@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  # Frontend React App
+  frontend:
+    build: .
+    container_name: obs_frontend
+    restart: unless-stopped
+    environment:
+      VITE_API_URL: ${VITE_API_URL:-http://localhost:5000/api/v1}
+    ports:
+      - "${PORT:-3000}:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    networks:
+      - obs_network
+    command: npm run dev -- --host
+
+  # Nginx for Production (Optional)
+  # nginx:
+  #   image: nginx:alpine
+  #   container_name: obs_nginx
+  #   restart: unless-stopped
+  #   ports:
+  #     - "80:80"
+  #   volumes:
+  #     - ./nginx.conf:/etc/nginx/nginx.conf:ro
+  #     - ./dist:/usr/share/nginx/html:ro
+  #   networks:
+  #     - obs_network
+
+networks:
+  obs_network:
+    driver: bridge
