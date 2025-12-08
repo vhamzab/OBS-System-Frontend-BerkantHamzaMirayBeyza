@@ -1,20 +1,23 @@
-# Frontend Dockerfile
-FROM node:18-alpine
+# Build stage
+FROM node:18-alpine as build
 
 WORKDIR /app
 
-# Copy package files
+ARG VITE_API_URL=https://obs-api-533500680660.europe-west1.run.app/api/v1
+ENV VITE_API_URL=$VITE_API_URL
+
 COPY package*.json ./
+RUN npm ci
 
-# Install dependencies
-RUN npm install
-
-# Copy source code
 COPY . .
+RUN npm run build
 
-# Expose port
-EXPOSE 3000
+# Production stage
+FROM nginx:alpine
 
-# Start command
-CMD ["npm", "run", "dev", "--", "--host"]
+COPY --from=build /app/dist /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/nginx.conf
 
+EXPOSE 8080
+
+CMD ["nginx", "-g", "daemon off;"]
