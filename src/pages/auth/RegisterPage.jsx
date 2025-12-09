@@ -87,7 +87,7 @@ const RegisterPage = () => {
         const response = await register(values);
         
         if (response.success) {
-          toast.success(response.message || 'Kayıt başarılı! Lütfen e-postanızı doğrulayın.');
+          toast.success(response.message || 'Kayıt başarılı! Şimdi giriş yapabilirsiniz.');
           navigate('/login');
         }
       } catch (error) {
