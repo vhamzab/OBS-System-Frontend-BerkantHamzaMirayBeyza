@@ -1,44 +1,72 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import toast from 'react-hot-toast';
-import { FiMail, FiArrowLeft, FiCheck } from 'react-icons/fi';
+import { FiMail, FiArrowLeft, FiCheck, FiKey } from 'react-icons/fi';
 import authService from '../../services/authService';
 import Input from '../../components/common/Input';
 import Button from '../../components/common/Button';
 
-const validationSchema = Yup.object({
+const emailSchema = Yup.object({
   email: Yup.string()
     .email('Geçerli bir e-posta adresi giriniz')
     .required('E-posta adresi zorunludur'),
 });
 
-const ForgotPasswordPage = () => {
-  const [loading, setLoading] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+const tokenSchema = Yup.object({
+  token: Yup.string()
+    .required('Token zorunludur')
+    .min(10, 'Token en az 10 karakter olmalıdır'),
+});
 
-  const formik = useFormik({
+const ForgotPasswordPage = () => {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [emailSent, setEmailSent] = useState(false);
+  const [userEmail, setUserEmail] = useState('');
+
+  const emailFormik = useFormik({
     initialValues: {
       email: '',
     },
-    validationSchema,
+    validationSchema: emailSchema,
     onSubmit: async (values) => {
       setLoading(true);
       try {
         await authService.forgotPassword(values.email);
-        setSubmitted(true);
-        toast.success('Şifre sıfırlama bağlantısı gönderildi');
+        setEmailSent(true);
+        setUserEmail(values.email);
+        toast.success('Şifre sıfırlama kodu e-posta adresinize gönderildi');
       } catch (error) {
         // Still show success to prevent email enumeration
-        setSubmitted(true);
+        setEmailSent(true);
+        setUserEmail(values.email);
       } finally {
         setLoading(false);
       }
     },
   });
 
-  if (submitted) {
+  const tokenFormik = useFormik({
+    initialValues: {
+      token: '',
+    },
+    validationSchema: tokenSchema,
+    onSubmit: async (values) => {
+      setLoading(true);
+      try {
+        // Navigate to reset password page with token
+        navigate(`/reset-password?token=${values.token}`);
+      } catch (error) {
+        toast.error('Token doğrulanırken bir hata oluştu');
+      } finally {
+        setLoading(false);
+      }
+    },
+  });
+
+  if (emailSent) {
     return (
       <div className="min-h-screen flex items-center justify-center px-4 py-12">
         <div className="w-full max-w-md">
@@ -50,15 +78,40 @@ const ForgotPasswordPage = () => {
               E-posta Gönderildi
             </h1>
             <p className="text-slate-400 mb-6">
-              Eğer <span className="text-white">{formik.values.email}</span> adresi sistemimizde kayıtlıysa, şifre sıfırlama bağlantısı gönderildi.
+              <span className="text-white">{userEmail}</span> adresine şifre sıfırlama kodu gönderildi.
             </p>
             <p className="text-sm text-slate-500 mb-6">
-              E-postanız birkaç dakika içinde gelecektir. Spam klasörünüzü de kontrol etmeyi unutmayın.
+              E-postanızdaki kodu aşağıya girin.
             </p>
-            <Link to="/login" className="btn-secondary inline-flex items-center gap-2">
-              <FiArrowLeft className="w-4 h-4" />
-              Giriş sayfasına dön
-            </Link>
+            
+            <form onSubmit={tokenFormik.handleSubmit} className="space-y-5">
+              <Input
+                label="Şifre Sıfırlama Kodu"
+                name="token"
+                type="text"
+                placeholder="E-postanızdaki kodu girin"
+                icon={FiKey}
+                value={tokenFormik.values.token}
+                onChange={tokenFormik.handleChange}
+                onBlur={tokenFormik.handleBlur}
+                error={tokenFormik.errors.token}
+                touched={tokenFormik.touched.token}
+                required
+              />
+
+              <Button type="submit" loading={loading} fullWidth>
+                Devam Et
+              </Button>
+            </form>
+
+            <div className="mt-6 text-center">
+              <button
+                onClick={() => setEmailSent(false)}
+                className="text-sm text-slate-400 hover:text-white transition-colors"
+              >
+                Farklı bir e-posta adresi kullan
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -85,29 +138,29 @@ const ForgotPasswordPage = () => {
             Şifremi Unuttum
           </h1>
           <p className="text-slate-400">
-            E-posta adresinizi girin, size şifre sıfırlama bağlantısı gönderelim
+            E-posta adresinizi girin, size şifre sıfırlama kodu gönderelim
           </p>
         </div>
 
         {/* Form */}
         <div className="card">
-          <form onSubmit={formik.handleSubmit} className="space-y-5">
+          <form onSubmit={emailFormik.handleSubmit} className="space-y-5">
             <Input
               label="E-posta Adresi"
               name="email"
               type="email"
               placeholder="ornek@university.edu"
               icon={FiMail}
-              value={formik.values.email}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.errors.email}
-              touched={formik.touched.email}
+              value={emailFormik.values.email}
+              onChange={emailFormik.handleChange}
+              onBlur={emailFormik.handleBlur}
+              error={emailFormik.errors.email}
+              touched={emailFormik.touched.email}
               required
             />
 
             <Button type="submit" loading={loading} fullWidth>
-              Sıfırlama Bağlantısı Gönder
+              Kod Gönder
             </Button>
           </form>
 
