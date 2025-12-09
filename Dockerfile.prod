@@ -3,7 +3,7 @@ FROM node:18-alpine as build
 
 WORKDIR /app
 
-ARG VITE_API_URL=https://obs-api-533500680660.europe-west1.run.app/api/v1
+ARG VITE_API_URL=https://obs-api-214391529742.europe-west1.run.app/api/v1
 ENV VITE_API_URL=$VITE_API_URL
 
 COPY package*.json ./
