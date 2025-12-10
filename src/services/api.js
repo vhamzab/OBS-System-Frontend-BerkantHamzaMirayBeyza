@@ -91,23 +91,5 @@ api.interceptors.response.use(
   }
 );
 
-// Helper function to get full URL for uploaded files
-export const getFileUrl = (relativePath) => {
-  if (!relativePath) return null;
-  
-  // If already a full URL, return as is
-  if (relativePath.startsWith('http://') || relativePath.startsWith('https://')) {
-    return relativePath;
-  }
-  
-  // Get base URL (remove /api/v1 from API_URL)
-  const baseUrl = API_URL.replace('/api/v1', '');
-  
-  // Ensure relative path starts with /
-  const path = relativePath.startsWith('/') ? relativePath : `/${relativePath}`;
-  
-  return `${baseUrl}${path}`;
-};
-
 export default api;
 

@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Link, useSearchParams, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import toast from 'react-hot-toast';
@@ -21,21 +21,10 @@ const validationSchema = Yup.object({
 });
 
 const ResetPasswordPage = () => {
-  const [searchParams] = useSearchParams();
+  const { token } = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [token, setToken] = useState('');
-
-  useEffect(() => {
-    const tokenParam = searchParams.get('token');
-    if (tokenParam) {
-      setToken(tokenParam);
-    } else {
-      toast.error('Geçersiz token. Lütfen şifre sıfırlama sayfasından tekrar deneyin.');
-      navigate('/forgot-password');
-    }
-  }, [searchParams, navigate]);
 
   const formik = useFormik({
     initialValues: {

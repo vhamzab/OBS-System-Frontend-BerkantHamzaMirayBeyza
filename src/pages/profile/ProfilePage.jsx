@@ -5,7 +5,6 @@ import toast from 'react-hot-toast';
 import { FiCamera, FiMail, FiPhone, FiUser, FiHash, FiLock, FiSave } from 'react-icons/fi';
 import { useAuth } from '../../context/AuthContext';
 import userService from '../../services/userService';
-import { getFileUrl } from '../../services/api';
 import Input from '../../components/common/Input';
 import Button from '../../components/common/Button';
 
@@ -128,29 +127,14 @@ const ProfilePage = () => {
     try {
       const response = await userService.uploadProfilePicture(file);
       if (response.success) {
-        // Get full URL for the profile picture
-        const fullUrl = getFileUrl(response.data.profilePictureUrl);
-        updateUser({ profile_picture_url: fullUrl });
+        updateUser({ profile_picture_url: response.data.profilePictureUrl });
         toast.success('Profil fotoğrafı güncellendi');
-        // Reset file input to allow uploading the same file again
-        if (fileInputRef.current) {
-          fileInputRef.current.value = '';
-        }
       }
     } catch (error) {
       toast.error(error.response?.data?.message || 'Yükleme başarısız');
     } finally {
       setUploadLoading(false);
     }
-  };
-
-  // Get profile picture URL with fallback
-  const getProfilePictureUrl = () => {
-    if (user?.profile_picture_url) {
-      // If it's already a full URL, return as is, otherwise convert it
-      return getFileUrl(user.profile_picture_url);
-    }
-    return null;
   };
 
   return (
@@ -163,39 +147,28 @@ const ProfilePage = () => {
           <div className="flex flex-col sm:flex-row items-center gap-6">
             {/* Profile Picture */}
             <div className="relative group">
-              <div className="w-36 h-36 sm:w-48 sm:h-48 rounded-2xl bg-gradient-to-br from-primary-500 via-primary-400 to-accent-500 flex items-center justify-center overflow-hidden border-2 border-slate-700/50 shadow-2xl relative">
-                {getProfilePictureUrl() ? (
+              <div className="w-28 h-28 rounded-2xl bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center overflow-hidden">
+                {user?.profile_picture_url ? (
                   <img
-                    src={getProfilePictureUrl()}
-                    alt={`${user?.first_name} ${user?.last_name}`}
+                    src={user.profile_picture_url}
+                    alt={user.first_name}
                     className="w-full h-full object-cover"
-                    onError={(e) => {
-                      // If image fails to load, hide it and show initials
-                      e.target.style.display = 'none';
-                      const parent = e.target.parentElement;
-                      if (parent) {
-                        const initials = parent.querySelector('.profile-initials');
-                        if (initials) initials.style.display = 'flex';
-                      }
-                    }}
                   />
-                ) : null}
-                <span 
-                  className={`profile-initials text-white font-bold text-5xl sm:text-6xl ${getProfilePictureUrl() ? 'hidden' : 'flex'} items-center justify-center absolute inset-0`}
-                >
-                  {user?.first_name?.[0]?.toUpperCase() || ''}{user?.last_name?.[0]?.toUpperCase() || ''}
-                </span>
+                ) : (
+                  <span className="text-white font-bold text-3xl">
+                    {user?.first_name?.[0]}{user?.last_name?.[0]}
+                  </span>
+                )}
               </div>
               <button
                 onClick={handlePictureClick}
                 disabled={uploadLoading}
-                className="absolute inset-0 bg-black/60 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer disabled:cursor-not-allowed z-10"
-                aria-label="Profil fotoğrafı değiştir"
+                className="absolute inset-0 bg-black/50 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
               >
                 {uploadLoading ? (
                   <div className="spinner" />
                 ) : (
-                  <FiCamera className="w-8 h-8 text-white" />
+                  <FiCamera className="w-6 h-6 text-white" />
                 )}
               </button>
               <input
