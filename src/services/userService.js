@@ -1,9 +1,13 @@
-import api from './api';
+import api, { getFileUrl } from './api';
 
 const userService = {
   // Get current user profile
   getProfile: async () => {
     const response = await api.get('/users/me');
+    // Convert profile picture URL to full URL if exists
+    if (response.data.data?.profile_picture_url) {
+      response.data.data.profile_picture_url = getFileUrl(response.data.data.profile_picture_url);
+    }
     return response.data;
   },
 
@@ -35,7 +39,9 @@ const userService = {
     // Update local storage
     if (response.data.success) {
       const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
-      currentUser.profile_picture_url = response.data.data.profilePictureUrl;
+      // Convert to full URL
+      const fullUrl = getFileUrl(response.data.data.profilePictureUrl);
+      currentUser.profile_picture_url = fullUrl;
       localStorage.setItem('user', JSON.stringify(currentUser));
     }
 

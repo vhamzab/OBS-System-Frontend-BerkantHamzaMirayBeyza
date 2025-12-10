@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FiUser, FiLogOut, FiSettings, FiMenu, FiX } from 'react-icons/fi';
 import { useAuth } from '../../context/AuthContext';
+import { getFileUrl } from '../../services/api';
 
 const Navbar = () => {
   const { user, logout, isAuthenticated } = useAuth();
@@ -34,6 +35,11 @@ const Navbar = () => {
       admin: 'Yönetici',
     };
     return roles[role] || role;
+  };
+
+  // Get profile picture URL with full path
+  const getProfilePictureUrl = () => {
+    return getFileUrl(user?.profile_picture_url);
   };
 
   return (
@@ -72,18 +78,28 @@ const Navbar = () => {
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                   className="flex items-center gap-3 p-2 rounded-xl hover:bg-white/5 transition-colors"
                 >
-                  <div className="w-9 h-9 bg-gradient-to-br from-primary-500 to-accent-500 rounded-full flex items-center justify-center">
-                    {user?.profile_picture_url ? (
+                  <div className="w-9 h-9 bg-gradient-to-br from-primary-500 to-accent-500 rounded-full flex items-center justify-center overflow-hidden relative">
+                    {getProfilePictureUrl() ? (
                       <img
-                        src={user.profile_picture_url}
-                        alt={user.first_name}
+                        src={getProfilePictureUrl()}
+                        alt={`${user?.first_name} ${user?.last_name}`}
                         className="w-full h-full rounded-full object-cover"
+                        onError={(e) => {
+                          // If image fails to load, hide it and show initials
+                          e.target.style.display = 'none';
+                          const parent = e.target.parentElement;
+                          if (parent) {
+                            const initials = parent.querySelector('.navbar-initials');
+                            if (initials) initials.style.display = 'flex';
+                          }
+                        }}
                       />
-                    ) : (
-                      <span className="text-white font-semibold text-sm">
-                        {user?.first_name?.[0]}{user?.last_name?.[0]}
-                      </span>
-                    )}
+                    ) : null}
+                    <span 
+                      className={`navbar-initials text-white font-semibold text-sm ${getProfilePictureUrl() ? 'hidden' : 'flex'} items-center justify-center absolute inset-0`}
+                    >
+                      {user?.first_name?.[0]?.toUpperCase() || ''}{user?.last_name?.[0]?.toUpperCase() || ''}
+                    </span>
                   </div>
                   <div className="hidden sm:block text-left">
                     <p className="text-sm font-medium text-white">

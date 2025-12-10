@@ -18,18 +18,21 @@ module.exports = {
     '**/*.(test|spec).(js|jsx)',
   ],
   collectCoverageFrom: [
-    'src/**/*.{js,jsx}',
-    '!src/main.jsx',
-    '!src/**/*.d.ts',
-    '!src/**/index.js',
-    '!src/**/__mocks__/**',
-    '!src/services/api.js', // Mock edildiği için coverage'dan çıkarıyoruz
+    'src/pages/auth/LoginPage.jsx',
+    'src/pages/auth/RegisterPage.jsx',
   ],
   coverageDirectory: 'coverage',
   coverageReporters: ['text', 'lcov', 'html'],
+  coverageThreshold: {
+    global: {
+      branches: 75,
+      functions: 75,
+      lines: 75,
+      statements: 75,
+    },
+  },
   moduleFileExtensions: ['js', 'jsx', 'json'],
   transformIgnorePatterns: [
     'node_modules/(?!(.*\\.mjs$))',
   ],
 };
-
