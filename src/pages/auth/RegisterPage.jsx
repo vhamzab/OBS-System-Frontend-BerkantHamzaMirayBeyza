@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import toast from 'react-hot-toast';
-import { FiMail, FiLock, FiUser, FiHash, FiCheck, FiSend } from 'react-icons/fi';
+import { FiMail, FiLock, FiUser, FiHash } from 'react-icons/fi';
 import { useAuth } from '../../context/AuthContext';
 import Input from '../../components/common/Input';
 import Select from '../../components/common/Select';
@@ -53,8 +53,6 @@ const RegisterPage = () => {
   const { register } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [registrationSuccess, setRegistrationSuccess] = useState(false);
-  const [registeredEmail, setRegisteredEmail] = useState('');
 
   const roleOptions = [
     { value: 'student', label: 'Öğrenci' },
@@ -89,9 +87,8 @@ const RegisterPage = () => {
         const response = await register(values);
         
         if (response.success) {
-          setRegisteredEmail(values.email);
-          setRegistrationSuccess(true);
-          toast.success('Kayıt başarılı! E-postanızı kontrol edin.');
+          toast.success(response.message || 'Kayıt başarılı! Şimdi giriş yapabilirsiniz.');
+          navigate('/login');
         }
       } catch (error) {
         const message = error.response?.data?.message || 'Kayıt olurken bir hata oluştu';
@@ -101,58 +98,6 @@ const RegisterPage = () => {
       }
     },
   });
-
-  // Email doğrulama başarı ekranı
-  if (registrationSuccess) {
-    return (
-      <div className="min-h-screen flex items-center justify-center px-4 py-12">
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute -top-40 -left-40 w-80 h-80 bg-accent-500/20 rounded-full blur-3xl" />
-          <div className="absolute -bottom-40 -right-40 w-80 h-80 bg-primary-500/20 rounded-full blur-3xl" />
-        </div>
-
-        <div className="w-full max-w-md relative">
-          <div className="card text-center">
-            <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
-              <FiSend className="w-10 h-10 text-green-500" />
-            </div>
-            
-            <h1 className="font-display text-2xl font-bold mb-4 text-green-400">
-              Kayıt Başarılı! 🎉
-            </h1>
-            
-            <p className="text-slate-300 mb-6">
-              E-posta adresinize bir doğrulama linki gönderdik.
-            </p>
-
-            <div className="bg-slate-800/50 rounded-lg p-4 mb-6">
-              <div className="flex items-center justify-center gap-2 mb-3">
-                <FiMail className="w-5 h-5 text-primary-400" />
-                <span className="text-primary-400 font-medium">{registeredEmail}</span>
-              </div>
-              <p className="text-sm text-slate-400">
-                E-posta kutunuzu kontrol edin ve doğrulama linkine tıklayarak hesabınızı aktifleştirin.
-              </p>
-            </div>
-
-            <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg p-4 mb-6">
-              <p className="text-sm text-amber-300">
-                ⚠️ E-posta gelmedi mi? Spam klasörünü kontrol edin.
-              </p>
-            </div>
-
-            <Link 
-              to="/login" 
-              className="btn-primary inline-flex items-center justify-center gap-2 w-full"
-            >
-              <FiCheck className="w-4 h-4" />
-              Giriş Sayfasına Git
-            </Link>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-12">

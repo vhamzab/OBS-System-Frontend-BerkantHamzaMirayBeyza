@@ -3,9 +3,8 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import toast from 'react-hot-toast';
-import { FiMail, FiLock, FiSend, FiAlertCircle } from 'react-icons/fi';
+import { FiMail, FiLock } from 'react-icons/fi';
 import { useAuth } from '../../context/AuthContext';
-import authService from '../../services/authService';
 import Input from '../../components/common/Input';
 import Button from '../../components/common/Button';
 
@@ -22,26 +21,8 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [loading, setLoading] = useState(false);
-  const [resendLoading, setResendLoading] = useState(false);
-  const [needsVerification, setNeedsVerification] = useState(false);
-  const [verificationEmail, setVerificationEmail] = useState('');
 
   const from = location.state?.from?.pathname || '/dashboard';
-
-  const handleResendVerification = async () => {
-    if (!verificationEmail) return;
-    
-    setResendLoading(true);
-    try {
-      const response = await authService.resendVerification(verificationEmail);
-      toast.success(response.message || 'Doğrulama linki gönderildi!');
-    } catch (error) {
-      const message = error.response?.data?.message || 'Doğrulama linki gönderilemedi';
-      toast.error(message);
-    } finally {
-      setResendLoading(false);
-    }
-  };
 
   const formik = useFormik({
     initialValues: {
@@ -51,8 +32,6 @@ const LoginPage = () => {
     validationSchema,
     onSubmit: async (values) => {
       setLoading(true);
-      setNeedsVerification(false);
-      
       try {
         const response = await login(values.email, values.password);
         
@@ -62,14 +41,6 @@ const LoginPage = () => {
         }
       } catch (error) {
         const message = error.response?.data?.message || 'Giriş yapılırken bir hata oluştu';
-        
-        // Email doğrulama gerekiyor mu kontrol et
-        if (message.toLowerCase().includes('doğrulama') || 
-            message.toLowerCase().includes('aktif değil')) {
-          setNeedsVerification(true);
-          setVerificationEmail(values.email);
-        }
-        
         toast.error(message);
       } finally {
         setLoading(false);
@@ -100,31 +71,6 @@ const LoginPage = () => {
             Hesabınıza giriş yapın
           </p>
         </div>
-
-        {/* Email Verification Warning */}
-        {needsVerification && (
-          <div className="mb-6 bg-amber-500/10 border border-amber-500/30 rounded-xl p-4">
-            <div className="flex items-start gap-3">
-              <FiAlertCircle className="w-5 h-5 text-amber-400 mt-0.5 flex-shrink-0" />
-              <div className="flex-1">
-                <h3 className="text-amber-300 font-medium mb-1">
-                  E-posta Doğrulaması Gerekli
-                </h3>
-                <p className="text-sm text-amber-200/80 mb-3">
-                  Hesabınızı aktifleştirmek için e-posta adresinize gönderilen doğrulama linkine tıklayın.
-                </p>
-                <button
-                  onClick={handleResendVerification}
-                  disabled={resendLoading}
-                  className="inline-flex items-center gap-2 text-sm bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
-                >
-                  <FiSend className={`w-4 h-4 ${resendLoading ? 'animate-pulse' : ''}`} />
-                  {resendLoading ? 'Gönderiliyor...' : 'Doğrulama Linkini Yeniden Gönder'}
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* Form */}
         <div className="card">
@@ -191,3 +137,4 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
+

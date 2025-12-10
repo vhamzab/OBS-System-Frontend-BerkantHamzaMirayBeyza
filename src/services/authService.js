@@ -13,12 +13,6 @@ const authService = {
     return response.data;
   },
 
-  // Resend verification email
-  resendVerification: async (email) => {
-    const response = await api.post('/auth/resend-verification', { email });
-    return response.data;
-  },
-
   // Login user
   login: async (email, password) => {
     const response = await api.post('/auth/login', { email, password });
