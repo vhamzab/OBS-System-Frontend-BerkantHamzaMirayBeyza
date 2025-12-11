@@ -16,6 +16,25 @@ import DashboardPage from './pages/dashboard/DashboardPage';
 // Profile Pages
 import ProfilePage from './pages/profile/ProfilePage';
 
+// Course Pages
+import CourseCatalogPage from './pages/courses/CourseCatalogPage';
+import CourseDetailPage from './pages/courses/CourseDetailPage';
+import MyCoursesPage from './pages/courses/MyCoursesPage';
+
+// Grade Pages
+import GradesPage from './pages/grades/GradesPage';
+import GradebookPage from './pages/grades/GradebookPage';
+
+// Attendance Pages
+import StartAttendancePage from './pages/attendance/StartAttendancePage';
+import GiveAttendancePage from './pages/attendance/GiveAttendancePage';
+import MyAttendancePage from './pages/attendance/MyAttendancePage';
+import AttendanceReportPage from './pages/attendance/AttendanceReportPage';
+import ExcuseRequestsPage from './pages/attendance/ExcuseRequestsPage';
+
+// Faculty Pages
+import FacultySectionsPage from './pages/faculty/FacultySectionsPage';
+
 // Error Pages
 import NotFoundPage from './pages/NotFoundPage';
 
@@ -61,6 +80,7 @@ function App() {
 
       {/* Protected Routes */}
       <Route element={<Layout withSidebar />}>
+        {/* Common Routes */}
         <Route
           path="/"
           element={
@@ -86,36 +106,112 @@ function App() {
           }
         />
         
-        {/* Placeholder routes for future features */}
+        {/* Course Catalog (All Roles) */}
         <Route
           path="/courses"
           element={
             <ProtectedRoute>
-              <ComingSoon title="Derslerim" />
+              <CourseCatalogPage />
             </ProtectedRoute>
           }
         />
         <Route
-          path="/schedule"
+          path="/courses/:id"
           element={
             <ProtectedRoute>
-              <ComingSoon title="Ders Programı" />
+              <CourseDetailPage />
+            </ProtectedRoute>
+          }
+        />
+        
+        {/* Student Routes */}
+        <Route
+          path="/my-courses"
+          element={
+            <ProtectedRoute roles={['student']}>
+              <MyCoursesPage />
             </ProtectedRoute>
           }
         />
         <Route
           path="/grades"
           element={
-            <ProtectedRoute>
-              <ComingSoon title="Notlarım" />
+            <ProtectedRoute roles={['student']}>
+              <GradesPage />
             </ProtectedRoute>
           }
         />
         <Route
-          path="/settings"
+          path="/my-attendance"
           element={
-            <ProtectedRoute>
-              <ComingSoon title="Ayarlar" />
+            <ProtectedRoute roles={['student']}>
+              <MyAttendancePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/attendance/give/:sessionId"
+          element={
+            <ProtectedRoute roles={['student']}>
+              <GiveAttendancePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/my-excuse-requests"
+          element={
+            <ProtectedRoute roles={['student']}>
+              <ExcuseRequestsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/schedule"
+          element={
+            <ProtectedRoute roles={['student']}>
+              <ComingSoon title="Ders Programı" />
+            </ProtectedRoute>
+          }
+        />
+        
+        {/* Faculty Routes */}
+        <Route
+          path="/faculty/sections"
+          element={
+            <ProtectedRoute roles={['faculty', 'admin']}>
+              <FacultySectionsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/gradebook/:sectionId"
+          element={
+            <ProtectedRoute roles={['faculty', 'admin']}>
+              <GradebookPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/attendance/start"
+          element={
+            <ProtectedRoute roles={['faculty', 'admin']}>
+              <StartAttendancePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/attendance/report/:sectionId"
+          element={
+            <ProtectedRoute roles={['faculty', 'admin']}>
+              <AttendanceReportPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/excuse-requests"
+          element={
+            <ProtectedRoute roles={['faculty', 'admin']}>
+              <ExcuseRequestsPage />
             </ProtectedRoute>
           }
         />
@@ -137,6 +233,22 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/admin/courses"
+          element={
+            <ProtectedRoute roles={['admin']}>
+              <ComingSoon title="Ders Yönetimi" />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <ComingSoon title="Ayarlar" />
+            </ProtectedRoute>
+          }
+        />
       </Route>
 
       {/* 404 */}
@@ -153,11 +265,10 @@ const ComingSoon = ({ title }) => (
       <div className="text-6xl mb-4">🚧</div>
       <h2 className="font-display text-2xl font-bold mb-2">Yakında!</h2>
       <p className="text-slate-400">
-        Bu özellik Part 2'de eklenecektir.
+        Bu özellik yakında eklenecektir.
       </p>
     </div>
   </div>
 );
 
 export default App;
-

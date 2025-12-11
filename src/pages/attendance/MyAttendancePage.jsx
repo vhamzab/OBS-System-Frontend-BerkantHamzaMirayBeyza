@@ -1,0 +1,247 @@
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { 
+  FiBook, FiCheckCircle, FiAlertTriangle, FiXCircle, 
+  FiCalendar, FiPercent, FiMapPin, FiClock
+} from 'react-icons/fi';
+import toast from 'react-hot-toast';
+import attendanceService from '../../services/attendanceService';
+import LoadingSpinner from '../../components/common/LoadingSpinner';
+
+const MyAttendancePage = () => {
+  const [attendance, setAttendance] = useState([]);
+  const [activeSessions, setActiveSessions] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      
+      const [attendanceRes, activeRes] = await Promise.all([
+        attendanceService.getMyAttendance(),
+        attendanceService.getActiveSessions(),
+      ]);
+      
+      if (attendanceRes.success) {
+        setAttendance(attendanceRes.data);
+      }
+      
+      if (activeRes.success) {
+        setActiveSessions(activeRes.data);
+      }
+    } catch (error) {
+      toast.error('Veriler yüklenirken hata oluştu');
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getStatusConfig = (status) => {
+    switch (status) {
+      case 'critical':
+        return {
+          color: 'text-red-400',
+          bg: 'bg-red-500/20',
+          border: 'border-red-500/30',
+          icon: FiXCircle,
+          label: 'Kritik',
+        };
+      case 'warning':
+        return {
+          color: 'text-amber-400',
+          bg: 'bg-amber-500/20',
+          border: 'border-amber-500/30',
+          icon: FiAlertTriangle,
+          label: 'Uyarı',
+        };
+      default:
+        return {
+          color: 'text-green-400',
+          bg: 'bg-green-500/20',
+          border: 'border-green-500/30',
+          icon: FiCheckCircle,
+          label: 'İyi',
+        };
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center py-16">
+        <LoadingSpinner size="lg" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="p-6 lg:p-8 max-w-6xl mx-auto">
+      <div className="mb-8">
+        <h1 className="font-display text-3xl font-bold mb-2">Devam Durumum</h1>
+        <p className="text-slate-400">Derslere katılım durumunuzu görüntüleyin</p>
+      </div>
+
+      {/* Active Sessions Banner */}
+      {activeSessions.length > 0 && (
+        <div className="mb-8">
+          <h2 className="font-display text-lg font-semibold mb-4 flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+            Aktif Yoklamalar
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {activeSessions.map((session) => (
+              <div
+                key={session.id}
+                className={`card border-2 ${
+                  session.alreadyCheckedIn ? 'border-green-500/30 bg-green-500/5' : 'border-primary-500/50'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="font-semibold">{session.course?.code}</div>
+                    <div className="text-sm text-slate-400">{session.course?.name}</div>
+                    <div className="flex items-center gap-3 mt-2 text-xs text-slate-500">
+                      <span className="flex items-center gap-1">
+                        <FiMapPin className="w-3 h-3" />
+                        {session.classroom || 'Belirtilmemiş'}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <FiClock className="w-3 h-3" />
+                        {session.startTime}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  {session.alreadyCheckedIn ? (
+                    <div className="flex items-center gap-2 text-green-400">
+                      <FiCheckCircle className="w-5 h-5" />
+                      <span className="text-sm">Verildi</span>
+                    </div>
+                  ) : (
+                    <Link
+                      to={`/attendance/give/${session.id}`}
+                      className="btn btn-primary"
+                    >
+                      Yoklama Ver
+                    </Link>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Attendance Summary */}
+      {attendance.length === 0 ? (
+        <div className="card text-center py-16">
+          <FiCalendar className="w-16 h-16 mx-auto text-slate-600 mb-4" />
+          <h2 className="text-xl font-semibold mb-2">Devam Kaydı Yok</h2>
+          <p className="text-slate-400">Henüz devam kaydınız bulunmuyor.</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {attendance.map((course) => {
+            const statusConfig = getStatusConfig(course.status);
+            const StatusIcon = statusConfig.icon;
+            
+            return (
+              <div key={course.sectionId} className={`card border ${statusConfig.border}`}>
+                <div className="flex items-start gap-4 mb-4">
+                  <div className={`w-12 h-12 rounded-xl ${statusConfig.bg} flex items-center justify-center`}>
+                    <FiBook className={`w-6 h-6 ${statusConfig.color}`} />
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <span className="font-semibold">{course.course?.code}</span>
+                      <span className={`px-2 py-0.5 rounded-full text-xs ${statusConfig.bg} ${statusConfig.color}`}>
+                        <StatusIcon className="w-3 h-3 inline mr-1" />
+                        {statusConfig.label}
+                      </span>
+                    </div>
+                    <div className="text-sm text-slate-400">{course.course?.name}</div>
+                  </div>
+                </div>
+
+                {/* Progress Bar */}
+                <div className="mb-4">
+                  <div className="flex items-center justify-between text-sm mb-2">
+                    <span className="text-slate-400">Devam Oranı</span>
+                    <span className={`font-bold ${statusConfig.color}`}>
+                      %{course.attendancePercentage}
+                    </span>
+                  </div>
+                  <div className="h-3 rounded-full bg-slate-800 overflow-hidden">
+                    <div
+                      className={`h-full rounded-full transition-all duration-500 ${
+                        course.status === 'critical' ? 'bg-red-500' :
+                        course.status === 'warning' ? 'bg-amber-500' : 'bg-green-500'
+                      }`}
+                      style={{ width: `${course.attendancePercentage}%` }}
+                    />
+                  </div>
+                </div>
+
+                {/* Stats */}
+                <div className="grid grid-cols-4 gap-2 text-center">
+                  <div className="p-2 rounded-lg bg-slate-800/50">
+                    <div className="text-lg font-bold text-green-400">{course.present}</div>
+                    <div className="text-xs text-slate-500">Katıldı</div>
+                  </div>
+                  <div className="p-2 rounded-lg bg-slate-800/50">
+                    <div className="text-lg font-bold text-amber-400">{course.late}</div>
+                    <div className="text-xs text-slate-500">Geç</div>
+                  </div>
+                  <div className="p-2 rounded-lg bg-slate-800/50">
+                    <div className="text-lg font-bold text-blue-400">{course.excused}</div>
+                    <div className="text-xs text-slate-500">Mazeretli</div>
+                  </div>
+                  <div className="p-2 rounded-lg bg-slate-800/50">
+                    <div className="text-lg font-bold text-red-400">{course.absent}</div>
+                    <div className="text-xs text-slate-500">Devamsız</div>
+                  </div>
+                </div>
+
+                <div className="mt-4 pt-4 border-t border-slate-700/50 flex justify-between items-center">
+                  <span className="text-sm text-slate-500">
+                    Toplam: {course.totalSessions} oturum
+                  </span>
+                  <Link
+                    to={`/attendance/excuse?section=${course.sectionId}`}
+                    className="text-sm text-primary-400 hover:text-primary-300"
+                  >
+                    Mazeret Bildir
+                  </Link>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Warning Box */}
+      {attendance.some((c) => c.status === 'critical') && (
+        <div className="mt-8 p-6 rounded-xl bg-red-500/10 border border-red-500/30">
+          <div className="flex items-start gap-4">
+            <FiAlertTriangle className="w-6 h-6 text-red-400 shrink-0 mt-0.5" />
+            <div>
+              <h3 className="font-semibold text-red-400 mb-2">Kritik Devamsızlık Uyarısı</h3>
+              <p className="text-sm text-red-200">
+                Bazı derslerinizde devamsızlık oranınız %30'u aşmıştır. 
+                Devamsızlık sınırını aşan öğrenciler dersten başarısız sayılabilir. 
+                Lütfen danışmanınızla görüşün.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default MyAttendancePage;
+

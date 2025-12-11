@@ -8,6 +8,10 @@ import {
   FiUsers,
   FiSettings,
   FiBarChart2,
+  FiMapPin,
+  FiFileText,
+  FiCheckSquare,
+  FiGrid,
 } from 'react-icons/fi';
 import { useAuth } from '../../context/AuthContext';
 
@@ -17,24 +21,28 @@ const Sidebar = ({ isOpen, onClose }) => {
   const studentLinks = [
     { to: '/dashboard', icon: FiHome, label: 'Dashboard' },
     { to: '/profile', icon: FiUser, label: 'Profil' },
-    { to: '/courses', icon: FiBook, label: 'Derslerim' },
+    { to: '/courses', icon: FiGrid, label: 'Ders Kataloğu' },
+    { to: '/my-courses', icon: FiBook, label: 'Derslerim' },
     { to: '/schedule', icon: FiCalendar, label: 'Ders Programı' },
     { to: '/grades', icon: FiClipboard, label: 'Notlarım' },
+    { to: '/my-attendance', icon: FiCheckSquare, label: 'Devam Durumu' },
+    { to: '/my-excuse-requests', icon: FiFileText, label: 'Mazeretlerim' },
   ];
 
   const facultyLinks = [
     { to: '/dashboard', icon: FiHome, label: 'Dashboard' },
     { to: '/profile', icon: FiUser, label: 'Profil' },
-    { to: '/my-courses', icon: FiBook, label: 'Derslerim' },
-    { to: '/students', icon: FiUsers, label: 'Öğrenciler' },
-    { to: '/attendance', icon: FiCalendar, label: 'Yoklama' },
+    { to: '/faculty/sections', icon: FiBook, label: 'Derslerim' },
+    { to: '/attendance/start', icon: FiMapPin, label: 'Yoklama Aç' },
+    { to: '/excuse-requests', icon: FiFileText, label: 'Mazeret Talepleri' },
   ];
 
   const adminLinks = [
     { to: '/dashboard', icon: FiHome, label: 'Dashboard' },
     { to: '/admin/users', icon: FiUsers, label: 'Kullanıcılar' },
     { to: '/admin/departments', icon: FiBarChart2, label: 'Bölümler' },
-    { to: '/admin/courses', icon: FiBook, label: 'Dersler' },
+    { to: '/courses', icon: FiGrid, label: 'Ders Kataloğu' },
+    { to: '/admin/courses', icon: FiBook, label: 'Ders Yönetimi' },
     { to: '/settings', icon: FiSettings, label: 'Ayarlar' },
   ];
 
@@ -66,7 +74,7 @@ const Sidebar = ({ isOpen, onClose }) => {
         className={`
           fixed top-16 left-0 h-[calc(100vh-4rem)] w-64 bg-slate-900/95 backdrop-blur-xl
           border-r border-slate-800 z-50 transform transition-transform duration-300
-          lg:translate-x-0 lg:static lg:h-auto
+          lg:translate-x-0 lg:static lg:h-auto overflow-y-auto
           ${isOpen ? 'translate-x-0' : '-translate-x-full'}
         `}
       >
@@ -89,10 +97,21 @@ const Sidebar = ({ isOpen, onClose }) => {
             </NavLink>
           ))}
         </nav>
+
+        {/* User Role Badge */}
+        <div className="p-4 mt-auto border-t border-slate-800">
+          <div className="px-4 py-2 rounded-xl bg-slate-800/50">
+            <div className="text-xs text-slate-500 mb-1">Rol</div>
+            <div className="font-medium capitalize">
+              {user?.role === 'student' && 'Öğrenci'}
+              {user?.role === 'faculty' && 'Öğretim Üyesi'}
+              {user?.role === 'admin' && 'Yönetici'}
+            </div>
+          </div>
+        </div>
       </aside>
     </>
   );
 };
 
 export default Sidebar;
-

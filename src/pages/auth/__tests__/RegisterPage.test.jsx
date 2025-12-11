@@ -589,3 +589,4 @@ describe('RegisterPage Component', () => {
   });
 });
 
+
