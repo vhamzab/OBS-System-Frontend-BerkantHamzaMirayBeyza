@@ -8,16 +8,42 @@ const enrollmentService = {
    * Enroll in a course section (student)
    */
   enrollInCourse: async (sectionId) => {
-    const response = await api.post('/enrollments', { section_id: sectionId });
-    return response.data;
+    try {
+      console.log('📝 EnrollmentService: Enrolling in section:', sectionId);
+      const response = await api.post('/enrollments', { section_id: sectionId });
+      console.log('✅ EnrollmentService: Enrollment successful:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('❌ EnrollmentService: Enrollment error:', error);
+      console.error('Error details:', {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
+        config: error.config,
+      });
+      throw error;
+    }
   },
 
   /**
    * Drop a course (student)
    */
   dropCourse: async (enrollmentId) => {
-    const response = await api.delete(`/enrollments/${enrollmentId}`);
-    return response.data;
+    try {
+      console.log('🗑️ EnrollmentService: Dropping course - Enrollment ID:', enrollmentId);
+      const response = await api.delete(`/enrollments/${enrollmentId}`);
+      console.log('✅ EnrollmentService: Course dropped successfully:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('❌ EnrollmentService: Drop course error:', error);
+      console.error('Error details:', {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
+        config: error.config,
+      });
+      throw error;
+    }
   },
 
   /**

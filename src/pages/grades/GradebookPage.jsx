@@ -190,6 +190,22 @@ const GradebookPage = () => {
         </div>
       </div>
 
+      {/* Auto-calculation Info Banner */}
+      <div className="card mb-6 bg-gradient-to-r from-primary-500/10 to-accent-500/10 border border-primary-500/20">
+        <div className="flex items-start gap-3">
+          <div className="w-10 h-10 rounded-lg bg-primary-500/20 flex items-center justify-center shrink-0">
+            <FiCheck className="w-5 h-5 text-primary-400" />
+          </div>
+          <div className="flex-1">
+            <h3 className="font-semibold text-primary-400 mb-1">Otomatik Hesaplama Sistemi</h3>
+            <p className="text-sm text-slate-300">
+              Notlar kaydedildiğinde sistem otomatik olarak <strong>ortalama not</strong> (Vize %30 + Final %50 + Ödev %20), 
+              <strong> harf notu</strong> ve <strong>not puanı</strong> hesaplar. Ayrıca öğrencilerin <strong>CGPA</strong> değerleri de güncellenir.
+            </p>
+          </div>
+        </div>
+      </div>
+
       {/* Info Banner */}
       {hasChanges && (
         <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 mb-6 flex items-center gap-3">

@@ -71,11 +71,32 @@ const attendanceService = {
   },
 
   /**
+   * Get my sessions for excuse request (student)
+   */
+  getMySessions: async () => {
+    const response = await api.get('/attendance/my-sessions');
+    return response.data;
+  },
+
+  /**
    * Get my attendance (student)
    */
   getMyAttendance: async () => {
-    const response = await api.get('/attendance/my-attendance');
-    return response.data;
+    try {
+      console.log('📊 AttendanceService: Fetching my attendance...');
+      const response = await api.get('/attendance/my-attendance');
+      console.log('✅ AttendanceService: Attendance fetched successfully:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('❌ AttendanceService: Get attendance error:', error);
+      console.error('Error details:', {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
+        config: error.config,
+      });
+      throw error;
+    }
   },
 
   // ========== Reports (Faculty) ==========

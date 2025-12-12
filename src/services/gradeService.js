@@ -8,8 +8,21 @@ const gradeService = {
    * Get my grades (student)
    */
   getMyGrades: async (params = {}) => {
-    const response = await api.get('/grades/my-grades', { params });
-    return response.data;
+    try {
+      console.log('📊 GradeService: Fetching grades with params:', params);
+      const response = await api.get('/grades/my-grades', { params });
+      console.log('✅ GradeService: Grades fetched successfully:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('❌ GradeService: Get grades error:', error);
+      console.error('Error details:', {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
+        config: error.config,
+      });
+      throw error;
+    }
   },
 
   /**
@@ -24,19 +37,33 @@ const gradeService = {
    * Download transcript as PDF (student)
    */
   downloadTranscriptPDF: async () => {
-    const response = await api.get('/grades/transcript/pdf', {
-      responseType: 'blob',
-    });
-    
-    // Create download link
-    const url = window.URL.createObjectURL(new Blob([response.data]));
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', `transcript_${Date.now()}.html`);
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    window.URL.revokeObjectURL(url);
+    try {
+      console.log('📄 GradeService: Downloading transcript PDF...');
+      const response = await api.get('/grades/transcript/pdf', {
+        responseType: 'blob',
+      });
+      console.log('✅ GradeService: Transcript PDF received');
+      
+      // Create download link
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `transcript_${Date.now()}.html`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+      console.log('✅ GradeService: Transcript downloaded');
+    } catch (error) {
+      console.error('❌ GradeService: Download transcript error:', error);
+      console.error('Error details:', {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
+        config: error.config,
+      });
+      throw error;
+    }
   },
 
   /**

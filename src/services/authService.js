@@ -15,16 +15,44 @@ const authService = {
 
   // Login user
   login: async (email, password) => {
-    const response = await api.post('/auth/login', { email, password });
-    
-    if (response.data.success) {
-      const { accessToken, refreshToken, user } = response.data.data;
-      localStorage.setItem('accessToken', accessToken);
-      localStorage.setItem('refreshToken', refreshToken);
-      localStorage.setItem('user', JSON.stringify(user));
+    try {
+      console.log('🔐 AuthService: Login attempt for:', email);
+      console.log('🔗 AuthService: API URL:', api.defaults.baseURL);
+      const response = await api.post('/auth/login', { email, password });
+      console.log('✅ AuthService: Login response:', response.data);
+      
+      if (response.data.success) {
+        const { accessToken, refreshToken, user } = response.data.data;
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('refreshToken', refreshToken);
+        localStorage.setItem('user', JSON.stringify(user));
+        console.log('✅ AuthService: Tokens saved to localStorage');
+      }
+      
+      return response.data;
+    } catch (error) {
+      console.error('❌ AuthService: Login error:', error);
+      console.error('Error details:', {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
+        config: error.config,
+      });
+      
+      // Axios error handling
+      if (error.response) {
+        // Server responded with error status
+        const errorMessage = error.response.data?.message || 'Giriş yapılırken bir hata oluştu';
+        throw new Error(errorMessage);
+      } else if (error.request) {
+        // Request was made but no response received (network error)
+        console.error('❌ AuthService: No response from server. Request:', error.request);
+        throw new Error('Sunucuya bağlanılamadı. Lütfen internet bağlantınızı kontrol edin.');
+      } else {
+        // Something else happened
+        throw new Error(error.message || 'Giriş yapılırken bir hata oluştu');
+      }
     }
-    
-    return response.data;
   },
 
   // Logout user

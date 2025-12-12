@@ -49,12 +49,28 @@ export const AuthProvider = ({ children }) => {
 
   // Login
   const login = async (email, password) => {
-    const response = await authService.login(email, password);
-    if (response.success) {
-      setUser(response.data.user);
-      setIsAuthenticated(true);
+    try {
+      console.log('🔐 AuthContext: Login attempt for:', email);
+      const response = await authService.login(email, password);
+      console.log('✅ AuthContext: Login response:', response);
+      
+      if (response.success) {
+        console.log('✅ AuthContext: Setting user and authentication state');
+        setUser(response.data.user);
+        setIsAuthenticated(true);
+        console.log('✅ AuthContext: User authenticated successfully');
+      } else {
+        console.warn('⚠️ AuthContext: Login response not successful:', response);
+      }
+      return response;
+    } catch (error) {
+      console.error('❌ AuthContext: Login error:', error);
+      // Clear any partial state
+      setUser(null);
+      setIsAuthenticated(false);
+      // Re-throw error so LoginPage can handle it
+      throw error;
     }
-    return response;
   };
 
   // Register

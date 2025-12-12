@@ -31,14 +31,25 @@ const MyCoursesPage = () => {
   const fetchEnrollments = async () => {
     try {
       setLoading(true);
+      console.log('📚 MyCoursesPage: Fetching enrollments...');
       const response = await enrollmentService.getMyCourses({ status: 'enrolled' });
+      console.log('✅ MyCoursesPage: Enrollments fetched:', response);
       
       if (response.success) {
-        setEnrollments(response.data);
+        setEnrollments(response.data || []);
+        console.log(`✅ MyCoursesPage: ${response.data?.length || 0} enrollments loaded`);
+      } else {
+        console.warn('⚠️ MyCoursesPage: Response not successful:', response);
+        toast.error(response.message || 'Dersler yüklenirken hata oluştu');
       }
     } catch (error) {
-      toast.error('Dersler yüklenirken hata oluştu');
-      console.error(error);
+      console.error('❌ MyCoursesPage: Fetch enrollments error:', error);
+      console.error('Error details:', {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
+      });
+      toast.error(error.response?.data?.message || 'Dersler yüklenirken hata oluştu');
     } finally {
       setLoading(false);
     }
@@ -47,14 +58,27 @@ const MyCoursesPage = () => {
   const handleDrop = async (enrollmentId) => {
     try {
       setDropping(enrollmentId);
+      console.log('🗑️ MyCoursesPage: Dropping enrollment:', enrollmentId);
       const response = await enrollmentService.dropCourse(enrollmentId);
+      console.log('✅ MyCoursesPage: Drop response:', response);
       
       if (response.success) {
         toast.success(response.message || 'Ders başarıyla bırakıldı');
         setEnrollments((prev) => prev.filter((e) => e.id !== enrollmentId));
+        console.log('✅ MyCoursesPage: Enrollment removed from list');
+      } else {
+        console.warn('⚠️ MyCoursesPage: Drop response not successful:', response);
+        toast.error(response.message || 'Ders bırakılırken hata oluştu');
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Ders bırakılırken hata oluştu');
+      console.error('❌ MyCoursesPage: Drop error:', error);
+      console.error('Error details:', {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
+      });
+      const errorMessage = error.response?.data?.message || error.message || 'Ders bırakılırken hata oluştu';
+      toast.error(errorMessage);
     } finally {
       setDropping(null);
       setShowDropModal(null);

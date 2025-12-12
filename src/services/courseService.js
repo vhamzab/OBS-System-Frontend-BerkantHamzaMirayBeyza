@@ -8,8 +8,21 @@ const courseService = {
    * Get all courses with pagination and filtering
    */
   getCourses: async (params = {}) => {
-    const response = await api.get('/courses', { params });
-    return response.data;
+    try {
+      console.log('📚 CourseService: Fetching courses with params:', params);
+      const response = await api.get('/courses', { params });
+      console.log('📚 CourseService: Response received:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('❌ CourseService: Error fetching courses:', error);
+      console.error('Error details:', {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
+        config: error.config,
+      });
+      throw error;
+    }
   },
 
   /**
@@ -82,6 +95,27 @@ const courseService = {
   updateSection: async (id, sectionData) => {
     const response = await api.put(`/sections/${id}`, sectionData);
     return response.data;
+  },
+
+  /**
+   * Get all departments (for filtering)
+   */
+  getDepartments: async () => {
+    try {
+      console.log('🏢 CourseService: Fetching departments...');
+      const response = await api.get('/courses/departments');
+      console.log('🏢 CourseService: Departments response:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('❌ CourseService: Error fetching departments:', error);
+      console.error('Error details:', {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
+        config: error.config,
+      });
+      throw error;
+    }
   },
 
   /**

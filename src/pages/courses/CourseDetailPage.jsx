@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { 
   FiBook, FiClock, FiUsers, FiArrowLeft, FiCalendar, 
-  FiMapPin, FiUser, FiCheckCircle, FiAlertCircle, FiLink
+  FiMapPin, FiUser, FiCheckCircle, FiAlertCircle, FiLink,
+  FiXCircle, FiInfo
 } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import courseService from '../../services/courseService';
@@ -71,18 +72,38 @@ const CourseDetailPage = () => {
   };
 
   const handleEnroll = async (sectionId) => {
-    if (!isStudent) return;
+    if (!isStudent) {
+      toast.error('Sadece öğrenciler ders kaydı yapabilir');
+      return;
+    }
+
+    if (!sectionId) {
+      toast.error('Section ID bulunamadı');
+      return;
+    }
 
     try {
       setEnrolling(sectionId);
+      console.log('📝 Enrollment attempt for section:', sectionId);
+      
       const response = await enrollmentService.enrollInCourse(sectionId);
+      console.log('✅ Enrollment response:', response);
       
       if (response.success) {
         toast.success(response.message || 'Derse başarıyla kayıt oldunuz!');
-        navigate('/my-courses');
+        // Refresh course data to update eligibility
+        await fetchCourse();
+        // Navigate after a short delay to show success message
+        setTimeout(() => {
+          navigate('/my-courses');
+        }, 1500);
+      } else {
+        toast.error(response.message || 'Kayıt olurken hata oluştu');
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Kayıt olurken hata oluştu');
+      console.error('❌ Enrollment error:', error);
+      const errorMessage = error.response?.data?.message || error.message || 'Kayıt olurken hata oluştu';
+      toast.error(errorMessage);
     } finally {
       setEnrolling(null);
     }
@@ -188,23 +209,64 @@ const CourseDetailPage = () => {
               <p className="text-slate-400 text-sm">Bu ders için önkoşul bulunmuyor.</p>
             ) : (
               <ul className="space-y-3">
-                {prerequisites.map((prereq) => (
-                  <li key={prereq.id}>
-                    <Link
-                      to={`/courses/${prereq.id}`}
-                      className="flex items-center gap-3 p-3 rounded-xl bg-slate-800/50 hover:bg-slate-700/50 transition-colors"
-                    >
-                      <div className="w-10 h-10 rounded-lg bg-amber-500/20 flex items-center justify-center shrink-0">
-                        <FiBook className="w-5 h-5 text-amber-400" />
-                      </div>
-                      <div>
-                        <div className="font-medium text-sm">{prereq.code}</div>
-                        <div className="text-xs text-slate-400">{prereq.name}</div>
-                        <div className="text-xs text-amber-400">Min: {prereq.min_grade}</div>
-                      </div>
-                    </Link>
-                  </li>
-                ))}
+                {prerequisites.map((prereq) => {
+                  // Check if prerequisite completion status is available
+                  const isCompleted = prereq.completed === true;
+                  const isIncomplete = prereq.completed === false;
+                  const statusUnknown = prereq.completed === undefined;
+                  
+                  return (
+                    <li key={prereq.id}>
+                      <Link
+                        to={`/courses/${prereq.id}`}
+                        className={`flex items-center gap-3 p-3 rounded-xl transition-colors ${
+                          isCompleted
+                            ? 'bg-green-500/10 border border-green-500/20 hover:bg-green-500/20'
+                            : isIncomplete
+                            ? 'bg-red-500/10 border border-red-500/20 hover:bg-red-500/20'
+                            : 'bg-slate-800/50 hover:bg-slate-700/50'
+                        }`}
+                      >
+                        <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${
+                          isCompleted
+                            ? 'bg-green-500/20'
+                            : isIncomplete
+                            ? 'bg-red-500/20'
+                            : 'bg-amber-500/20'
+                        }`}>
+                          {isCompleted ? (
+                            <FiCheckCircle className="w-5 h-5 text-green-400" />
+                          ) : isIncomplete ? (
+                            <FiXCircle className="w-5 h-5 text-red-400" />
+                          ) : (
+                            <FiBook className="w-5 h-5 text-amber-400" />
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="font-medium text-sm flex items-center gap-2 flex-wrap">
+                            {prereq.code}
+                            {isCompleted && (
+                              <span className="text-xs px-2 py-0.5 rounded-full bg-green-500/20 text-green-400">
+                                Tamamlandı
+                              </span>
+                            )}
+                            {isIncomplete && (
+                              <span className="text-xs px-2 py-0.5 rounded-full bg-red-500/20 text-red-400">
+                                Eksik
+                              </span>
+                            )}
+                          </div>
+                          <div className="text-xs text-slate-400 truncate">{prereq.name}</div>
+                          <div className={`text-xs mt-1 ${
+                            isCompleted ? 'text-green-400' : isIncomplete ? 'text-red-400' : 'text-amber-400'
+                          }`}>
+                            Min Not: {prereq.min_grade || 'DD'}
+                          </div>
+                        </div>
+                      </Link>
+                    </li>
+                  );
+                })}
               </ul>
             )}
           </div>
@@ -271,26 +333,93 @@ const CourseDetailPage = () => {
                           
                           {isStudent && (
                             <>
-                              {elig && !elig.eligible && (
-                                <div className="text-xs text-red-400 flex items-center gap-1">
-                                  <FiAlertCircle className="w-3 h-3" />
-                                  {elig.issues?.[0] || 'Kayıt yapılamaz'}
+                              {elig && (
+                                <div className="w-full mb-2">
+                                  {!elig.eligible && elig.issues && elig.issues.length > 0 && (
+                                    <div className="text-xs text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg p-2 mb-2">
+                                      <div className="flex items-start gap-2">
+                                        <FiAlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
+                                        <div className="flex-1">
+                                          <div className="font-medium mb-1">Kayıt Yapılamaz:</div>
+                                          <ul className="list-disc list-inside space-y-0.5">
+                                            {elig.issues.map((issue, idx) => (
+                                              <li key={idx}>{issue}</li>
+                                            ))}
+                                          </ul>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  )}
+                                  {elig.eligible && (
+                                    <div className="text-xs text-green-400 bg-green-500/10 border border-green-500/20 rounded-lg p-2 mb-2 flex items-center gap-2">
+                                      <FiCheckCircle className="w-4 h-4" />
+                                      <span>Kayıt için uygunsunuz</span>
+                                    </div>
+                                  )}
+                                  {elig.details && (
+                                    <details className="text-xs text-slate-400 mt-2">
+                                      <summary className="cursor-pointer hover:text-slate-300 flex items-center gap-1">
+                                        <FiInfo className="w-3 h-3" />
+                                        Detaylı Bilgi
+                                      </summary>
+                                      <div className="mt-2 space-y-1 pl-4">
+                                        {elig.details.prerequisites && (
+                                          <div>
+                                            <span className="font-medium">Önkoşullar: </span>
+                                            {elig.details.prerequisites.satisfied ? (
+                                              <span className="text-green-400">✓ Tamamlandı</span>
+                                            ) : (
+                                              <span className="text-red-400">
+                                                ✗ Eksik: {elig.details.prerequisites.missing?.map(m => m.courseCode).join(', ')}
+                                              </span>
+                                            )}
+                                          </div>
+                                        )}
+                                        {elig.details.scheduleConflict && (
+                                          <div>
+                                            <span className="font-medium">Çakışma: </span>
+                                            {elig.details.scheduleConflict.hasConflict ? (
+                                              <span className="text-red-400">✗ Var</span>
+                                            ) : (
+                                              <span className="text-green-400">✓ Yok</span>
+                                            )}
+                                          </div>
+                                        )}
+                                        {elig.details.hasCapacity !== undefined && (
+                                          <div>
+                                            <span className="font-medium">Kapasite: </span>
+                                            {elig.details.hasCapacity ? (
+                                              <span className="text-green-400">✓ Yer var</span>
+                                            ) : (
+                                              <span className="text-red-400">✗ Dolu</span>
+                                            )}
+                                          </div>
+                                        )}
+                                      </div>
+                                    </details>
+                                  )}
                                 </div>
                               )}
                               <button
                                 onClick={() => handleEnroll(section.id)}
                                 disabled={!canEnroll || enrolling === section.id}
-                                className={`btn ${canEnroll ? 'btn-primary' : 'btn-secondary opacity-50 cursor-not-allowed'}`}
+                                className={`btn w-full ${canEnroll ? 'btn-primary' : 'btn-secondary opacity-50 cursor-not-allowed'}`}
                               >
                                 {enrolling === section.id ? (
-                                  <LoadingSpinner size="sm" />
+                                  <>
+                                    <LoadingSpinner size="sm" />
+                                    <span className="ml-2">Kayıt yapılıyor...</span>
+                                  </>
                                 ) : canEnroll ? (
                                   <>
                                     <FiCheckCircle className="w-4 h-4 mr-2" />
                                     Kayıt Ol
                                   </>
                                 ) : (
-                                  'Kayıt Yapılamaz'
+                                  <>
+                                    <FiXCircle className="w-4 h-4 mr-2" />
+                                    Kayıt Yapılamaz
+                                  </>
                                 )}
                               </button>
                             </>

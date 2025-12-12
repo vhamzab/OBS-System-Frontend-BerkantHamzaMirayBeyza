@@ -31,6 +31,11 @@ import GiveAttendancePage from './pages/attendance/GiveAttendancePage';
 import MyAttendancePage from './pages/attendance/MyAttendancePage';
 import AttendanceReportPage from './pages/attendance/AttendanceReportPage';
 import ExcuseRequestsPage from './pages/attendance/ExcuseRequestsPage';
+import CreateExcusePage from './pages/attendance/CreateExcusePage';
+
+// Schedule & Announcements
+import SchedulePage from './pages/schedule/SchedulePage';
+import AnnouncementsPage from './pages/announcements/AnnouncementsPage';
 
 // Faculty Pages
 import FacultySectionsPage from './pages/faculty/FacultySectionsPage';
@@ -158,6 +163,14 @@ function App() {
           }
         />
         <Route
+          path="/attendance/excuse"
+          element={
+            <ProtectedRoute roles={['student']}>
+              <CreateExcusePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/my-excuse-requests"
           element={
             <ProtectedRoute roles={['student']}>
@@ -169,7 +182,15 @@ function App() {
           path="/schedule"
           element={
             <ProtectedRoute roles={['student']}>
-              <ComingSoon title="Ders Programı" />
+              <SchedulePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/announcements"
+          element={
+            <ProtectedRoute>
+              <AnnouncementsPage />
             </ProtectedRoute>
           }
         />

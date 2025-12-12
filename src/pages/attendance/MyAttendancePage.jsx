@@ -20,22 +20,37 @@ const MyAttendancePage = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
+      console.log('📊 MyAttendancePage: Fetching attendance data...');
       
       const [attendanceRes, activeRes] = await Promise.all([
         attendanceService.getMyAttendance(),
         attendanceService.getActiveSessions(),
       ]);
       
+      console.log('✅ MyAttendancePage: Data fetched:', { attendanceRes, activeRes });
+      
       if (attendanceRes.success) {
-        setAttendance(attendanceRes.data);
+        setAttendance(attendanceRes.data || []);
+        console.log(`✅ MyAttendancePage: ${attendanceRes.data?.length || 0} attendance records loaded`);
+      } else {
+        console.warn('⚠️ MyAttendancePage: Attendance response not successful:', attendanceRes);
+        toast.error(attendanceRes.message || 'Yoklama bilgileri yüklenirken hata oluştu');
       }
       
       if (activeRes.success) {
-        setActiveSessions(activeRes.data);
+        setActiveSessions(activeRes.data || []);
+        console.log(`✅ MyAttendancePage: ${activeRes.data?.length || 0} active sessions loaded`);
+      } else {
+        console.warn('⚠️ MyAttendancePage: Active sessions response not successful:', activeRes);
       }
     } catch (error) {
-      toast.error('Veriler yüklenirken hata oluştu');
-      console.error(error);
+      console.error('❌ MyAttendancePage: Fetch data error:', error);
+      console.error('Error details:', {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
+      });
+      toast.error(error.response?.data?.message || 'Veriler yüklenirken hata oluştu');
     } finally {
       setLoading(false);
     }

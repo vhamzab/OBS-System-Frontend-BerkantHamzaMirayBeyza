@@ -33,14 +33,46 @@ const LoginPage = () => {
     onSubmit: async (values) => {
       setLoading(true);
       try {
-        const response = await login(values.email, values.password);
+        console.log('🔐 LoginPage: Starting login process');
+        console.log('📧 Email:', values.email);
+        console.log('🔑 Password length:', values.password.length);
         
-        if (response.success) {
+        const response = await login(values.email, values.password);
+        console.log('✅ LoginPage: Login response received:', response);
+        
+        if (response && response.success) {
+          console.log('✅ LoginPage: Login successful, navigating...');
           toast.success('Giriş başarılı!');
-          navigate(from, { replace: true });
+          // Small delay to ensure state is updated
+          setTimeout(() => {
+            navigate(from, { replace: true });
+          }, 100);
+        } else {
+          const errorMsg = response?.message || 'Giriş yapılırken bir hata oluştu';
+          console.error('❌ LoginPage: Login failed:', errorMsg, response);
+          toast.error(errorMsg);
         }
       } catch (error) {
-        const message = error.response?.data?.message || 'Giriş yapılırken bir hata oluştu';
+        // Handle different error types
+        console.error('❌ LoginPage: Login exception:', error);
+        console.error('Error details:', {
+          message: error.message,
+          response: error.response?.data,
+          status: error.response?.status,
+          config: error.config,
+        });
+        
+        let message = 'Giriş yapılırken bir hata oluştu';
+        if (error.message) {
+          message = error.message;
+        } else if (error.response?.data?.message) {
+          message = error.response.data.message;
+        } else if (error.response?.status === 401) {
+          message = 'E-posta veya şifre hatalı';
+        } else if (error.response?.status === 0 || !error.response) {
+          message = 'Sunucuya bağlanılamadı. Lütfen internet bağlantınızı kontrol edin.';
+        }
+        
         toast.error(message);
       } finally {
         setLoading(false);

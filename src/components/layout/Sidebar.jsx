@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { 
   FiHome, 
   FiUser, 
@@ -74,11 +75,24 @@ const Sidebar = ({ isOpen, onClose }) => {
         className={`
           fixed top-16 left-0 h-[calc(100vh-4rem)] w-64 bg-slate-900/95 backdrop-blur-xl
           border-r border-slate-800 z-50 transform transition-transform duration-300
-          lg:translate-x-0 lg:static lg:h-auto overflow-y-auto
+          lg:translate-x-0 lg:static lg:h-auto flex flex-col overflow-hidden
           ${isOpen ? 'translate-x-0' : '-translate-x-full'}
         `}
       >
-        <nav className="p-4 space-y-2">
+        {/* Sticky Header with Logo */}
+        <div className="sticky top-0 z-10 bg-slate-900/95 backdrop-blur-xl border-b border-slate-800 p-4">
+          <Link to="/dashboard" className="flex items-center gap-3" onClick={onClose}>
+            <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-accent-500 rounded-xl flex items-center justify-center flex-shrink-0">
+              <span className="text-white font-bold text-lg">Ü</span>
+            </div>
+            <span className="font-display font-bold text-lg">
+              Üniversite <span className="gradient-text">OBS</span>
+            </span>
+          </Link>
+        </div>
+
+        {/* Scrollable Navigation */}
+        <nav className="flex-1 overflow-y-auto p-4 space-y-2">
           {links.map((link) => (
             <NavLink
               key={link.to}
@@ -98,8 +112,8 @@ const Sidebar = ({ isOpen, onClose }) => {
           ))}
         </nav>
 
-        {/* User Role Badge */}
-        <div className="p-4 mt-auto border-t border-slate-800">
+        {/* User Role Badge - Sticky at bottom */}
+        <div className="sticky bottom-0 bg-slate-900/95 backdrop-blur-xl border-t border-slate-800 p-4">
           <div className="px-4 py-2 rounded-xl bg-slate-800/50">
             <div className="text-xs text-slate-500 mb-1">Rol</div>
             <div className="font-medium capitalize">

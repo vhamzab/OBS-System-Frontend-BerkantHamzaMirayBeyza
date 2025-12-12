@@ -96,10 +96,11 @@ const FacultySectionsPage = () => {
         <select
           value={selectedSemester}
           onChange={(e) => setSelectedSemester(e.target.value)}
-          className="input"
+          className="input text-white"
+          style={{ color: '#ffffff' }}
         >
-          <option value="current">Mevcut Dönem</option>
-          <option value="all">Tüm Dönemler</option>
+          <option value="current" style={{ color: '#ffffff', backgroundColor: '#0f172a' }}>Mevcut Dönem</option>
+          <option value="all" style={{ color: '#ffffff', backgroundColor: '#0f172a' }}>Tüm Dönemler</option>
         </select>
       </div>
 

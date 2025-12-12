@@ -1,8 +1,14 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { FiBook, FiCalendar, FiClipboard, FiUsers, FiTrendingUp, FiBell } from 'react-icons/fi';
+import toast from 'react-hot-toast';
+import courseService from '../../services/courseService';
 
 const DashboardPage = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
+  const [loadingGradeEntry, setLoadingGradeEntry] = useState(false);
 
   const getRoleLabel = (role) => {
     const roles = {
@@ -47,6 +53,35 @@ const DashboardPage = () => {
 
   const stats = getStats();
 
+  // Handle grade entry navigation
+  const handleGradeEntry = async () => {
+    if (user?.role !== 'faculty') return;
+    
+    try {
+      setLoadingGradeEntry(true);
+      const response = await courseService.getInstructorSections();
+      
+      if (response.success && response.data.length > 0) {
+        // If only one section, go directly to gradebook
+        if (response.data.length === 1) {
+          navigate(`/gradebook/${response.data[0].id}`);
+        } else {
+          // Multiple sections, go to sections page
+          navigate('/faculty/sections');
+        }
+      } else {
+        toast.error('Henüz size atanmış ders bulunmuyor');
+        navigate('/faculty/sections');
+      }
+    } catch (error) {
+      console.error('Error fetching sections:', error);
+      toast.error('Dersler yüklenirken hata oluştu');
+      navigate('/faculty/sections');
+    } finally {
+      setLoadingGradeEntry(false);
+    }
+  };
+
   return (
     <div className="p-6 lg:p-8 max-w-7xl mx-auto">
       {/* Welcome Section */}
@@ -89,19 +124,31 @@ const DashboardPage = () => {
           <div className="grid grid-cols-2 gap-3">
             {user?.role === 'student' && (
               <>
-                <button className="p-4 rounded-xl bg-slate-800 hover:bg-slate-700 transition-colors text-left">
+                <button
+                  onClick={() => navigate('/courses')}
+                  className="p-4 rounded-xl bg-slate-800 hover:bg-slate-700 transition-colors text-left"
+                >
                   <FiBook className="w-5 h-5 text-primary-400 mb-2" />
                   <span className="block text-sm font-medium">Ders Kaydı</span>
                 </button>
-                <button className="p-4 rounded-xl bg-slate-800 hover:bg-slate-700 transition-colors text-left">
+                <button
+                  onClick={() => navigate('/schedule')}
+                  className="p-4 rounded-xl bg-slate-800 hover:bg-slate-700 transition-colors text-left"
+                >
                   <FiCalendar className="w-5 h-5 text-accent-400 mb-2" />
                   <span className="block text-sm font-medium">Ders Programı</span>
                 </button>
-                <button className="p-4 rounded-xl bg-slate-800 hover:bg-slate-700 transition-colors text-left">
+                <button
+                  onClick={() => navigate('/grades')}
+                  className="p-4 rounded-xl bg-slate-800 hover:bg-slate-700 transition-colors text-left"
+                >
                   <FiClipboard className="w-5 h-5 text-green-400 mb-2" />
                   <span className="block text-sm font-medium">Notlarım</span>
                 </button>
-                <button className="p-4 rounded-xl bg-slate-800 hover:bg-slate-700 transition-colors text-left">
+                <button
+                  onClick={() => navigate('/announcements')}
+                  className="p-4 rounded-xl bg-slate-800 hover:bg-slate-700 transition-colors text-left"
+                >
                   <FiBell className="w-5 h-5 text-orange-400 mb-2" />
                   <span className="block text-sm font-medium">Duyurular</span>
                 </button>
@@ -109,19 +156,34 @@ const DashboardPage = () => {
             )}
             {user?.role === 'faculty' && (
               <>
-                <button className="p-4 rounded-xl bg-slate-800 hover:bg-slate-700 transition-colors text-left">
+                <button
+                  onClick={() => navigate('/attendance/start')}
+                  className="p-4 rounded-xl bg-slate-800 hover:bg-slate-700 transition-colors text-left"
+                >
                   <FiUsers className="w-5 h-5 text-primary-400 mb-2" />
                   <span className="block text-sm font-medium">Yoklama Al</span>
                 </button>
-                <button className="p-4 rounded-xl bg-slate-800 hover:bg-slate-700 transition-colors text-left">
+                <button
+                  onClick={handleGradeEntry}
+                  disabled={loadingGradeEntry}
+                  className="p-4 rounded-xl bg-slate-800 hover:bg-slate-700 transition-colors text-left disabled:opacity-50 disabled:cursor-not-allowed"
+                >
                   <FiClipboard className="w-5 h-5 text-accent-400 mb-2" />
                   <span className="block text-sm font-medium">Not Girişi</span>
                 </button>
-                <button className="p-4 rounded-xl bg-slate-800 hover:bg-slate-700 transition-colors text-left">
+                <button
+                  onClick={() => navigate('/faculty/sections')}
+                  className="p-4 rounded-xl bg-slate-800 hover:bg-slate-700 transition-colors text-left"
+                >
                   <FiBook className="w-5 h-5 text-green-400 mb-2" />
                   <span className="block text-sm font-medium">Ders Materyali</span>
                 </button>
-                <button className="p-4 rounded-xl bg-slate-800 hover:bg-slate-700 transition-colors text-left">
+                <button
+                  onClick={() => {
+                    toast.info('Sınav planlama özelliği yakında eklenecek');
+                  }}
+                  className="p-4 rounded-xl bg-slate-800 hover:bg-slate-700 transition-colors text-left"
+                >
                   <FiCalendar className="w-5 h-5 text-orange-400 mb-2" />
                   <span className="block text-sm font-medium">Sınav Planla</span>
                 </button>
@@ -129,19 +191,35 @@ const DashboardPage = () => {
             )}
             {user?.role === 'admin' && (
               <>
-                <button className="p-4 rounded-xl bg-slate-800 hover:bg-slate-700 transition-colors text-left">
+                <button
+                  onClick={() => navigate('/admin/users')}
+                  className="p-4 rounded-xl bg-slate-800 hover:bg-slate-700 transition-colors text-left"
+                >
                   <FiUsers className="w-5 h-5 text-primary-400 mb-2" />
                   <span className="block text-sm font-medium">Kullanıcı Ekle</span>
                 </button>
-                <button className="p-4 rounded-xl bg-slate-800 hover:bg-slate-700 transition-colors text-left">
+                <button
+                  onClick={() => navigate('/admin/courses')}
+                  className="p-4 rounded-xl bg-slate-800 hover:bg-slate-700 transition-colors text-left"
+                >
                   <FiBook className="w-5 h-5 text-accent-400 mb-2" />
                   <span className="block text-sm font-medium">Ders Ekle</span>
                 </button>
-                <button className="p-4 rounded-xl bg-slate-800 hover:bg-slate-700 transition-colors text-left">
+                <button
+                  onClick={() => {
+                    toast.info('Raporlar özelliği yakında eklenecek');
+                  }}
+                  className="p-4 rounded-xl bg-slate-800 hover:bg-slate-700 transition-colors text-left"
+                >
                   <FiTrendingUp className="w-5 h-5 text-green-400 mb-2" />
                   <span className="block text-sm font-medium">Raporlar</span>
                 </button>
-                <button className="p-4 rounded-xl bg-slate-800 hover:bg-slate-700 transition-colors text-left">
+                <button
+                  onClick={() => {
+                    toast.info('Takvim özelliği yakında eklenecek');
+                  }}
+                  className="p-4 rounded-xl bg-slate-800 hover:bg-slate-700 transition-colors text-left"
+                >
                   <FiCalendar className="w-5 h-5 text-orange-400 mb-2" />
                   <span className="block text-sm font-medium">Takvim</span>
                 </button>
@@ -179,12 +257,6 @@ const DashboardPage = () => {
         </div>
       </div>
 
-      {/* Placeholder for upcoming features */}
-      <div className="mt-8 p-6 border-2 border-dashed border-slate-700 rounded-2xl text-center">
-        <p className="text-slate-500">
-          🚀 Yeni özellikler yakında eklenecek: Ders yönetimi, yoklama sistemi, not girişi ve daha fazlası!
-        </p>
-      </div>
     </div>
   );
 };
