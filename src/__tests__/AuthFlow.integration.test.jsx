@@ -43,22 +43,22 @@ describe('Auth Flow Integration Tests', () => {
   describe('Login to Dashboard Flow', () => {
     it('should complete full login flow successfully', async () => {
       mockLogin.mockResolvedValue({ success: true });
-      
+
       render(
-        <BrowserRouter>
+        <MemoryRouter>
           <LoginPage />
-        </BrowserRouter>
+        </MemoryRouter>
       );
-      
+
       // Fill in login form
       const emailInput = screen.getByPlaceholderText('ornek@university.edu');
       const passwordInput = screen.getByPlaceholderText('••••••••');
       const submitButton = screen.getByRole('button', { name: /giriş yap/i });
-      
+
       await userEvent.type(emailInput, 'student@university.edu');
       await userEvent.type(passwordInput, 'Password123');
       await userEvent.click(submitButton);
-      
+
       await waitFor(() => {
         expect(mockLogin).toHaveBeenCalledWith('student@university.edu', 'Password123');
         expect(mockNavigate).toHaveBeenCalledWith('/dashboard', { replace: true });
@@ -70,21 +70,21 @@ describe('Auth Flow Integration Tests', () => {
       mockLogin.mockRejectedValue({
         response: { data: { message: 'Geçersiz kullanıcı adı veya şifre' } }
       });
-      
+
       render(
-        <BrowserRouter>
+        <MemoryRouter>
           <LoginPage />
-        </BrowserRouter>
+        </MemoryRouter>
       );
-      
+
       const emailInput = screen.getByPlaceholderText('ornek@university.edu');
       const passwordInput = screen.getByPlaceholderText('••••••••');
       const submitButton = screen.getByRole('button', { name: /giriş yap/i });
-      
+
       await userEvent.type(emailInput, 'wrong@email.com');
       await userEvent.type(passwordInput, 'wrongpassword');
       await userEvent.click(submitButton);
-      
+
       await waitFor(() => {
         expect(toast.error).toHaveBeenCalledWith('Geçersiz kullanıcı adı veya şifre');
         expect(mockNavigate).not.toHaveBeenCalled();
@@ -93,39 +93,39 @@ describe('Auth Flow Integration Tests', () => {
 
     it('should validate email format before submission', async () => {
       render(
-        <BrowserRouter>
+        <MemoryRouter>
           <LoginPage />
-        </BrowserRouter>
+        </MemoryRouter>
       );
-      
+
       const emailInput = screen.getByPlaceholderText('ornek@university.edu');
       await userEvent.type(emailInput, 'invalidemail');
       fireEvent.blur(emailInput);
-      
+
       await waitFor(() => {
         expect(screen.getByText('Geçerli bir e-posta adresi giriniz')).toBeInTheDocument();
       });
-      
+
       expect(mockLogin).not.toHaveBeenCalled();
     });
 
     it('should require password field', async () => {
       render(
-        <BrowserRouter>
+        <MemoryRouter>
           <LoginPage />
-        </BrowserRouter>
+        </MemoryRouter>
       );
-      
+
       const emailInput = screen.getByPlaceholderText('ornek@university.edu');
       const submitButton = screen.getByRole('button', { name: /giriş yap/i });
-      
+
       await userEvent.type(emailInput, 'test@university.edu');
       await userEvent.click(submitButton);
-      
+
       await waitFor(() => {
         expect(screen.getByText('Şifre zorunludur')).toBeInTheDocument();
       });
-      
+
       expect(mockLogin).not.toHaveBeenCalled();
     });
   });
@@ -134,13 +134,13 @@ describe('Auth Flow Integration Tests', () => {
     it('should complete full registration flow and redirect to login', async () => {
       const toast = require('react-hot-toast');
       mockRegister.mockResolvedValue({ success: true, message: 'Kayıt başarılı!' });
-      
+
       render(
-        <BrowserRouter>
+        <MemoryRouter>
           <RegisterPage />
-        </BrowserRouter>
+        </MemoryRouter>
       );
-      
+
       // Fill in registration form
       const firstNameInput = screen.getByPlaceholderText('Adınız');
       const lastNameInput = screen.getByPlaceholderText('Soyadınız');
@@ -148,22 +148,22 @@ describe('Auth Flow Integration Tests', () => {
       const passwordInputs = screen.getAllByPlaceholderText('••••••••');
       const roleSelect = screen.getByRole('combobox');
       const termsCheckbox = screen.getByRole('checkbox');
-      
+
       await userEvent.type(firstNameInput, 'Yeni');
       await userEvent.type(lastNameInput, 'Kullanıcı');
       await userEvent.type(emailInput, 'yeni@university.edu');
       await userEvent.type(passwordInputs[0], 'Password123');
       await userEvent.type(passwordInputs[1], 'Password123');
       await userEvent.selectOptions(roleSelect, 'student');
-      
+
       const studentNumberInput = await screen.findByPlaceholderText('20210001');
       await userEvent.type(studentNumberInput, '20230001');
-      
+
       await userEvent.click(termsCheckbox);
-      
+
       const submitButton = screen.getByRole('button', { name: /kayıt ol/i });
       await userEvent.click(submitButton);
-      
+
       await waitFor(() => {
         expect(mockRegister).toHaveBeenCalled();
         expect(toast.success).toHaveBeenCalledWith('Kayıt başarılı!');
@@ -176,13 +176,13 @@ describe('Auth Flow Integration Tests', () => {
       mockRegister.mockRejectedValue({
         response: { data: { message: 'Bu e-posta adresi zaten kayıtlı' } }
       });
-      
+
       render(
-        <BrowserRouter>
+        <MemoryRouter>
           <RegisterPage />
-        </BrowserRouter>
+        </MemoryRouter>
       );
-      
+
       // Fill form with existing email
       const firstNameInput = screen.getByPlaceholderText('Adınız');
       const lastNameInput = screen.getByPlaceholderText('Soyadınız');
@@ -190,22 +190,22 @@ describe('Auth Flow Integration Tests', () => {
       const passwordInputs = screen.getAllByPlaceholderText('••••••••');
       const roleSelect = screen.getByRole('combobox');
       const termsCheckbox = screen.getByRole('checkbox');
-      
+
       await userEvent.type(firstNameInput, 'Test');
       await userEvent.type(lastNameInput, 'User');
       await userEvent.type(emailInput, 'existing@university.edu');
       await userEvent.type(passwordInputs[0], 'Password123');
       await userEvent.type(passwordInputs[1], 'Password123');
       await userEvent.selectOptions(roleSelect, 'student');
-      
+
       const studentNumberInput = await screen.findByPlaceholderText('20210001');
       await userEvent.type(studentNumberInput, '20230001');
-      
+
       await userEvent.click(termsCheckbox);
-      
+
       const submitButton = screen.getByRole('button', { name: /kayıt ol/i });
       await userEvent.click(submitButton);
-      
+
       await waitFor(() => {
         expect(toast.error).toHaveBeenCalledWith('Bu e-posta adresi zaten kayıtlı');
         expect(mockNavigate).not.toHaveBeenCalledWith('/login');
@@ -214,17 +214,17 @@ describe('Auth Flow Integration Tests', () => {
 
     it('should validate password requirements during registration', async () => {
       render(
-        <BrowserRouter>
+        <MemoryRouter>
           <RegisterPage />
-        </BrowserRouter>
+        </MemoryRouter>
       );
-      
+
       const passwordInputs = screen.getAllByPlaceholderText('••••••••');
-      
+
       // Test weak password
       await userEvent.type(passwordInputs[0], 'weak');
       fireEvent.blur(passwordInputs[0]);
-      
+
       await waitFor(() => {
         expect(screen.getByText('Şifre en az 8 karakter olmalıdır')).toBeInTheDocument();
       });
@@ -232,17 +232,17 @@ describe('Auth Flow Integration Tests', () => {
 
     it('should validate password confirmation match', async () => {
       render(
-        <BrowserRouter>
+        <MemoryRouter>
           <RegisterPage />
-        </BrowserRouter>
+        </MemoryRouter>
       );
-      
+
       const passwordInputs = screen.getAllByPlaceholderText('••••••••');
-      
+
       await userEvent.type(passwordInputs[0], 'Password123');
       await userEvent.type(passwordInputs[1], 'Password456');
       fireEvent.blur(passwordInputs[1]);
-      
+
       await waitFor(() => {
         expect(screen.getByText('Şifreler eşleşmiyor')).toBeInTheDocument();
       });
@@ -252,33 +252,33 @@ describe('Auth Flow Integration Tests', () => {
   describe('Form Navigation', () => {
     it('should have link from login to register page', () => {
       render(
-        <BrowserRouter>
+        <MemoryRouter>
           <LoginPage />
-        </BrowserRouter>
+        </MemoryRouter>
       );
-      
+
       const registerLink = screen.getByText('Kayıt Ol');
       expect(registerLink).toHaveAttribute('href', '/register');
     });
 
     it('should have link from register to login page', () => {
       render(
-        <BrowserRouter>
+        <MemoryRouter>
           <RegisterPage />
-        </BrowserRouter>
+        </MemoryRouter>
       );
-      
+
       const loginLink = screen.getByText('Giriş Yap');
       expect(loginLink).toHaveAttribute('href', '/login');
     });
 
     it('should have forgot password link on login page', () => {
       render(
-        <BrowserRouter>
+        <MemoryRouter>
           <LoginPage />
-        </BrowserRouter>
+        </MemoryRouter>
       );
-      
+
       const forgotPasswordLink = screen.getByText('Şifremi unuttum');
       expect(forgotPasswordLink).toHaveAttribute('href', '/forgot-password');
     });
@@ -287,14 +287,14 @@ describe('Auth Flow Integration Tests', () => {
   describe('Student Registration Flow', () => {
     it('should show student number field when student role selected', async () => {
       render(
-        <BrowserRouter>
+        <MemoryRouter>
           <RegisterPage />
-        </BrowserRouter>
+        </MemoryRouter>
       );
-      
+
       const roleSelect = screen.getByRole('combobox');
       await userEvent.selectOptions(roleSelect, 'student');
-      
+
       await waitFor(() => {
         expect(screen.getByPlaceholderText('20210001')).toBeInTheDocument();
       });
@@ -302,18 +302,18 @@ describe('Auth Flow Integration Tests', () => {
 
     it('should validate student number format', async () => {
       render(
-        <BrowserRouter>
+        <MemoryRouter>
           <RegisterPage />
-        </BrowserRouter>
+        </MemoryRouter>
       );
-      
+
       const roleSelect = screen.getByRole('combobox');
       await userEvent.selectOptions(roleSelect, 'student');
-      
+
       const studentNumberInput = await screen.findByPlaceholderText('20210001');
       await userEvent.type(studentNumberInput, 'abc');
       fireEvent.blur(studentNumberInput);
-      
+
       await waitFor(() => {
         expect(screen.getByText('Geçerli bir öğrenci numarası giriniz')).toBeInTheDocument();
       });
@@ -323,14 +323,14 @@ describe('Auth Flow Integration Tests', () => {
   describe('Faculty Registration Flow', () => {
     it('should show employee number and title fields when faculty role selected', async () => {
       render(
-        <BrowserRouter>
+        <MemoryRouter>
           <RegisterPage />
-        </BrowserRouter>
+        </MemoryRouter>
       );
-      
+
       const roleSelect = screen.getByRole('combobox');
       await userEvent.selectOptions(roleSelect, 'faculty');
-      
+
       await waitFor(() => {
         expect(screen.getByPlaceholderText('AK0001')).toBeInTheDocument();
         expect(screen.getByText('Ünvan seçiniz')).toBeInTheDocument();
@@ -339,35 +339,35 @@ describe('Auth Flow Integration Tests', () => {
 
     it('should complete faculty registration successfully', async () => {
       mockRegister.mockResolvedValue({ success: true, message: 'Kayıt başarılı!' });
-      
+
       render(
-        <BrowserRouter>
+        <MemoryRouter>
           <RegisterPage />
-        </BrowserRouter>
+        </MemoryRouter>
       );
-      
+
       const firstNameInput = screen.getByPlaceholderText('Adınız');
       const lastNameInput = screen.getByPlaceholderText('Soyadınız');
       const emailInput = screen.getByPlaceholderText('ornek@university.edu');
       const passwordInputs = screen.getAllByPlaceholderText('••••••••');
       const roleSelect = screen.getByRole('combobox');
       const termsCheckbox = screen.getByRole('checkbox');
-      
+
       await userEvent.type(firstNameInput, 'Prof. Test');
       await userEvent.type(lastNameInput, 'Faculty');
       await userEvent.type(emailInput, 'prof@university.edu');
       await userEvent.type(passwordInputs[0], 'Password123');
       await userEvent.type(passwordInputs[1], 'Password123');
       await userEvent.selectOptions(roleSelect, 'faculty');
-      
+
       const employeeNumberInput = await screen.findByPlaceholderText('AK0001');
       await userEvent.type(employeeNumberInput, 'AK0001');
-      
+
       await userEvent.click(termsCheckbox);
-      
+
       const submitButton = screen.getByRole('button', { name: /kayıt ol/i });
       await userEvent.click(submitButton);
-      
+
       await waitFor(() => {
         expect(mockRegister).toHaveBeenCalledWith(expect.objectContaining({
           role: 'faculty',
@@ -381,21 +381,21 @@ describe('Auth Flow Integration Tests', () => {
     it('should display network error message on login', async () => {
       const toast = require('react-hot-toast');
       mockLogin.mockRejectedValue(new Error('Network Error'));
-      
+
       render(
-        <BrowserRouter>
+        <MemoryRouter>
           <LoginPage />
-        </BrowserRouter>
+        </MemoryRouter>
       );
-      
+
       const emailInput = screen.getByPlaceholderText('ornek@university.edu');
       const passwordInput = screen.getByPlaceholderText('••••••••');
       const submitButton = screen.getByRole('button', { name: /giriş yap/i });
-      
+
       await userEvent.type(emailInput, 'test@university.edu');
       await userEvent.type(passwordInput, 'Password123');
       await userEvent.click(submitButton);
-      
+
       await waitFor(() => {
         expect(toast.error).toHaveBeenCalledWith('Giriş yapılırken bir hata oluştu');
       });
@@ -404,35 +404,35 @@ describe('Auth Flow Integration Tests', () => {
     it('should display network error message on registration', async () => {
       const toast = require('react-hot-toast');
       mockRegister.mockRejectedValue(new Error('Network Error'));
-      
+
       render(
-        <BrowserRouter>
+        <MemoryRouter>
           <RegisterPage />
-        </BrowserRouter>
+        </MemoryRouter>
       );
-      
+
       const firstNameInput = screen.getByPlaceholderText('Adınız');
       const lastNameInput = screen.getByPlaceholderText('Soyadınız');
       const emailInput = screen.getByPlaceholderText('ornek@university.edu');
       const passwordInputs = screen.getAllByPlaceholderText('••••••••');
       const roleSelect = screen.getByRole('combobox');
       const termsCheckbox = screen.getByRole('checkbox');
-      
+
       await userEvent.type(firstNameInput, 'Test');
       await userEvent.type(lastNameInput, 'User');
       await userEvent.type(emailInput, 'test@university.edu');
       await userEvent.type(passwordInputs[0], 'Password123');
       await userEvent.type(passwordInputs[1], 'Password123');
       await userEvent.selectOptions(roleSelect, 'student');
-      
+
       const studentNumberInput = await screen.findByPlaceholderText('20210001');
       await userEvent.type(studentNumberInput, '20230001');
-      
+
       await userEvent.click(termsCheckbox);
-      
+
       const submitButton = screen.getByRole('button', { name: /kayıt ol/i });
       await userEvent.click(submitButton);
-      
+
       await waitFor(() => {
         expect(toast.error).toHaveBeenCalledWith('Kayıt olurken bir hata oluştu');
       });
@@ -442,50 +442,48 @@ describe('Auth Flow Integration Tests', () => {
   describe('Terms and Privacy', () => {
     it('should require terms acceptance before registration', async () => {
       render(
-        <BrowserRouter>
+        <MemoryRouter>
           <RegisterPage />
-        </BrowserRouter>
+        </MemoryRouter>
       );
-      
+
       const firstNameInput = screen.getByPlaceholderText('Adınız');
       const lastNameInput = screen.getByPlaceholderText('Soyadınız');
       const emailInput = screen.getByPlaceholderText('ornek@university.edu');
       const passwordInputs = screen.getAllByPlaceholderText('••••••••');
       const roleSelect = screen.getByRole('combobox');
-      
+
       await userEvent.type(firstNameInput, 'Test');
       await userEvent.type(lastNameInput, 'User');
       await userEvent.type(emailInput, 'test@university.edu');
       await userEvent.type(passwordInputs[0], 'Password123');
       await userEvent.type(passwordInputs[1], 'Password123');
       await userEvent.selectOptions(roleSelect, 'student');
-      
+
       const studentNumberInput = await screen.findByPlaceholderText('20210001');
       await userEvent.type(studentNumberInput, '20230001');
-      
+
       // Don't check terms checkbox
-      
+
       const submitButton = screen.getByRole('button', { name: /kayıt ol/i });
       await userEvent.click(submitButton);
-      
+
       await waitFor(() => {
         expect(screen.getByText('Kullanım koşullarını kabul etmelisiniz')).toBeInTheDocument();
       });
-      
+
       expect(mockRegister).not.toHaveBeenCalled();
     });
 
     it('should have terms and privacy links', () => {
       render(
-        <BrowserRouter>
+        <MemoryRouter>
           <RegisterPage />
-        </BrowserRouter>
+        </MemoryRouter>
       );
-      
+
       expect(screen.getByText('Kullanım koşullarını')).toHaveAttribute('href', '/terms');
       expect(screen.getByText('gizlilik politikasını')).toHaveAttribute('href', '/privacy');
     });
   });
 });
-
-

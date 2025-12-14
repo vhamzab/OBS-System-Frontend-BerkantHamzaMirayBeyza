@@ -15,6 +15,7 @@ import DashboardPage from './pages/dashboard/DashboardPage';
 
 // Profile Pages
 import ProfilePage from './pages/profile/ProfilePage';
+import DepartmentSelectionPage from './pages/profile/DepartmentSelectionPage';
 
 // Course Pages
 import CourseCatalogPage from './pages/courses/CourseCatalogPage';
@@ -32,13 +33,22 @@ import MyAttendancePage from './pages/attendance/MyAttendancePage';
 import AttendanceReportPage from './pages/attendance/AttendanceReportPage';
 import ExcuseRequestsPage from './pages/attendance/ExcuseRequestsPage';
 import CreateExcusePage from './pages/attendance/CreateExcusePage';
+import ActiveSessionsPage from './pages/attendance/ActiveSessionsPage';
+import FacultySessionsPage from './pages/attendance/FacultySessionsPage';
 
 // Schedule & Announcements
 import SchedulePage from './pages/schedule/SchedulePage';
 import AnnouncementsPage from './pages/announcements/AnnouncementsPage';
+import AcademicCalendarPage from './pages/calendar/AcademicCalendarPage';
 
 // Faculty Pages
 import FacultySectionsPage from './pages/faculty/FacultySectionsPage';
+
+// Admin Pages
+import AdminSectionsPage from './pages/admin/AdminSectionsPage';
+import AdminUsersPage from './pages/admin/AdminUsersPage';
+import AdminDepartmentsPage from './pages/admin/AdminDepartmentsPage';
+import AdminCoursesPage from './pages/admin/AdminCoursesPage';
 
 // Error Pages
 import NotFoundPage from './pages/NotFoundPage';
@@ -110,7 +120,7 @@ function App() {
             </ProtectedRoute>
           }
         />
-        
+
         {/* Course Catalog (All Roles) */}
         <Route
           path="/courses"
@@ -128,7 +138,7 @@ function App() {
             </ProtectedRoute>
           }
         />
-        
+
         {/* Student Routes */}
         <Route
           path="/my-courses"
@@ -159,6 +169,22 @@ function App() {
           element={
             <ProtectedRoute roles={['student']}>
               <GiveAttendancePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/active-sessions"
+          element={
+            <ProtectedRoute roles={['student']}>
+              <ActiveSessionsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/select-department"
+          element={
+            <ProtectedRoute roles={['student']}>
+              <DepartmentSelectionPage />
             </ProtectedRoute>
           }
         />
@@ -194,7 +220,15 @@ function App() {
             </ProtectedRoute>
           }
         />
-        
+        <Route
+          path="/academic-calendar"
+          element={
+            <ProtectedRoute>
+              <AcademicCalendarPage />
+            </ProtectedRoute>
+          }
+        />
+
         {/* Faculty Routes */}
         <Route
           path="/faculty/sections"
@@ -229,6 +263,14 @@ function App() {
           }
         />
         <Route
+          path="/attendance/sessions"
+          element={
+            <ProtectedRoute roles={['faculty', 'admin']}>
+              <FacultySessionsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/excuse-requests"
           element={
             <ProtectedRoute roles={['faculty', 'admin']}>
@@ -242,7 +284,7 @@ function App() {
           path="/admin/users"
           element={
             <ProtectedRoute roles={['admin']}>
-              <ComingSoon title="Kullanıcı Yönetimi" />
+              <AdminUsersPage />
             </ProtectedRoute>
           }
         />
@@ -250,7 +292,15 @@ function App() {
           path="/admin/departments"
           element={
             <ProtectedRoute roles={['admin']}>
-              <ComingSoon title="Bölüm Yönetimi" />
+              <AdminDepartmentsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/sections"
+          element={
+            <ProtectedRoute roles={['admin']}>
+              <AdminSectionsPage />
             </ProtectedRoute>
           }
         />
@@ -258,7 +308,7 @@ function App() {
           path="/admin/courses"
           element={
             <ProtectedRoute roles={['admin']}>
-              <ComingSoon title="Ders Yönetimi" />
+              <AdminCoursesPage />
             </ProtectedRoute>
           }
         />

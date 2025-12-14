@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import courseService from '../../services/courseService';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import { testApiConnection, testCoursesEndpoint } from '../../utils/apiTest';
+import { useAuth } from '../../context/AuthContext';
 
 // Debounce hook
 const useDebounce = (value, delay) => {
@@ -40,12 +41,18 @@ const CourseCardSkeleton = () => (
 );
 
 const CourseCatalogPage = () => {
+  const { user } = useAuth();
   const [courses, setCourses] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [departmentsLoading, setDepartmentsLoading] = useState(true);
   const [search, setSearch] = useState('');
-  const [departmentFilter, setDepartmentFilter] = useState('');
+  // Auto-set department filter for students with a department
+  const [departmentFilter, setDepartmentFilter] = useState(
+    user?.role === 'student' && user?.student?.department?.id
+      ? user.student.department.id
+      : ''
+  );
   const [pagination, setPagination] = useState({
     page: 1,
     limit: 12,
@@ -67,14 +74,14 @@ const CourseCatalogPage = () => {
           console.error('❌ API health check failed:', healthTest.error);
           toast.error('Backend sunucusuna bağlanılamadı. Lütfen daha sonra tekrar deneyin.');
         }
-        
+
         const coursesTest = await testCoursesEndpoint();
         if (!coursesTest.success) {
           console.error('❌ Courses endpoint test failed:', coursesTest.error);
         }
       }
     };
-    
+
     testConnection();
   }, []);
 
@@ -129,7 +136,7 @@ const CourseCatalogPage = () => {
         page: pagination.page,
         limit: pagination.limit,
       };
-      
+
       if (debouncedSearch.trim()) {
         params.search = debouncedSearch.trim();
       }
@@ -140,7 +147,7 @@ const CourseCatalogPage = () => {
       console.log('📚 Fetching courses with params:', params);
       const response = await courseService.getCourses(params);
       console.log('📚 Courses response:', response);
-      
+
       if (response.success) {
         setCourses(response.data.courses);
         setPagination((prev) => ({
@@ -233,7 +240,7 @@ const CourseCatalogPage = () => {
             )}
           </div>
         </div>
-        
+
         {/* Active filters indicator */}
         {hasActiveFilters && (
           <div className="mt-4 pt-4 border-t border-slate-700/50 flex items-center gap-2 flex-wrap">
@@ -317,15 +324,15 @@ const CourseCatalogPage = () => {
                     {course.code}
                   </span>
                 </div>
-                
+
                 <h3 className="font-display text-lg font-semibold mb-2 group-hover:text-primary-400 transition-colors line-clamp-2">
                   {course.name}
                 </h3>
-                
+
                 <p className="text-slate-400 text-sm mb-4 line-clamp-2 min-h-[2.5rem]">
                   {course.description || 'Açıklama bulunmuyor'}
                 </p>
-                
+
                 <div className="flex items-center justify-between text-sm text-slate-400">
                   <div className="flex items-center gap-4">
                     <span className="flex items-center gap-1">
@@ -339,7 +346,7 @@ const CourseCatalogPage = () => {
                   </div>
                   <FiChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </div>
-                
+
                 {course.department && (
                   <div className="mt-4 pt-4 border-t border-slate-700/50">
                     <span className="text-xs text-slate-500">{course.department.name}</span>
@@ -372,11 +379,10 @@ const CourseCatalogPage = () => {
                       <button
                         key={pageNum}
                         onClick={() => setPagination((prev) => ({ ...prev, page: pageNum }))}
-                        className={`px-4 py-2 rounded-lg transition-colors ${
-                          pagination.page === pageNum
+                        className={`px-4 py-2 rounded-lg transition-colors ${pagination.page === pageNum
                             ? 'bg-primary-500 text-white'
                             : 'bg-slate-700/50 text-slate-300 hover:bg-slate-700'
-                        }`}
+                          }`}
                       >
                         {pageNum}
                       </button>

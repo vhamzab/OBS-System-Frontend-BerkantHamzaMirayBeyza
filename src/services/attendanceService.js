@@ -42,6 +42,22 @@ const attendanceService = {
     return response.data;
   },
 
+  /**
+   * Regenerate QR code for session (faculty) - 5 second refresh
+   */
+  regenerateQRCode: async (sessionId) => {
+    const response = await api.post(`/attendance/sessions/${sessionId}/regenerate-qr`);
+    return response.data;
+  },
+
+  /**
+   * Get current QR code for session (student)
+   */
+  getCurrentQRCode: async (sessionId) => {
+    const response = await api.get(`/attendance/sessions/${sessionId}/qr`);
+    return response.data;
+  },
+
   // ========== Student Attendance ==========
 
   /**
@@ -53,11 +69,11 @@ const attendanceService = {
       longitude: location.longitude,
       accuracy: location.accuracy,
     };
-    
+
     if (qrCode) {
       data.qr_code = qrCode;
     }
-    
+
     const response = await api.post(`/attendance/sessions/${sessionId}/checkin`, data);
     return response.data;
   },
@@ -119,11 +135,11 @@ const attendanceService = {
     formData.append('session_id', sessionId);
     formData.append('reason', reason);
     formData.append('excuse_type', excuseType);
-    
+
     if (document) {
       formData.append('document', document);
     }
-    
+
     const response = await api.post('/attendance/excuse-requests', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',

@@ -1,10 +1,10 @@
 import { NavLink } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import { 
-  FiHome, 
-  FiUser, 
-  FiBook, 
-  FiCalendar, 
+import {
+  FiHome,
+  FiUser,
+  FiBook,
+  FiCalendar,
   FiClipboard,
   FiUsers,
   FiSettings,
@@ -13,6 +13,7 @@ import {
   FiFileText,
   FiCheckSquare,
   FiGrid,
+  FiBell,
 } from 'react-icons/fi';
 import { useAuth } from '../../context/AuthContext';
 
@@ -21,6 +22,8 @@ const Sidebar = ({ isOpen, onClose }) => {
 
   const studentLinks = [
     { to: '/dashboard', icon: FiHome, label: 'Dashboard' },
+    { to: '/announcements', icon: FiBell, label: 'Duyurular' },
+    { to: '/academic-calendar', icon: FiCalendar, label: 'Akademik Takvim' },
     { to: '/profile', icon: FiUser, label: 'Profil' },
     { to: '/courses', icon: FiGrid, label: 'Ders Kataloğu' },
     { to: '/my-courses', icon: FiBook, label: 'Derslerim' },
@@ -32,6 +35,8 @@ const Sidebar = ({ isOpen, onClose }) => {
 
   const facultyLinks = [
     { to: '/dashboard', icon: FiHome, label: 'Dashboard' },
+    { to: '/announcements', icon: FiBell, label: 'Duyurular' },
+    { to: '/academic-calendar', icon: FiCalendar, label: 'Akademik Takvim' },
     { to: '/profile', icon: FiUser, label: 'Profil' },
     { to: '/faculty/sections', icon: FiBook, label: 'Derslerim' },
     { to: '/attendance/start', icon: FiMapPin, label: 'Yoklama Aç' },
@@ -40,10 +45,13 @@ const Sidebar = ({ isOpen, onClose }) => {
 
   const adminLinks = [
     { to: '/dashboard', icon: FiHome, label: 'Dashboard' },
+    { to: '/announcements', icon: FiBell, label: 'Duyurular' },
+    { to: '/academic-calendar', icon: FiCalendar, label: 'Akademik Takvim' },
     { to: '/admin/users', icon: FiUsers, label: 'Kullanıcılar' },
     { to: '/admin/departments', icon: FiBarChart2, label: 'Bölümler' },
     { to: '/courses', icon: FiGrid, label: 'Ders Kataloğu' },
     { to: '/admin/courses', icon: FiBook, label: 'Ders Yönetimi' },
+    { to: '/admin/sections', icon: FiClipboard, label: 'Section Yönetimi' },
     { to: '/settings', icon: FiSettings, label: 'Ayarlar' },
   ];
 
@@ -100,8 +108,8 @@ const Sidebar = ({ isOpen, onClose }) => {
               onClick={onClose}
               className={({ isActive }) => `
                 flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300
-                ${isActive 
-                  ? 'bg-gradient-to-r from-primary-600/20 to-accent-600/20 text-white border border-primary-500/30' 
+                ${isActive
+                  ? 'bg-gradient-to-r from-primary-600/20 to-accent-600/20 text-white border border-primary-500/30'
                   : 'text-slate-400 hover:text-white hover:bg-white/5'
                 }
               `}

@@ -1,8 +1,8 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import toast from 'react-hot-toast';
-import { FiCamera, FiMail, FiPhone, FiUser, FiHash, FiLock, FiSave } from 'react-icons/fi';
+import { FiCamera, FiMail, FiPhone, FiUser, FiHash, FiLock, FiSave, FiBookOpen, FiFileText, FiDownload } from 'react-icons/fi';
 import { useAuth } from '../../context/AuthContext';
 import userService from '../../services/userService';
 import { getFileUrl } from '../../services/api';
@@ -35,11 +35,196 @@ const passwordSchema = Yup.object({
     .required('Şifre tekrarı zorunludur'),
 });
 
+// Student Department Section Component
+const StudentDepartmentSection = ({ studentNumber, currentDepartment, onDepartmentUpdate }) => {
+  const [departments, setDepartments] = useState([]);
+  const [selectedDept, setSelectedDept] = useState(currentDepartment?.id || '');
+  const [loading, setLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    fetchDepartments();
+  }, []);
+
+  const fetchDepartments = async () => {
+    try {
+      setLoading(true);
+      const response = await userService.getAllDepartments();
+      if (response.success) {
+        setDepartments(response.data);
+      }
+    } catch (error) {
+      console.error('Error fetching departments:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDepartmentChange = async (deptId) => {
+    if (!deptId || deptId === currentDepartment?.id) return;
+
+    setSaving(true);
+    try {
+      const response = await userService.updateStudentDepartment(deptId);
+      if (response.success) {
+        const selectedDepartment = departments.find(d => d.id === deptId);
+        toast.success('Bölüm başarıyla güncellendi!');
+        setSelectedDept(deptId);
+        onDepartmentUpdate(selectedDepartment);
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Bölüm güncellenirken hata oluştu');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+      <Input
+        label="Öğrenci Numarası"
+        name="studentNumber"
+        icon={FiHash}
+        value={studentNumber || '-'}
+        disabled
+      />
+      <div>
+        <label className="block text-sm font-medium mb-2">
+          Bölüm
+          {!currentDepartment && (
+            <span className="text-amber-400 text-xs ml-2">(Lütfen seçin)</span>
+          )}
+        </label>
+        <div className="relative">
+          <FiBookOpen className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
+          <select
+            value={selectedDept}
+            onChange={(e) => handleDepartmentChange(e.target.value)}
+            disabled={loading || saving}
+            className="input pl-10 w-full appearance-none cursor-pointer"
+          >
+            <option value="">-- Bölüm Seçin --</option>
+            {departments.map((dept) => (
+              <option key={dept.id} value={dept.id}>
+                {dept.name} ({dept.code})
+              </option>
+            ))}
+          </select>
+          {saving && (
+            <div className="absolute right-3 top-1/2 -translate-y-1/2">
+              <div className="w-4 h-4 border-2 border-primary-500 border-t-transparent rounded-full animate-spin" />
+            </div>
+          )}
+        </div>
+        {currentDepartment && (
+          <p className="text-xs text-slate-500 mt-1">
+            Mevcut: {currentDepartment.name}
+          </p>
+        )}
+      </div>
+    </div>
+  );
+};
+
+
+// Faculty Department Section Component
+const FacultyDepartmentSection = ({ employeeNumber, currentDepartment, onDepartmentUpdate }) => {
+  const [departments, setDepartments] = useState([]);
+  const [selectedDept, setSelectedDept] = useState(currentDepartment?.id || '');
+  const [loading, setLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    fetchDepartments();
+  }, []);
+
+  const fetchDepartments = async () => {
+    try {
+      setLoading(true);
+      const response = await userService.getAllDepartments();
+      if (response.success) {
+        setDepartments(response.data);
+      }
+    } catch (error) {
+      console.error('Error fetching departments:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDepartmentChange = async (deptId) => {
+    if (!deptId || deptId === currentDepartment?.id) return;
+
+    setSaving(true);
+    try {
+      const response = await userService.updateFacultyDepartment(deptId);
+      if (response.success) {
+        const selectedDepartment = departments.find(d => d.id === deptId);
+        toast.success('Bölüm başarıyla güncellendi!');
+        setSelectedDept(deptId);
+        onDepartmentUpdate(selectedDepartment);
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Bölüm güncellenirken hata oluştu');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+      <Input
+        label="Sicil Numarası"
+        name="employeeNumber"
+        icon={FiHash}
+        value={employeeNumber || '-'}
+        disabled
+      />
+      <div>
+        <label className="block text-sm font-medium mb-2">
+          Bölüm
+          {!currentDepartment && (
+            <span className="text-amber-400 text-xs ml-2">(Lütfen seçin)</span>
+          )}
+        </label>
+        <div className="relative">
+          <FiBookOpen className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
+          <select
+            value={selectedDept}
+            onChange={(e) => handleDepartmentChange(e.target.value)}
+            disabled={loading || saving}
+            className="input pl-10 w-full appearance-none cursor-pointer"
+          >
+            <option value="">-- Bölüm Seçin --</option>
+            {departments.map((dept) => (
+              <option key={dept.id} value={dept.id}>
+                {dept.name} ({dept.code})
+              </option>
+            ))}
+          </select>
+          {saving && (
+            <div className="absolute right-3 top-1/2 -translate-y-1/2">
+              <div className="w-4 h-4 border-2 border-primary-500 border-t-transparent rounded-full animate-spin" />
+            </div>
+          )}
+        </div>
+        {currentDepartment && (
+          <p className="text-xs text-slate-500 mt-1">
+            Mevcut: {currentDepartment.name}
+          </p>
+        )}
+      </div>
+    </div>
+  );
+};
+
+
 const ProfilePage = () => {
   const { user, updateUser } = useAuth();
   const [profileLoading, setProfileLoading] = useState(false);
   const [passwordLoading, setPasswordLoading] = useState(false);
   const [uploadLoading, setUploadLoading] = useState(false);
+  const [certificateLoading, setCertificateLoading] = useState(false);
   const fileInputRef = useRef(null);
 
   const getRoleLabel = (role) => {
@@ -49,6 +234,30 @@ const ProfilePage = () => {
       admin: 'Yönetici',
     };
     return roles[role] || role;
+  };
+
+  const handleDownloadCertificate = async () => {
+    try {
+      setCertificateLoading(true);
+      const blob = await userService.downloadCertificate();
+
+      // Create a URL for the blob
+      const url = window.URL.createObjectURL(new Blob([blob]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `ogrenci_belgesi_${user?.student?.student_number || 'obs'}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+      window.URL.revokeObjectURL(url);
+
+      toast.success('Öğrenci belgesi indirildi');
+    } catch (error) {
+      console.error('Certificate download error:', error);
+      toast.error('Belge indirilirken hata oluştu');
+    } finally {
+      setCertificateLoading(false);
+    }
   };
 
   const profileFormik = useFormik({
@@ -180,7 +389,7 @@ const ProfilePage = () => {
                     }}
                   />
                 ) : null}
-                <span 
+                <span
                   className={`profile-initials text-white font-bold text-5xl sm:text-6xl ${getProfilePictureUrl() ? 'hidden' : 'flex'} items-center justify-center absolute inset-0`}
                 >
                   {user?.first_name?.[0]?.toUpperCase() || ''}{user?.last_name?.[0]?.toUpperCase() || ''}
@@ -219,6 +428,36 @@ const ProfilePage = () => {
             </div>
           </div>
         </div>
+
+        {/* Documents Card - Student Only */}
+        {user?.role === 'student' && (
+          <div className="card">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-display text-xl font-bold">Belgelerim</h3>
+              <FiFileText className="w-5 h-5 text-primary-400" />
+            </div>
+            <div className="bg-slate-800/50 rounded-xl p-4 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-red-500/20 text-red-400 flex items-center justify-center">
+                  <span className="font-bold text-xs">PDF</span>
+                </div>
+                <div>
+                  <h4 className="font-medium">Öğrenci Belgesi</h4>
+                  <p className="text-xs text-slate-400">Resmi, barkodlu öğrenci belgesi</p>
+                </div>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleDownloadCertificate}
+                loading={certificateLoading}
+              >
+                <FiDownload className="w-4 h-4 mr-2" />
+                İndir
+              </Button>
+            </div>
+          </div>
+        )}
 
         {/* Profile Form */}
         <div className="card">
@@ -271,40 +510,34 @@ const ProfilePage = () => {
             />
 
             {/* Role-specific fields */}
-            {user?.student && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                <Input
-                  label="Öğrenci Numarası"
-                  name="studentNumber"
-                  icon={FiHash}
-                  value={user.student.student_number}
-                  disabled
-                />
-                <Input
-                  label="Bölüm"
-                  name="department"
-                  value={user.student.department?.name || '-'}
-                  disabled
-                />
-              </div>
+            {user?.role === 'student' && (
+              <StudentDepartmentSection
+                studentNumber={user.student?.student_number}
+                currentDepartment={user.student?.department}
+                onDepartmentUpdate={(dept) => {
+                  updateUser({
+                    student: {
+                      ...user.student,
+                      department: dept
+                    }
+                  });
+                }}
+              />
             )}
 
-            {user?.faculty && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                <Input
-                  label="Personel Numarası"
-                  name="employeeNumber"
-                  icon={FiHash}
-                  value={user.faculty.employee_number}
-                  disabled
-                />
-                <Input
-                  label="Bölüm"
-                  name="department"
-                  value={user.faculty.department?.name || '-'}
-                  disabled
-                />
-              </div>
+            {user?.role === 'faculty' && (
+              <FacultyDepartmentSection
+                employeeNumber={user.faculty?.employee_number}
+                currentDepartment={user.faculty?.department}
+                onDepartmentUpdate={(dept) => {
+                  updateUser({
+                    faculty: {
+                      ...user.faculty,
+                      department: dept
+                    }
+                  });
+                }}
+              />
             )}
 
             <div className="flex justify-end">
@@ -377,4 +610,3 @@ const ProfilePage = () => {
 };
 
 export default ProfilePage;
-

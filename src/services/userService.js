@@ -14,14 +14,14 @@ const userService = {
   // Update profile
   updateProfile: async (data) => {
     const response = await api.put('/users/me', data);
-    
+
     // Update local storage
     if (response.data.success) {
       const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
       const updatedUser = { ...currentUser, ...response.data.data };
       localStorage.setItem('user', JSON.stringify(updatedUser));
     }
-    
+
     return response.data;
   },
 
@@ -79,6 +79,50 @@ const userService = {
   // Admin: Delete user
   deleteUser: async (userId) => {
     const response = await api.delete(`/users/${userId}`);
+    return response.data;
+  },
+
+  // Admin: Get all faculty members
+  getAllFaculty: async () => {
+    const response = await api.get('/users/faculty');
+    return response.data;
+  },
+
+  // Get all departments
+  getAllDepartments: async () => {
+    const response = await api.get('/users/departments');
+    return response.data;
+  },
+
+  // Student: Get profile with department
+  getStudentProfile: async () => {
+    const response = await api.get('/users/students/profile');
+    return response.data;
+  },
+
+  // Student: Update department
+  updateStudentDepartment: async (departmentId) => {
+    const response = await api.put('/users/students/department', { departmentId });
+    return response.data;
+  },
+
+  // Faculty: Get profile with department
+  getFacultyProfile: async () => {
+    const response = await api.get('/users/faculty/profile');
+    return response.data;
+  },
+
+  // Faculty: Update department
+  updateFacultyDepartment: async (departmentId) => {
+    const response = await api.put('/users/faculty/department', { departmentId });
+    return response.data;
+  },
+
+  // Student: Download certificate
+  downloadCertificate: async () => {
+    const response = await api.get('/users/students/certificate', {
+      responseType: 'blob', // Important for file download
+    });
     return response.data;
   },
 };
