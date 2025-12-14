@@ -108,13 +108,58 @@ frontend/
 
 ## Sayfalar
 
+### Auth Sayfaları
 - `/login` - Giriş sayfası
 - `/register` - Kayıt sayfası
 - `/forgot-password` - Şifremi unuttum
 - `/reset-password/:token` - Şifre sıfırlama
 - `/verify-email/:token` - Email doğrulama
+
+### Genel
 - `/dashboard` - Ana panel
 - `/profile` - Profil sayfası
+
+### Academic Management (Part 2)
+- `/courses` - Ders kataloğu
+- `/courses/:id` - Ders detayları
+- `/my-courses` - Kayıtlı derslerim
+- `/grades` - Notlarım
+- `/gradebook/:sectionId` - Not defteri (Faculty)
+- `/schedule` - Ders programı
+
+### GPS Attendance (Part 2)
+- `/attendance/start` - Yoklama başlat (Faculty)
+- `/attendance/give/:sessionId` - Yoklama ver (Student)
+- `/my-attendance` - Yoklama durumum
+- `/attendance/report/:sectionId` - Yoklama raporu (Faculty)
+- `/excuse-requests` - Mazeret talepleri
+
+## Part 2 Özellikleri
+
+### Academic Management
+- ✅ Ders kataloğu (arama, filtreleme, pagination)
+- ✅ Ders detayları ve önkoşullar
+- ✅ Derse kayıt (önkoşul ve çakışma kontrolü)
+- ✅ Not görüntüleme ve transkript
+
+### GPS Attendance
+- ✅ Yoklama oturumu açma (Faculty)
+- ✅ GPS tabanlı yoklama verme
+- ✅ Geofence kontrolü
+- ✅ Spoofing algılama
+- ✅ Harita görünümü (Leaflet)
+- ✅ Mazeret sistemi
+
+### Yeni Componentler
+- `components/gps/` - GPS bileşenleri
+  - GPSPermissionHandler
+  - LocationMap
+  - DistanceCalculator
+  - LocationAccuracyIndicator
+- `components/charts/` - Grafik bileşenleri
+  - AttendanceChart
+  - GradeDistributionChart
+  - GPATrendChart
 
 ## Docker Komutları
 
