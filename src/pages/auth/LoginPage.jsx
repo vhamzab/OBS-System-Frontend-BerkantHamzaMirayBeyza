@@ -84,8 +84,8 @@ const LoginPage = () => {
     <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-gray-50 relative overflow-hidden">
       {/* Background image */}
       <div
-        className="absolute inset-0 bg-center bg-cover scale-105 blur-sm"
-        style={{ backgroundImage: "url('/girişFoto.jpg')" }}
+        className="absolute inset-0 bg-center bg-cover scale-105 blur-none"
+        style={{ backgroundImage: "url('/yeniArkaPLan.jpg')" }}
         aria-hidden="true"
       />
 
