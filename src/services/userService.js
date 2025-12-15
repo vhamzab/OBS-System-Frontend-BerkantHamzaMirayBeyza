@@ -94,6 +94,24 @@ const userService = {
     return response.data;
   },
 
+  // Admin: Create department
+  createDepartment: async (data) => {
+    const response = await api.post('/users/departments', data);
+    return response.data;
+  },
+
+  // Admin: Update department
+  updateDepartment: async (id, data) => {
+    const response = await api.put(`/users/departments/${id}`, data);
+    return response.data;
+  },
+
+  // Admin: Delete department
+  deleteDepartment: async (id) => {
+    const response = await api.delete(`/users/departments/${id}`);
+    return response.data;
+  },
+
   // Student: Get profile with department
   getStudentProfile: async () => {
     const response = await api.get('/users/students/profile');

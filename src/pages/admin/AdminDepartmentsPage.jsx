@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { FiBookOpen, FiPlus, FiEdit2, FiTrash2, FiUsers, FiBook, FiSave, FiX } from 'react-icons/fi';
+import { FiBookOpen, FiPlus, FiEdit2, FiTrash2, FiUsers, FiBook, FiSave, FiX, FiAlertCircle } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import userService from '../../services/userService';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
@@ -10,6 +10,8 @@ const AdminDepartmentsPage = () => {
     const [showModal, setShowModal] = useState(false);
     const [editingDept, setEditingDept] = useState(null);
     const [saving, setSaving] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(null);
+    const [deleting, setDeleting] = useState(false);
     const [formData, setFormData] = useState({
         code: '',
         name: '',
@@ -66,15 +68,46 @@ const AdminDepartmentsPage = () => {
 
         setSaving(true);
         try {
-            // Note: Backend department create/update endpoints would need to be added
-            // For now, show success and close modal
-            toast.success(editingDept ? 'Bölüm güncellendi' : 'Bölüm oluşturuldu');
-            handleCloseModal();
-            fetchDepartments();
+            let response;
+            if (editingDept) {
+                // Update existing department
+                response = await userService.updateDepartment(editingDept.id, formData);
+            } else {
+                // Create new department
+                response = await userService.createDepartment(formData);
+            }
+
+            if (response.success) {
+                toast.success(response.message || (editingDept ? 'Bölüm güncellendi' : 'Bölüm oluşturuldu'));
+                handleCloseModal();
+                fetchDepartments();
+            } else {
+                toast.error(response.message || 'İşlem sırasında hata oluştu');
+            }
         } catch (error) {
-            toast.error('İşlem sırasında hata oluştu');
+            console.error('Department save error:', error);
+            toast.error(error.response?.data?.message || 'İşlem sırasında hata oluştu');
         } finally {
             setSaving(false);
+        }
+    };
+
+    const handleDelete = async (deptId) => {
+        setDeleting(true);
+        try {
+            const response = await userService.deleteDepartment(deptId);
+            if (response.success) {
+                toast.success(response.message || 'Bölüm silindi');
+                setShowDeleteModal(null);
+                fetchDepartments();
+            } else {
+                toast.error(response.message || 'Bölüm silinirken hata oluştu');
+            }
+        } catch (error) {
+            console.error('Delete department error:', error);
+            toast.error(error.response?.data?.message || 'Bölüm silinirken hata oluştu');
+        } finally {
+            setDeleting(false);
         }
     };
 
@@ -164,20 +197,67 @@ const AdminDepartmentsPage = () => {
                                         Dersler
                                     </span>
                                 </div>
-                                <button
-                                    onClick={() => handleOpenModal(dept)}
-                                    className="p-2 rounded-lg hover:bg-slate-700 transition-colors"
-                                    title="Düzenle"
-                                >
-                                    <FiEdit2 className="w-4 h-4 text-slate-400" />
-                                </button>
+                                <div className="flex items-center gap-2">
+                                    <button
+                                        onClick={() => handleOpenModal(dept)}
+                                        className="p-2 rounded-lg hover:bg-slate-700 transition-colors"
+                                        title="Düzenle"
+                                    >
+                                        <FiEdit2 className="w-4 h-4 text-slate-400" />
+                                    </button>
+                                    <button
+                                        onClick={() => setShowDeleteModal(dept)}
+                                        className="p-2 rounded-lg hover:bg-red-500/20 transition-colors"
+                                        title="Sil"
+                                    >
+                                        <FiTrash2 className="w-4 h-4 text-red-400" />
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     ))
                 )}
             </div>
 
-            {/* Modal */}
+            {/* Delete Confirmation Modal */}
+            {showDeleteModal && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                    <div className="card w-full max-w-md mx-4">
+                        <div className="flex items-center gap-3 mb-4">
+                            <div className="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center">
+                                <FiAlertCircle className="w-5 h-5 text-red-400" />
+                            </div>
+                            <h3 className="font-display text-xl font-semibold">Bölümü Sil</h3>
+                        </div>
+
+                        <p className="text-slate-400 mb-4">
+                            <strong className="text-white">{showDeleteModal.name}</strong> bölümünü silmek istediğinizden emin misiniz?
+                        </p>
+                        <p className="text-sm text-amber-400 mb-6">
+                            Bu işlem geri alınamaz. Bölüme bağlı öğrenci, öğretim üyesi veya ders varsa silme işlemi başarısız olur.
+                        </p>
+
+                        <div className="flex gap-3 justify-end">
+                            <button
+                                onClick={() => setShowDeleteModal(null)}
+                                className="btn btn-secondary"
+                                disabled={deleting}
+                            >
+                                İptal
+                            </button>
+                            <button
+                                onClick={() => handleDelete(showDeleteModal.id)}
+                                className="btn bg-red-500 hover:bg-red-600 text-white"
+                                disabled={deleting}
+                            >
+                                {deleting ? <LoadingSpinner size="sm" /> : 'Sil'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Create/Edit Modal */}
             {showModal && (
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
                     <div className="card w-full max-w-md mx-4">
