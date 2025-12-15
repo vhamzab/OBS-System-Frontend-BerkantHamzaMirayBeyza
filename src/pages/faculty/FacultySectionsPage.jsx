@@ -11,7 +11,7 @@ import LoadingSpinner from '../../components/common/LoadingSpinner';
 const FacultySectionsPage = () => {
   const [sections, setSections] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedSemester, setSelectedSemester] = useState('current');
+  const [selectedSemester, setSelectedSemester] = useState('');
 
   const dayNames = {
     monday: 'Pzt',
@@ -38,7 +38,9 @@ const FacultySectionsPage = () => {
       setLoading(true);
       
       const params = {};
-      if (selectedSemester !== 'all') {
+      // If no semester selected or 'all' selected, fetch all
+      // If 'current' selected, filter by current semester
+      if (selectedSemester === 'current') {
         const currentYear = new Date().getFullYear();
         const currentMonth = new Date().getMonth();
         let semester;
@@ -49,12 +51,10 @@ const FacultySectionsPage = () => {
         } else {
           semester = 'fall';
         }
-        
-        if (selectedSemester === 'current') {
-          params.semester = semester;
-          params.year = currentYear;
-        }
+        params.semester = semester;
+        params.year = currentYear;
       }
+      // If empty string or 'all', don't add filters - fetch all
 
       const response = await courseService.getInstructorSections(params);
       
@@ -96,11 +96,11 @@ const FacultySectionsPage = () => {
         <select
           value={selectedSemester}
           onChange={(e) => setSelectedSemester(e.target.value)}
-          className="input text-white"
-          style={{ color: '#ffffff' }}
+          className="px-4 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-primary-500 min-w-[280px] cursor-pointer"
         >
-          <option value="current" style={{ color: '#ffffff', backgroundColor: '#0f172a' }}>Mevcut Dönem</option>
-          <option value="all" style={{ color: '#ffffff', backgroundColor: '#0f172a' }}>Tüm Dönemler</option>
+          <option value="" disabled style={{ color: '#94a3b8' }}>Lütfen dönem seçmek için tıklayın</option>
+          <option value="current">Mevcut Dönem</option>
+          <option value="all">Tüm Dönemler</option>
         </select>
       </div>
 
@@ -208,4 +208,5 @@ const FacultySectionsPage = () => {
 };
 
 export default FacultySectionsPage;
+
 

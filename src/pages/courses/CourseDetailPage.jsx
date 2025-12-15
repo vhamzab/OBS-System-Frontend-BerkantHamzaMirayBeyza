@@ -440,3 +440,4 @@ const CourseDetailPage = () => {
 
 export default CourseDetailPage;
 
+

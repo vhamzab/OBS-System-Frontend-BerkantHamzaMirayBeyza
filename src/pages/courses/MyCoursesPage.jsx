@@ -55,7 +55,18 @@ const MyCoursesPage = () => {
         response: error.response?.data,
         status: error.response?.status,
       });
-      toast.error(error.response?.data?.message || 'Dersler yüklenirken hata oluştu');
+      
+      // Daha açıklayıcı hata mesajları
+      let errorMessage = 'Dersler yüklenirken hata oluştu';
+      if (error.response?.status === 403) {
+        errorMessage = error.response?.data?.message || 'Öğrenci kaydı bulunamadı. Lütfen yönetici ile iletişime geçin.';
+      } else if (error.response?.status === 500) {
+        errorMessage = error.response?.data?.message || 'Sunucu hatası. Lütfen daha sonra tekrar deneyin.';
+      } else if (!error.response) {
+        errorMessage = 'Sunucuya bağlanılamadı. İnternet bağlantınızı kontrol edin.';
+      }
+      
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -337,4 +348,5 @@ const MyCoursesPage = () => {
 };
 
 export default MyCoursesPage;
+
 

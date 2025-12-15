@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { FiBookOpen, FiPlus, FiEdit2, FiTrash2, FiUsers, FiBook, FiSave, FiX, FiAlertCircle } from 'react-icons/fi';
+import { FiBookOpen, FiPlus, FiEdit2, FiTrash2, FiUsers, FiBook, FiSave, FiX, FiAlertCircle, FiDatabase } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import userService from '../../services/userService';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
@@ -12,6 +12,7 @@ const AdminDepartmentsPage = () => {
     const [saving, setSaving] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(null);
     const [deleting, setDeleting] = useState(false);
+    const [seeding, setSeeding] = useState(false);
     const [formData, setFormData] = useState({
         code: '',
         name: '',
@@ -111,6 +112,26 @@ const AdminDepartmentsPage = () => {
         }
     };
 
+    const handleSeedDepartments = async () => {
+        if (seeding) return;
+        
+        setSeeding(true);
+        try {
+            const response = await userService.seedDepartments();
+            if (response.success) {
+                toast.success(`${response.data?.added || 0} bölüm eklendi, ${response.data?.updated || 0} bölüm aktif edildi`);
+                fetchDepartments();
+            } else {
+                toast.error(response.message || 'Bölümler eklenirken hata oluştu');
+            }
+        } catch (error) {
+            console.error('Seed departments error:', error);
+            toast.error(error.response?.data?.message || 'Bölümler eklenirken hata oluştu');
+        } finally {
+            setSeeding(false);
+        }
+    };
+
     if (loading) {
         return (
             <div className="flex justify-center py-16">
@@ -127,13 +148,30 @@ const AdminDepartmentsPage = () => {
                     <h1 className="font-display text-3xl font-bold mb-2 text-gray-800">Bölüm Yönetimi</h1>
                     <p className="text-gray-500">Üniversite bölümlerini görüntüleyin ve yönetin</p>
                 </div>
-                <button
-                    onClick={() => handleOpenModal()}
-                    className="btn btn-primary"
-                >
-                    <FiPlus className="w-4 h-4 mr-2" />
-                    Yeni Bölüm
-                </button>
+                <div className="flex gap-3">
+                    <button
+                        onClick={handleSeedDepartments}
+                        disabled={seeding}
+                        className="btn btn-secondary"
+                        title="26 adet hazır bölüm ekle"
+                    >
+                        {seeding ? (
+                            <LoadingSpinner size="sm" />
+                        ) : (
+                            <>
+                                <FiDatabase className="w-4 h-4 mr-2" />
+                                Tüm Bölümleri Ekle
+                            </>
+                        )}
+                    </button>
+                    <button
+                        onClick={() => handleOpenModal()}
+                        className="btn btn-primary"
+                    >
+                        <FiPlus className="w-4 h-4 mr-2" />
+                        Yeni Bölüm
+                    </button>
+                </div>
             </div>
 
             {/* Stats */}

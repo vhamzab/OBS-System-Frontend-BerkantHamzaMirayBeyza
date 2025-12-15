@@ -112,6 +112,12 @@ const userService = {
     return response.data;
   },
 
+  // Admin: Seed all departments (adds 26 default departments)
+  seedDepartments: async () => {
+    const response = await api.post('/users/departments/seed');
+    return response.data;
+  },
+
   // Student: Get profile with department
   getStudentProfile: async () => {
     const response = await api.get('/users/students/profile');

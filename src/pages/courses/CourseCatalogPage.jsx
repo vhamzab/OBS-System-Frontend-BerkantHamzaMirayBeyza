@@ -111,10 +111,25 @@ const CourseCatalogPage = () => {
         // Fallback to hardcoded departments if API fails
         setDepartments([
           { id: '', code: '', name: 'Tüm Bölümler' },
+          // Mühendislik
           { id: 'CSE', code: 'CSE', name: 'Bilgisayar Mühendisliği' },
+          { id: 'EE', code: 'EE', name: 'Elektrik-Elektronik Mühendisliği' },
+          { id: 'ME', code: 'ME', name: 'Makine Mühendisliği' },
+          { id: 'CE', code: 'CE', name: 'İnşaat Mühendisliği' },
+          { id: 'IE', code: 'IE', name: 'Endüstri Mühendisliği' },
+          // Fen
           { id: 'MATH', code: 'MATH', name: 'Matematik' },
           { id: 'PHYS', code: 'PHYS', name: 'Fizik' },
+          { id: 'CHEM', code: 'CHEM', name: 'Kimya' },
+          { id: 'BIO', code: 'BIO', name: 'Biyoloji' },
+          // İşletme
           { id: 'BA', code: 'BA', name: 'İşletme' },
+          { id: 'ECON', code: 'ECON', name: 'Ekonomi' },
+          // Diğer
+          { id: 'LAW', code: 'LAW', name: 'Hukuk' },
+          { id: 'MED', code: 'MED', name: 'Tıp' },
+          { id: 'PSY', code: 'PSY', name: 'Psikoloji' },
+          { id: 'ARCH', code: 'ARCH', name: 'Mimarlık' },
         ]);
       } finally {
         setDepartmentsLoading(false);
@@ -415,3 +430,4 @@ const CourseCatalogPage = () => {
 };
 
 export default CourseCatalogPage;
+
