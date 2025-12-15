@@ -43,16 +43,18 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="glass sticky top-0 z-50 border-b border-white/5">
+    <nav className="glass sticky top-0 z-50 border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-accent-500 rounded-xl flex items-center justify-center">
-              <span className="text-white font-bold text-lg">Ü</span>
-            </div>
-            <span className="font-display font-bold text-xl hidden sm:block">
-              Üniversite <span className="gradient-text">OBS</span>
+            <img 
+              src="/logo.png" 
+              alt="BHMB Üniversitesi Logo" 
+              className="w-10 h-10 object-contain rounded-xl shadow-sm"
+            />
+            <span className="font-display font-bold text-xl hidden sm:block text-gray-800">
+              BHMB <span className="gradient-text">Üniversitesi</span>
             </span>
           </Link>
 
@@ -76,9 +78,9 @@ const Navbar = () => {
               <div className="relative" ref={dropdownRef}>
                 <button
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  className="flex items-center gap-3 p-2 rounded-xl hover:bg-white/5 transition-colors"
+                  className="flex items-center gap-3 p-2 rounded-xl hover:bg-gray-100 transition-colors"
                 >
-                  <div className="w-9 h-9 bg-gradient-to-br from-primary-500 to-accent-500 rounded-full flex items-center justify-center overflow-hidden relative">
+                  <div className="w-9 h-9 bg-gradient-to-br from-primary-500 to-primary-700 rounded-full flex items-center justify-center overflow-hidden relative">
                     {getProfilePictureUrl() ? (
                       <img
                         src={getProfilePictureUrl()}
@@ -102,10 +104,10 @@ const Navbar = () => {
                     </span>
                   </div>
                   <div className="hidden sm:block text-left">
-                    <p className="text-sm font-medium text-white">
+                    <p className="text-sm font-medium text-gray-800">
                       {user?.first_name} {user?.last_name}
                     </p>
-                    <p className="text-xs text-slate-400">
+                    <p className="text-xs text-gray-500">
                       {getRoleLabel(user?.role)}
                     </p>
                   </div>
@@ -114,17 +116,17 @@ const Navbar = () => {
                 {/* Dropdown */}
                 {isDropdownOpen && (
                   <div className="absolute right-0 mt-2 w-56 card p-2 animate-slide-down">
-                    <div className="px-3 py-2 border-b border-slate-700 mb-2 sm:hidden">
-                      <p className="font-medium text-white">
+                    <div className="px-3 py-2 border-b border-gray-200 mb-2 sm:hidden">
+                      <p className="font-medium text-gray-800">
                         {user?.first_name} {user?.last_name}
                       </p>
-                      <p className="text-sm text-slate-400">
+                      <p className="text-sm text-gray-500">
                         {getRoleLabel(user?.role)}
                       </p>
                     </div>
                     <Link
                       to="/profile"
-                      className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 transition-colors text-slate-300 hover:text-white"
+                      className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors text-gray-600 hover:text-gray-900"
                       onClick={() => setIsDropdownOpen(false)}
                     >
                       <FiUser className="w-4 h-4" />
@@ -132,16 +134,16 @@ const Navbar = () => {
                     </Link>
                     <Link
                       to="/settings"
-                      className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 transition-colors text-slate-300 hover:text-white"
+                      className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors text-gray-600 hover:text-gray-900"
                       onClick={() => setIsDropdownOpen(false)}
                     >
                       <FiSettings className="w-4 h-4" />
                       Ayarlar
                     </Link>
-                    <hr className="border-slate-700 my-2" />
+                    <hr className="border-gray-200 my-2" />
                     <button
                       onClick={handleLogout}
-                      className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-red-500/10 transition-colors text-red-400 hover:text-red-300"
+                      className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-red-50 transition-colors text-red-500 hover:text-red-600"
                     >
                       <FiLogOut className="w-4 h-4" />
                       Çıkış Yap
@@ -163,7 +165,7 @@ const Navbar = () => {
             {/* Mobile menu button */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden p-2 rounded-lg hover:bg-white/5 transition-colors"
+              className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors text-gray-600"
             >
               {isMenuOpen ? (
                 <FiX className="w-6 h-6" />
@@ -176,10 +178,10 @@ const Navbar = () => {
 
         {/* Mobile menu */}
         {isMenuOpen && isAuthenticated && (
-          <div className="md:hidden py-4 border-t border-white/5 animate-slide-down">
+          <div className="md:hidden py-4 border-t border-gray-200 animate-slide-down">
             <Link
               to="/dashboard"
-              className="block py-2 text-slate-300 hover:text-white transition-colors"
+              className="block py-2 text-gray-600 hover:text-gray-900 transition-colors"
               onClick={() => setIsMenuOpen(false)}
             >
               Dashboard
@@ -187,7 +189,7 @@ const Navbar = () => {
             {user?.role === 'admin' && (
               <Link
                 to="/admin/users"
-                className="block py-2 text-slate-300 hover:text-white transition-colors"
+                className="block py-2 text-gray-600 hover:text-gray-900 transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Kullanıcılar

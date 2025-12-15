@@ -75,7 +75,7 @@ const Sidebar = ({ isOpen, onClose }) => {
       {/* Overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          className="fixed inset-0 bg-black/30 z-40 lg:hidden"
           onClick={onClose}
         />
       )}
@@ -83,20 +83,22 @@ const Sidebar = ({ isOpen, onClose }) => {
       {/* Sidebar */}
       <aside
         className={`
-          fixed top-16 left-0 h-[calc(100vh-4rem)] w-64 bg-slate-900/95 backdrop-blur-xl
-          border-r border-slate-800 z-50 transform transition-transform duration-300
-          lg:translate-x-0 lg:static lg:h-auto flex flex-col overflow-hidden
+          fixed top-16 left-0 h-[calc(100vh-4rem)] w-64 bg-white
+          border-r border-gray-200 z-50 transform transition-transform duration-300
+          lg:translate-x-0 lg:static lg:h-auto flex flex-col overflow-hidden shadow-lg lg:shadow-none
           ${isOpen ? 'translate-x-0' : '-translate-x-full'}
         `}
       >
         {/* Sticky Header with Logo */}
-        <div className="sticky top-0 z-10 bg-slate-900/95 backdrop-blur-xl border-b border-slate-800 p-4">
+        <div className="sticky top-0 z-10 bg-white border-b border-gray-200 p-4">
           <Link to="/dashboard" className="flex items-center gap-3" onClick={onClose}>
-            <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-accent-500 rounded-xl flex items-center justify-center flex-shrink-0">
-              <span className="text-white font-bold text-lg">Ü</span>
-            </div>
-            <span className="font-display font-bold text-lg">
-              Üniversite <span className="gradient-text">OBS</span>
+            <img 
+              src="/logo.png" 
+              alt="BHMB Üniversitesi Logo" 
+              className="w-10 h-10 object-contain flex-shrink-0 rounded-xl shadow-sm"
+            />
+            <span className="font-display font-bold text-lg text-gray-800">
+              BHMB <span className="gradient-text">Üniversitesi</span>
             </span>
           </Link>
         </div>
@@ -111,8 +113,8 @@ const Sidebar = ({ isOpen, onClose }) => {
               className={({ isActive }) => `
                 flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300
                 ${isActive
-                  ? 'bg-gradient-to-r from-primary-600/20 to-accent-600/20 text-white border border-primary-500/30'
-                  : 'text-slate-400 hover:text-white hover:bg-white/5'
+                  ? 'bg-primary-50 text-primary-700 border border-primary-200 font-semibold'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
                 }
               `}
             >
@@ -123,10 +125,10 @@ const Sidebar = ({ isOpen, onClose }) => {
         </nav>
 
         {/* User Role Badge - Sticky at bottom */}
-        <div className="sticky bottom-0 bg-slate-900/95 backdrop-blur-xl border-t border-slate-800 p-4">
-          <div className="px-4 py-2 rounded-xl bg-slate-800/50">
-            <div className="text-xs text-slate-500 mb-1">Rol</div>
-            <div className="font-medium capitalize">
+        <div className="sticky bottom-0 bg-white border-t border-gray-200 p-4">
+          <div className="px-4 py-2 rounded-xl bg-gray-100">
+            <div className="text-xs text-gray-500 mb-1">Rol</div>
+            <div className="font-medium text-gray-800 capitalize">
               {user?.role === 'student' && 'Öğrenci'}
               {user?.role === 'faculty' && 'Öğretim Üyesi'}
               {user?.role === 'admin' && 'Yönetici'}

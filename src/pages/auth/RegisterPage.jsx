@@ -100,26 +100,28 @@ const RegisterPage = () => {
   });
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-gradient-to-br from-gray-50 to-gray-100">
       {/* Background decoration */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -left-40 w-80 h-80 bg-accent-500/20 rounded-full blur-3xl" />
-        <div className="absolute -bottom-40 -right-40 w-80 h-80 bg-primary-500/20 rounded-full blur-3xl" />
+        <div className="absolute -top-40 -left-40 w-80 h-80 bg-primary-500/10 rounded-full blur-3xl" />
+        <div className="absolute -bottom-40 -right-40 w-80 h-80 bg-primary-600/10 rounded-full blur-3xl" />
       </div>
 
       <div className="w-full max-w-lg relative">
         {/* Header */}
         <div className="text-center mb-8">
           <Link to="/" className="inline-flex items-center gap-3 mb-6">
-            <div className="w-14 h-14 bg-gradient-to-br from-primary-500 to-accent-500 rounded-2xl flex items-center justify-center shadow-lg shadow-primary-500/25">
-              <span className="text-white font-bold text-2xl">Ü</span>
-            </div>
+            <img 
+              src="/logo.png" 
+              alt="BHMB Üniversitesi Logo" 
+              className="w-16 h-16 object-contain"
+            />
           </Link>
-          <h1 className="font-display text-3xl font-bold mb-2">
+          <h1 className="font-display text-3xl font-bold mb-2 text-gray-800">
             Hesap Oluşturun
           </h1>
-          <p className="text-slate-400">
-            Üniversite OBS'ye kayıt olun
+          <p className="text-gray-500">
+            BHMB Üniversitesi OBS'ye kayıt olun
           </p>
         </div>
 
@@ -254,9 +256,9 @@ const RegisterPage = () => {
                 name="terms"
                 checked={formik.values.terms}
                 onChange={formik.handleChange}
-                className="w-5 h-5 mt-0.5 rounded border-slate-600 bg-slate-800 text-primary-500 focus:ring-primary-500 focus:ring-offset-slate-900"
+                className="w-5 h-5 mt-0.5 rounded border-gray-300 bg-white text-primary-500 focus:ring-primary-500 focus:ring-offset-white"
               />
-              <span className="text-sm text-slate-400">
+              <span className="text-sm text-gray-500">
                 <Link to="/terms" className="link">Kullanım koşullarını</Link> ve{' '}
                 <Link to="/privacy" className="link">gizlilik politikasını</Link> okudum ve kabul ediyorum.
               </span>
@@ -271,7 +273,7 @@ const RegisterPage = () => {
           </form>
 
           <div className="mt-6 text-center">
-            <p className="text-slate-400">
+            <p className="text-gray-500">
               Zaten hesabınız var mı?{' '}
               <Link to="/login" className="link font-medium">
                 Giriş Yap

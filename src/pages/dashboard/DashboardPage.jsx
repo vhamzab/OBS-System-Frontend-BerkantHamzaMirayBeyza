@@ -133,7 +133,7 @@ const DashboardPage = () => {
       case 'success': return 'bg-green-500';
       case 'warning': return 'bg-yellow-500';
       case 'info': return 'bg-blue-500';
-      default: return 'bg-slate-500';
+      default: return 'bg-gray-400';
     }
   };
 
@@ -141,10 +141,10 @@ const DashboardPage = () => {
     <div className="p-6 lg:p-8 max-w-7xl mx-auto">
       {/* Welcome Section */}
       <div className="mb-8">
-        <h1 className="font-display text-3xl font-bold mb-2">
+        <h1 className="font-display text-3xl font-bold mb-2 text-gray-800">
           Hoş Geldiniz, <span className="gradient-text">{user?.first_name}</span>!
         </h1>
-        <p className="text-slate-400">
+        <p className="text-gray-500">
           {getRoleLabel(user?.role)} paneline hoş geldiniz. Bugün neler yapmak istersiniz?
         </p>
       </div>
@@ -155,11 +155,11 @@ const DashboardPage = () => {
           Array(4).fill(0).map((_, index) => (
             <div key={index} className="card animate-pulse">
               <div className="flex items-start justify-between mb-4">
-                <div className="w-12 h-12 rounded-xl bg-slate-700"></div>
-                <div className="w-12 h-5 rounded-full bg-slate-700"></div>
+                <div className="w-12 h-12 rounded-xl bg-gray-200"></div>
+                <div className="w-12 h-5 rounded-full bg-gray-200"></div>
               </div>
-              <div className="h-8 w-16 bg-slate-700 rounded mb-2"></div>
-              <div className="h-4 w-24 bg-slate-700 rounded"></div>
+              <div className="h-8 w-16 bg-gray-200 rounded mb-2"></div>
+              <div className="h-4 w-24 bg-gray-200 rounded"></div>
             </div>
           ))
         ) : (
@@ -173,12 +173,12 @@ const DashboardPage = () => {
                 <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center shadow-lg`}>
                   <stat.icon className="w-6 h-6 text-white" />
                 </div>
-                <span className="text-xs text-slate-500 bg-slate-800 px-2 py-1 rounded-full">
+                <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
                   Güncel
                 </span>
               </div>
-              <h3 className="text-3xl font-bold mb-1">{stat.value}</h3>
-              <p className="text-slate-400">{stat.label}</p>
+              <h3 className="text-3xl font-bold mb-1 text-gray-800">{stat.value}</h3>
+              <p className="text-gray-500">{stat.label}</p>
             </div>
           ))
         )}
@@ -188,37 +188,37 @@ const DashboardPage = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Quick Actions */}
         <div className="card">
-          <h2 className="font-display text-xl font-bold mb-4">Hızlı İşlemler</h2>
+          <h2 className="font-display text-xl font-bold mb-4 text-gray-800">Hızlı İşlemler</h2>
           <div className="grid grid-cols-2 gap-3">
             {user?.role === 'student' && (
               <>
                 <button
                   onClick={() => navigate('/courses')}
-                  className="p-4 rounded-xl bg-slate-800 hover:bg-slate-700 transition-colors text-left"
+                  className="p-4 rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-200 transition-colors text-left"
                 >
-                  <FiBook className="w-5 h-5 text-primary-400 mb-2" />
-                  <span className="block text-sm font-medium">Ders Kaydı</span>
+                  <FiBook className="w-5 h-5 text-primary-500 mb-2" />
+                  <span className="block text-sm font-medium text-gray-700">Ders Kaydı</span>
                 </button>
                 <button
                   onClick={() => navigate('/schedule')}
-                  className="p-4 rounded-xl bg-slate-800 hover:bg-slate-700 transition-colors text-left"
+                  className="p-4 rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-200 transition-colors text-left"
                 >
-                  <FiCalendar className="w-5 h-5 text-accent-400 mb-2" />
-                  <span className="block text-sm font-medium">Ders Programı</span>
+                  <FiCalendar className="w-5 h-5 text-purple-500 mb-2" />
+                  <span className="block text-sm font-medium text-gray-700">Ders Programı</span>
                 </button>
                 <button
                   onClick={() => navigate('/grades')}
-                  className="p-4 rounded-xl bg-slate-800 hover:bg-slate-700 transition-colors text-left"
+                  className="p-4 rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-200 transition-colors text-left"
                 >
-                  <FiClipboard className="w-5 h-5 text-green-400 mb-2" />
-                  <span className="block text-sm font-medium">Notlarım</span>
+                  <FiClipboard className="w-5 h-5 text-green-500 mb-2" />
+                  <span className="block text-sm font-medium text-gray-700">Notlarım</span>
                 </button>
                 <button
                   onClick={() => navigate('/announcements')}
-                  className="p-4 rounded-xl bg-slate-800 hover:bg-slate-700 transition-colors text-left"
+                  className="p-4 rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-200 transition-colors text-left"
                 >
-                  <FiBell className="w-5 h-5 text-orange-400 mb-2" />
-                  <span className="block text-sm font-medium">Duyurular</span>
+                  <FiBell className="w-5 h-5 text-orange-500 mb-2" />
+                  <span className="block text-sm font-medium text-gray-700">Duyurular</span>
                 </button>
               </>
             )}
@@ -226,32 +226,32 @@ const DashboardPage = () => {
               <>
                 <button
                   onClick={() => navigate('/attendance/start')}
-                  className="p-4 rounded-xl bg-slate-800 hover:bg-slate-700 transition-colors text-left"
+                  className="p-4 rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-200 transition-colors text-left"
                 >
-                  <FiUsers className="w-5 h-5 text-primary-400 mb-2" />
-                  <span className="block text-sm font-medium">Yoklama Al</span>
+                  <FiUsers className="w-5 h-5 text-primary-500 mb-2" />
+                  <span className="block text-sm font-medium text-gray-700">Yoklama Al</span>
                 </button>
                 <button
                   onClick={handleGradeEntry}
                   disabled={loadingGradeEntry}
-                  className="p-4 rounded-xl bg-slate-800 hover:bg-slate-700 transition-colors text-left disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="p-4 rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-200 transition-colors text-left disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <FiClipboard className="w-5 h-5 text-accent-400 mb-2" />
-                  <span className="block text-sm font-medium">Not Girişi</span>
+                  <FiClipboard className="w-5 h-5 text-purple-500 mb-2" />
+                  <span className="block text-sm font-medium text-gray-700">Not Girişi</span>
                 </button>
                 <button
                   onClick={() => navigate('/faculty/sections')}
-                  className="p-4 rounded-xl bg-slate-800 hover:bg-slate-700 transition-colors text-left"
+                  className="p-4 rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-200 transition-colors text-left"
                 >
-                  <FiBook className="w-5 h-5 text-green-400 mb-2" />
-                  <span className="block text-sm font-medium">Derslerim</span>
+                  <FiBook className="w-5 h-5 text-green-500 mb-2" />
+                  <span className="block text-sm font-medium text-gray-700">Derslerim</span>
                 </button>
                 <button
                   onClick={() => navigate('/excuse-requests')}
-                  className="p-4 rounded-xl bg-slate-800 hover:bg-slate-700 transition-colors text-left"
+                  className="p-4 rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-200 transition-colors text-left"
                 >
-                  <FiCalendar className="w-5 h-5 text-orange-400 mb-2" />
-                  <span className="block text-sm font-medium">Mazeret Talepleri</span>
+                  <FiCalendar className="w-5 h-5 text-orange-500 mb-2" />
+                  <span className="block text-sm font-medium text-gray-700">Mazeret Talepleri</span>
                 </button>
               </>
             )}
@@ -259,31 +259,31 @@ const DashboardPage = () => {
               <>
                 <button
                   onClick={() => navigate('/admin/users')}
-                  className="p-4 rounded-xl bg-slate-800 hover:bg-slate-700 transition-colors text-left"
+                  className="p-4 rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-200 transition-colors text-left"
                 >
-                  <FiUsers className="w-5 h-5 text-primary-400 mb-2" />
-                  <span className="block text-sm font-medium">Kullanıcı Yönetimi</span>
+                  <FiUsers className="w-5 h-5 text-primary-500 mb-2" />
+                  <span className="block text-sm font-medium text-gray-700">Kullanıcı Yönetimi</span>
                 </button>
                 <button
                   onClick={() => navigate('/admin/courses')}
-                  className="p-4 rounded-xl bg-slate-800 hover:bg-slate-700 transition-colors text-left"
+                  className="p-4 rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-200 transition-colors text-left"
                 >
-                  <FiBook className="w-5 h-5 text-accent-400 mb-2" />
-                  <span className="block text-sm font-medium">Ders Yönetimi</span>
+                  <FiBook className="w-5 h-5 text-purple-500 mb-2" />
+                  <span className="block text-sm font-medium text-gray-700">Ders Yönetimi</span>
                 </button>
                 <button
                   onClick={() => navigate('/admin/sections')}
-                  className="p-4 rounded-xl bg-slate-800 hover:bg-slate-700 transition-colors text-left"
+                  className="p-4 rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-200 transition-colors text-left"
                 >
-                  <FiClipboard className="w-5 h-5 text-green-400 mb-2" />
-                  <span className="block text-sm font-medium">Section Yönetimi</span>
+                  <FiClipboard className="w-5 h-5 text-green-500 mb-2" />
+                  <span className="block text-sm font-medium text-gray-700">Section Yönetimi</span>
                 </button>
                 <button
                   onClick={() => navigate('/admin/departments')}
-                  className="p-4 rounded-xl bg-slate-800 hover:bg-slate-700 transition-colors text-left"
+                  className="p-4 rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-200 transition-colors text-left"
                 >
-                  <FiCalendar className="w-5 h-5 text-orange-400 mb-2" />
-                  <span className="block text-sm font-medium">Bölüm Yönetimi</span>
+                  <FiCalendar className="w-5 h-5 text-orange-500 mb-2" />
+                  <span className="block text-sm font-medium text-gray-700">Bölüm Yönetimi</span>
                 </button>
               </>
             )}
@@ -292,15 +292,15 @@ const DashboardPage = () => {
 
         {/* Recent Activity */}
         <div className="card">
-          <h2 className="font-display text-xl font-bold mb-4">Son Aktiviteler</h2>
+          <h2 className="font-display text-xl font-bold mb-4 text-gray-800">Son Aktiviteler</h2>
           <div className="space-y-4">
             {loading ? (
               Array(4).fill(0).map((_, index) => (
-                <div key={index} className="flex items-start gap-3 p-3 rounded-lg bg-slate-800/50 animate-pulse">
-                  <div className="w-2 h-2 mt-2 rounded-full bg-slate-600"></div>
+                <div key={index} className="flex items-start gap-3 p-3 rounded-lg bg-gray-50 animate-pulse">
+                  <div className="w-2 h-2 mt-2 rounded-full bg-gray-300"></div>
                   <div className="flex-1">
-                    <div className="h-4 w-3/4 bg-slate-700 rounded mb-2"></div>
-                    <div className="h-3 w-20 bg-slate-700 rounded"></div>
+                    <div className="h-4 w-3/4 bg-gray-200 rounded mb-2"></div>
+                    <div className="h-3 w-20 bg-gray-200 rounded"></div>
                   </div>
                 </div>
               ))
@@ -308,17 +308,17 @@ const DashboardPage = () => {
               activities.map((activity, index) => (
                 <div
                   key={activity.id || index}
-                  className="flex items-start gap-3 p-3 rounded-lg bg-slate-800/50 hover:bg-slate-800 transition-colors"
+                  className="flex items-start gap-3 p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors"
                 >
                   <div className={`w-2 h-2 mt-2 rounded-full ${getActivityColor(activity.type)}`} />
                   <div>
-                    <p className="text-sm text-slate-300">{activity.text}</p>
-                    <span className="text-xs text-slate-500">{activity.time}</span>
+                    <p className="text-sm text-gray-700">{activity.text}</p>
+                    <span className="text-xs text-gray-500">{activity.time}</span>
                   </div>
                 </div>
               ))
             ) : (
-              <div className="text-center text-slate-500 py-8">
+              <div className="text-center text-gray-500 py-8">
                 <p>Henüz aktivite bulunmuyor</p>
               </div>
             )}

@@ -22,7 +22,7 @@ const Select = ({
       {label && (
         <label htmlFor={name} className="label">
           {label}
-          {required && <span className="text-red-400 ml-1">*</span>}
+          {required && <span className="text-red-500 ml-1">*</span>}
         </label>
       )}
       <div className="relative">
@@ -36,7 +36,7 @@ const Select = ({
           className={`
             input-field appearance-none pr-10 cursor-pointer
             ${hasError ? 'input-error' : ''}
-            ${!value ? 'text-slate-500' : ''}
+            ${!value ? 'text-gray-400' : ''}
           `}
           {...props}
         >
@@ -49,7 +49,7 @@ const Select = ({
             </option>
           ))}
         </select>
-        <FiChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5 pointer-events-none" />
+        <FiChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5 pointer-events-none" />
       </div>
       {hasError && <p className="error-text">{error}</p>}
     </div>

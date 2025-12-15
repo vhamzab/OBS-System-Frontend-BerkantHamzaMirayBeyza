@@ -81,26 +81,38 @@ const LoginPage = () => {
   });
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-gray-50 relative overflow-hidden">
+      {/* Background image */}
+      <div
+        className="absolute inset-0 bg-center bg-cover scale-105 blur-sm"
+        style={{ backgroundImage: "url('/girişFoto.jpg')" }}
+        aria-hidden="true"
+      />
+
+      {/* Gradient overlay for readability */}
+      <div className="absolute inset-0 bg-gradient-to-br from-white/85 via-white/75 to-white/60 pointer-events-none" />
+
       {/* Background decoration */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary-500/20 rounded-full blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-accent-500/20 rounded-full blur-3xl" />
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary-500/10 rounded-full blur-3xl" />
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-primary-600/10 rounded-full blur-3xl" />
       </div>
 
       <div className="w-full max-w-md relative">
         {/* Header */}
         <div className="text-center mb-8">
           <Link to="/" className="inline-flex items-center gap-3 mb-6">
-            <div className="w-14 h-14 bg-gradient-to-br from-primary-500 to-accent-500 rounded-2xl flex items-center justify-center shadow-lg shadow-primary-500/25">
-              <span className="text-white font-bold text-2xl">Ü</span>
-            </div>
+            <img 
+              src="/logo.png" 
+              alt="BHMB Üniversitesi Logo" 
+              className="w-16 h-16 object-contain rounded-2xl shadow-md"
+            />
           </Link>
-          <h1 className="font-display text-3xl font-bold mb-2">
+          <h1 className="font-display text-3xl font-bold mb-2 text-gray-800">
             Tekrar Hoş Geldiniz
           </h1>
-          <p className="text-slate-400">
-            Hesabınıza giriş yapın
+          <p className="text-gray-500">
+            BHMB Üniversitesi hesabınıza giriş yapın
           </p>
         </div>
 
@@ -111,7 +123,7 @@ const LoginPage = () => {
               label="E-posta Adresi"
               name="email"
               type="email"
-              placeholder="ornek@university.edu"
+              placeholder="ornek@bhmb.edu.tr"
               icon={FiMail}
               value={formik.values.email}
               onChange={formik.handleChange}
@@ -139,9 +151,9 @@ const LoginPage = () => {
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
                   type="checkbox"
-                  className="w-4 h-4 rounded border-slate-600 bg-slate-800 text-primary-500 focus:ring-primary-500 focus:ring-offset-slate-900"
+                  className="w-4 h-4 rounded border-gray-300 bg-white text-primary-500 focus:ring-primary-500 focus:ring-offset-white"
                 />
-                <span className="text-sm text-slate-400">Beni hatırla</span>
+                <span className="text-sm text-gray-500">Beni hatırla</span>
               </label>
               <Link to="/forgot-password" className="text-sm link">
                 Şifremi unuttum
@@ -154,7 +166,7 @@ const LoginPage = () => {
           </form>
 
           <div className="mt-6 text-center">
-            <p className="text-slate-400">
+            <p className="text-gray-500">
               Hesabınız yok mu?{' '}
               <Link to="/register" className="link font-medium">
                 Kayıt Ol

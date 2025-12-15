@@ -3,11 +3,11 @@ import { FiHome, FiArrowLeft } from 'react-icons/fi';
 
 const NotFoundPage = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-gradient-to-br from-gray-50 to-gray-100">
       {/* Background decoration */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent-500/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-primary-600/10 rounded-full blur-3xl" />
       </div>
 
       <div className="text-center relative">
@@ -17,10 +17,10 @@ const NotFoundPage = () => {
         </h1>
 
         {/* Message */}
-        <h2 className="font-display text-2xl sm:text-3xl font-bold mb-4">
+        <h2 className="font-display text-2xl sm:text-3xl font-bold mb-4 text-gray-800">
           Sayfa Bulunamadı
         </h2>
-        <p className="text-slate-400 mb-8 max-w-md mx-auto">
+        <p className="text-gray-500 mb-8 max-w-md mx-auto">
           Aradığınız sayfa mevcut değil veya taşınmış olabilir. 
           Ana sayfaya dönerek devam edebilirsiniz.
         </p>
