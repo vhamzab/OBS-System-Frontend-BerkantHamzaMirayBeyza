@@ -403,7 +403,11 @@ const CourseDetailPage = () => {
                               <button
                                 onClick={() => handleEnroll(section.id)}
                                 disabled={!canEnroll || enrolling === section.id}
-                                className={`btn w-full ${canEnroll ? 'btn-primary' : 'btn-secondary opacity-50 cursor-not-allowed'}`}
+                                className={`btn w-full ${
+                                  canEnroll
+                                    ? 'btn-primary'
+                                    : 'bg-slate-200 text-slate-600 cursor-not-allowed border border-slate-300'
+                                }`}
                               >
                                 {enrolling === section.id ? (
                                   <>
