@@ -85,7 +85,7 @@ const LoginPage = () => {
       {/* Background image */}
       <div
         className="absolute inset-0 bg-center bg-cover scale-105 blur-sm"
-        style={{ backgroundImage: "url('/girişFoto.jpg')" }}
+        style={{ backgroundImage: "url('/girisFoto.jpg')" }}
         aria-hidden="true"
       />
 
