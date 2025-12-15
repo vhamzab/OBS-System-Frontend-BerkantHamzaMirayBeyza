@@ -436,14 +436,14 @@ const ProfilePage = () => {
               <h3 className="font-display text-xl font-bold">Belgelerim</h3>
               <FiFileText className="w-5 h-5 text-primary-400" />
             </div>
-            <div className="bg-slate-100 rounded-xl p-4 flex items-center justify-between">
+            <div className="bg-slate-800/50 rounded-xl p-4 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-red-500/20 text-red-500 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-lg bg-red-500/20 text-red-400 flex items-center justify-center">
                   <span className="font-bold text-xs">PDF</span>
                 </div>
                 <div>
-                  <h4 className="font-medium text-slate-800">Öğrenci Belgesi</h4>
-                  <p className="text-xs text-slate-500">Resmi, barkodlu öğrenci belgesi</p>
+                  <h4 className="font-medium">Öğrenci Belgesi</h4>
+                  <p className="text-xs text-slate-400">Resmi, barkodlu öğrenci belgesi</p>
                 </div>
               </div>
               <Button
