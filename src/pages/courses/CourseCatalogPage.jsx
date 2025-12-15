@@ -326,48 +326,65 @@ const CourseCatalogPage = () => {
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
             {courses.map((course) => (
-              <Link
+              <div
                 key={course.id}
-                to={`/courses/${course.id}`}
-                className="card hover:border-primary-500/50 transition-all duration-300 group cursor-pointer"
+                className="card hover:border-primary-500/50 transition-all duration-300 group"
               >
-                <div className="flex items-start justify-between mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary-500/20 to-accent-500/20 flex items-center justify-center group-hover:from-primary-500/30 group-hover:to-accent-500/30 transition-all">
-                    <FiBook className="w-6 h-6 text-primary-400" />
+                <Link
+                  to={`/courses/${course.id}`}
+                  className="block"
+                >
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary-500/20 to-accent-500/20 flex items-center justify-center group-hover:from-primary-500/30 group-hover:to-accent-500/30 transition-all">
+                      <FiBook className="w-6 h-6 text-primary-400" />
+                    </div>
+                    <span className="px-3 py-1 rounded-full bg-slate-700/50 text-xs font-medium group-hover:bg-slate-700/70 transition-colors">
+                      {course.code}
+                    </span>
                   </div>
-                  <span className="px-3 py-1 rounded-full bg-slate-700/50 text-xs font-medium group-hover:bg-slate-700/70 transition-colors">
-                    {course.code}
+
+                  <h3 className="font-display text-lg font-semibold mb-2 group-hover:text-primary-400 transition-colors line-clamp-2">
+                    {course.name}
+                  </h3>
+
+                  <p className="text-slate-400 text-sm mb-4 line-clamp-2 min-h-[2.5rem]">
+                    {course.description || 'Açıklama bulunmuyor'}
+                  </p>
+
+                  <div className="flex items-center justify-between text-sm text-slate-400 mb-4">
+                    <div className="flex items-center gap-4">
+                      <span className="flex items-center gap-1">
+                        <FiClock className="w-4 h-4" />
+                        {course.credits} Kredi
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <FiUsers className="w-4 h-4" />
+                        {course.ects} AKTS
+                      </span>
+                    </div>
+                  </div>
+
+                  {course.department && (
+                    <div className="mt-2 pt-2 border-t border-slate-700/50">
+                      <span className="text-xs text-slate-500">{course.department.name}</span>
+                    </div>
+                  )}
+                </Link>
+
+                {/* Detay / Kayıt butonu */}
+                <div className="mt-4 pt-4 border-t border-slate-700/50 flex items-center justify-between">
+                  <span className="text-xs text-slate-500">
+                    Bu derse kayıt olmak için önce detay sayfasına gidin.
                   </span>
+                  <Link
+                    to={`/courses/${course.id}`}
+                    className="btn btn-primary btn-sm flex items-center gap-1"
+                  >
+                    <span>Detayları Gör / Kayıt Ol</span>
+                    <FiChevronRight className="w-4 h-4" />
+                  </Link>
                 </div>
-
-                <h3 className="font-display text-lg font-semibold mb-2 group-hover:text-primary-400 transition-colors line-clamp-2">
-                  {course.name}
-                </h3>
-
-                <p className="text-slate-400 text-sm mb-4 line-clamp-2 min-h-[2.5rem]">
-                  {course.description || 'Açıklama bulunmuyor'}
-                </p>
-
-                <div className="flex items-center justify-between text-sm text-slate-400">
-                  <div className="flex items-center gap-4">
-                    <span className="flex items-center gap-1">
-                      <FiClock className="w-4 h-4" />
-                      {course.credits} Kredi
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <FiUsers className="w-4 h-4" />
-                      {course.ects} AKTS
-                    </span>
-                  </div>
-                  <FiChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </div>
-
-                {course.department && (
-                  <div className="mt-4 pt-4 border-t border-slate-700/50">
-                    <span className="text-xs text-slate-500">{course.department.name}</span>
-                  </div>
-                )}
-              </Link>
+              </div>
             ))}
           </div>
 
