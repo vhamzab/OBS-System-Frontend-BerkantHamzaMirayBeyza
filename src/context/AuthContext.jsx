@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import authService from '../services/authService';
+import userService from '../services/userService';
 
 const AuthContext = createContext(null);
 
@@ -24,9 +25,17 @@ export const AuthProvider = ({ children }) => {
         const token = localStorage.getItem('accessToken');
 
         if (storedUser && token) {
-          // Local storage'daki kullanıcı bilgisini kullan
-          setUser(storedUser);
-          setIsAuthenticated(true);
+          // Verify token by fetching profile
+          try {
+            const response = await userService.getProfile();
+            setUser(response.data);
+            setIsAuthenticated(true);
+          } catch (error) {
+            // Token invalid, clear storage
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
+            localStorage.removeItem('user');
+          }
         }
       } catch (error) {
         console.error('Auth initialization error:', error);
