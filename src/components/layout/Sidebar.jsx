@@ -14,6 +14,7 @@ import {
   FiCheckSquare,
   FiGrid,
   FiBell,
+  FiUserCheck,
 } from 'react-icons/fi';
 import { useAuth } from '../../context/AuthContext';
 
@@ -39,6 +40,7 @@ const Sidebar = ({ isOpen, onClose }) => {
     { to: '/academic-calendar', icon: FiCalendar, label: 'Akademik Takvim' },
     { to: '/profile', icon: FiUser, label: 'Profil' },
     { to: '/faculty/sections', icon: FiBook, label: 'Derslerim' },
+    { to: '/faculty/enrollment-approvals', icon: FiUserCheck, label: 'Kayıt Onayları' },
     { to: '/attendance/start', icon: FiMapPin, label: 'Yoklama Aç' },
     { to: '/excuse-requests', icon: FiFileText, label: 'Mazeret Talepleri' },
   ];

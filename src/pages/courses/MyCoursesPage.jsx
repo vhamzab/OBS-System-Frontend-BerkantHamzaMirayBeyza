@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   FiBook, FiClock, FiUser, FiMapPin, FiCalendar, 
-  FiAlertTriangle, FiCheckCircle, FiXCircle, FiTrash2
+  FiAlertTriangle, FiCheckCircle, FiXCircle, FiTrash2,
+  FiLoader, FiInfo
 } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import enrollmentService from '../../services/enrollmentService';
@@ -32,12 +33,17 @@ const MyCoursesPage = () => {
     try {
       setLoading(true);
       console.log('📚 MyCoursesPage: Fetching enrollments...');
-      const response = await enrollmentService.getMyCourses({ status: 'enrolled' });
+      // Fetch all enrollments (pending, enrolled, rejected) - not just enrolled
+      const response = await enrollmentService.getMyCourses({});
       console.log('✅ MyCoursesPage: Enrollments fetched:', response);
       
       if (response.success) {
-        setEnrollments(response.data || []);
-        console.log(`✅ MyCoursesPage: ${response.data?.length || 0} enrollments loaded`);
+        // Filter to show pending, enrolled and rejected (not dropped, completed, failed, withdrawn)
+        const activeEnrollments = (response.data || []).filter(
+          (e) => ['pending', 'enrolled', 'rejected'].includes(e.status)
+        );
+        setEnrollments(activeEnrollments);
+        console.log(`✅ MyCoursesPage: ${activeEnrollments.length} active enrollments loaded`);
       } else {
         console.warn('⚠️ MyCoursesPage: Response not successful:', response);
         toast.error(response.message || 'Dersler yüklenirken hata oluştu');
@@ -102,6 +108,47 @@ const MyCoursesPage = () => {
       return { color: 'text-amber-400', bg: 'bg-amber-500/20', label: 'Uyarı', icon: FiAlertTriangle };
     }
     return { color: 'text-green-400', bg: 'bg-green-500/20', label: 'İyi', icon: FiCheckCircle };
+  };
+
+  const getEnrollmentStatus = (status) => {
+    switch (status) {
+      case 'pending':
+        return {
+          color: 'text-amber-400',
+          bg: 'bg-amber-500/20',
+          border: 'border-amber-500/30',
+          label: 'Onay Bekliyor',
+          icon: FiLoader,
+          description: 'Öğretim üyesi onayı bekleniyor',
+        };
+      case 'enrolled':
+        return {
+          color: 'text-emerald-400',
+          bg: 'bg-emerald-500/20',
+          border: 'border-emerald-500/30',
+          label: 'Kayıtlı',
+          icon: FiCheckCircle,
+          description: 'Derse kayıtlısınız',
+        };
+      case 'rejected':
+        return {
+          color: 'text-red-400',
+          bg: 'bg-red-500/20',
+          border: 'border-red-500/30',
+          label: 'Reddedildi',
+          icon: FiXCircle,
+          description: 'Kayıt talebiniz reddedildi',
+        };
+      default:
+        return {
+          color: 'text-slate-400',
+          bg: 'bg-slate-700',
+          border: 'border-slate-600',
+          label: status,
+          icon: FiInfo,
+          description: '',
+        };
+    }
   };
 
   if (loading) {

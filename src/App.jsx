@@ -43,6 +43,7 @@ import AcademicCalendarPage from './pages/calendar/AcademicCalendarPage';
 
 // Faculty Pages
 import FacultySectionsPage from './pages/faculty/FacultySectionsPage';
+import EnrollmentApprovalsPage from './pages/faculty/EnrollmentApprovalsPage';
 
 // Admin Pages
 import AdminSectionsPage from './pages/admin/AdminSectionsPage';
@@ -235,6 +236,14 @@ function App() {
           element={
             <ProtectedRoute roles={['faculty', 'admin']}>
               <FacultySectionsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/faculty/enrollment-approvals"
+          element={
+            <ProtectedRoute roles={['faculty']}>
+              <EnrollmentApprovalsPage />
             </ProtectedRoute>
           }
         />

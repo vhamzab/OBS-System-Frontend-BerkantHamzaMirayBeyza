@@ -77,6 +77,68 @@ const enrollmentService = {
     const response = await api.get(`/enrollments/students/${sectionId}`);
     return response.data;
   },
+
+  // ==================== FACULTY APPROVAL METHODS ====================
+
+  /**
+   * Get pending enrollments for faculty's sections
+   */
+  getPendingEnrollments: async () => {
+    try {
+      console.log('📋 EnrollmentService: Fetching pending enrollments...');
+      const response = await api.get('/enrollments/pending');
+      console.log('✅ EnrollmentService: Pending enrollments fetched:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('❌ EnrollmentService: Get pending enrollments error:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Approve a pending enrollment (faculty)
+   */
+  approveEnrollment: async (enrollmentId) => {
+    try {
+      console.log('✅ EnrollmentService: Approving enrollment:', enrollmentId);
+      const response = await api.put(`/enrollments/${enrollmentId}/approve`);
+      console.log('✅ EnrollmentService: Enrollment approved:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('❌ EnrollmentService: Approve enrollment error:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Reject a pending enrollment (faculty)
+   */
+  rejectEnrollment: async (enrollmentId, reason = '') => {
+    try {
+      console.log('❌ EnrollmentService: Rejecting enrollment:', enrollmentId);
+      const response = await api.put(`/enrollments/${enrollmentId}/reject`, { reason });
+      console.log('✅ EnrollmentService: Enrollment rejected:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('❌ EnrollmentService: Reject enrollment error:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Bulk approve enrollments (faculty)
+   */
+  approveAllEnrollments: async (enrollmentIds) => {
+    try {
+      console.log('✅ EnrollmentService: Bulk approving enrollments:', enrollmentIds);
+      const response = await api.put('/enrollments/approve-all', { enrollmentIds });
+      console.log('✅ EnrollmentService: Bulk approval completed:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('❌ EnrollmentService: Bulk approve error:', error);
+      throw error;
+    }
+  },
 };
 
 export default enrollmentService;
