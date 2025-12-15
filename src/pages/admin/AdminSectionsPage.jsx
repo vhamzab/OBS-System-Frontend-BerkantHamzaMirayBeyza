@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import {
     FiBook, FiUser, FiUsers, FiEdit2, FiPlus,
-    FiFilter, FiSearch, FiCalendar, FiMapPin
+    FiFilter, FiSearch, FiCalendar, FiMapPin, FiX, FiSave
 } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import courseService from '../../services/courseService';
@@ -10,14 +9,25 @@ import userService from '../../services/userService';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 
 const AdminSectionsPage = () => {
-    const navigate = useNavigate();
     const [sections, setSections] = useState([]);
+    const [courses, setCourses] = useState([]);
+    const [classrooms, setClassrooms] = useState([]);
     const [faculty, setFaculty] = useState([]);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [selectedSection, setSelectedSection] = useState(null);
     const [showAssignModal, setShowAssignModal] = useState(false);
+    const [showCreateModal, setShowCreateModal] = useState(false);
     const [selectedInstructor, setSelectedInstructor] = useState('');
+    const [newSectionData, setNewSectionData] = useState({
+        course_id: '',
+        section_number: 1,
+        semester: 'spring',
+        year: new Date().getFullYear(),
+        instructor_id: '',
+        classroom_id: '',
+        capacity: 30,
+    });
 
     // Filters
     const [filters, setFilters] = useState({
@@ -33,13 +43,15 @@ const AdminSectionsPage = () => {
     const fetchData = async () => {
         try {
             setLoading(true);
-            const [sectionsRes, facultyRes] = await Promise.all([
+            const [sectionsRes, facultyRes, coursesRes, classroomsRes] = await Promise.all([
                 courseService.getSections({
                     semester: filters.semester,
                     year: filters.year,
                     limit: 100
                 }),
                 userService.getAllFaculty(),
+                courseService.getCourses({ limit: 200, is_active: true }),
+                courseService.getClassrooms({ limit: 100 }),
             ]);
 
             if (sectionsRes.success) {
@@ -47,6 +59,12 @@ const AdminSectionsPage = () => {
             }
             if (facultyRes.success) {
                 setFaculty(facultyRes.data || []);
+            }
+            if (coursesRes.success) {
+                setCourses(coursesRes.data?.courses || []);
+            }
+            if (classroomsRes.success) {
+                setClassrooms(classroomsRes.data || []);
             }
         } catch (error) {
             toast.error('Veriler yüklenirken hata oluştu');
@@ -83,6 +101,50 @@ const AdminSectionsPage = () => {
         }
     };
 
+    const handleOpenCreateModal = () => {
+        setNewSectionData({
+            course_id: '',
+            section_number: 1,
+            semester: 'spring',
+            year: new Date().getFullYear(),
+            instructor_id: '',
+            classroom_id: '',
+            capacity: 30,
+        });
+        setShowCreateModal(true);
+    };
+
+    const handleCreateSection = async (e) => {
+        e.preventDefault();
+
+        if (!newSectionData.course_id) {
+            toast.error('Lütfen bir ders seçin');
+            return;
+        }
+
+        try {
+            setSaving(true);
+            const response = await courseService.createSection({
+                ...newSectionData,
+                instructor_id: newSectionData.instructor_id || null,
+                classroom_id: newSectionData.classroom_id || null,
+            });
+
+            if (response.success) {
+                toast.success(response.message || 'Section başarıyla oluşturuldu');
+                setShowCreateModal(false);
+                fetchData();
+            } else {
+                toast.error(response.message || 'Section oluşturulurken hata oluştu');
+            }
+        } catch (error) {
+            console.error('Create section error:', error);
+            toast.error(error.response?.data?.message || 'Section oluşturulurken hata oluştu');
+        } finally {
+            setSaving(false);
+        }
+    };
+
     const filteredSections = sections.filter(section => {
         if (!filters.search) return true;
         const searchLower = filters.search.toLowerCase();
@@ -110,7 +172,7 @@ const AdminSectionsPage = () => {
                     <p className="text-slate-400">Derslere öğretim üyesi atayın ve section'ları yönetin</p>
                 </div>
                 <button
-                    onClick={() => navigate('/admin/sections/create')}
+                    onClick={handleOpenCreateModal}
                     className="btn btn-primary"
                 >
                     <FiPlus className="w-4 h-4 mr-2" />
@@ -269,6 +331,155 @@ const AdminSectionsPage = () => {
                     </table>
                 </div>
             </div>
+
+            {/* Create Section Modal */}
+            {showCreateModal && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                    <div className="card w-full max-w-lg mx-4 max-h-[90vh] overflow-y-auto">
+                        <div className="flex items-center justify-between mb-6">
+                            <h3 className="font-display text-xl font-semibold">
+                                Yeni Section Oluştur
+                            </h3>
+                            <button
+                                onClick={() => setShowCreateModal(false)}
+                                className="p-2 rounded-lg hover:bg-slate-700 transition-colors"
+                            >
+                                <FiX className="w-5 h-5" />
+                            </button>
+                        </div>
+
+                        <form onSubmit={handleCreateSection} className="space-y-4">
+                            {/* Course Selection */}
+                            <div>
+                                <label className="block text-sm font-medium mb-2">Ders *</label>
+                                <select
+                                    value={newSectionData.course_id}
+                                    onChange={(e) => setNewSectionData({ ...newSectionData, course_id: e.target.value })}
+                                    className="input w-full"
+                                    required
+                                >
+                                    <option value="">-- Ders Seçin --</option>
+                                    {courses.map((course) => (
+                                        <option key={course.id} value={course.id}>
+                                            {course.code} - {course.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            {/* Section Number & Capacity */}
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-sm font-medium mb-2">Section No</label>
+                                    <input
+                                        type="number"
+                                        min="1"
+                                        value={newSectionData.section_number}
+                                        onChange={(e) => setNewSectionData({ ...newSectionData, section_number: parseInt(e.target.value) || 1 })}
+                                        className="input w-full"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium mb-2">Kapasite</label>
+                                    <input
+                                        type="number"
+                                        min="1"
+                                        value={newSectionData.capacity}
+                                        onChange={(e) => setNewSectionData({ ...newSectionData, capacity: parseInt(e.target.value) || 30 })}
+                                        className="input w-full"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Semester & Year */}
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-sm font-medium mb-2">Dönem</label>
+                                    <select
+                                        value={newSectionData.semester}
+                                        onChange={(e) => setNewSectionData({ ...newSectionData, semester: e.target.value })}
+                                        className="input w-full"
+                                    >
+                                        <option value="fall">Güz</option>
+                                        <option value="spring">Bahar</option>
+                                        <option value="summer">Yaz</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium mb-2">Yıl</label>
+                                    <select
+                                        value={newSectionData.year}
+                                        onChange={(e) => setNewSectionData({ ...newSectionData, year: parseInt(e.target.value) })}
+                                        className="input w-full"
+                                    >
+                                        {[2024, 2025, 2026].map(year => (
+                                            <option key={year} value={year}>{year}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
+
+                            {/* Instructor */}
+                            <div>
+                                <label className="block text-sm font-medium mb-2">Öğretim Üyesi</label>
+                                <select
+                                    value={newSectionData.instructor_id}
+                                    onChange={(e) => setNewSectionData({ ...newSectionData, instructor_id: e.target.value })}
+                                    className="input w-full"
+                                >
+                                    <option value="">-- Öğretim Üyesi Yok --</option>
+                                    {faculty.map((f) => (
+                                        <option key={f.id} value={f.id}>
+                                            {f.name} {f.department ? `(${f.department})` : ''}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            {/* Classroom */}
+                            <div>
+                                <label className="block text-sm font-medium mb-2">Derslik</label>
+                                <select
+                                    value={newSectionData.classroom_id}
+                                    onChange={(e) => setNewSectionData({ ...newSectionData, classroom_id: e.target.value })}
+                                    className="input w-full"
+                                >
+                                    <option value="">-- Derslik Yok --</option>
+                                    {classrooms.map((c) => (
+                                        <option key={c.id} value={c.id}>
+                                            {c.building} {c.room_number} (Kapasite: {c.capacity})
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            {/* Buttons */}
+                            <div className="flex gap-3 pt-4">
+                                <button
+                                    type="button"
+                                    onClick={() => setShowCreateModal(false)}
+                                    className="btn btn-secondary flex-1"
+                                    disabled={saving}
+                                >
+                                    İptal
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="btn btn-primary flex-1"
+                                    disabled={saving}
+                                >
+                                    {saving ? <LoadingSpinner size="sm" /> : (
+                                        <>
+                                            <FiSave className="w-4 h-4 mr-2" />
+                                            Oluştur
+                                        </>
+                                    )}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
 
             {/* Assignment Modal */}
             {showAssignModal && selectedSection && (
