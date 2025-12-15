@@ -96,11 +96,11 @@ const FacultySectionsPage = () => {
         <select
           value={selectedSemester}
           onChange={(e) => setSelectedSemester(e.target.value)}
-          className="input"
+          className="input text-white"
+          style={{ color: '#ffffff' }}
         >
-          <option value="" disabled>Dönem seçiniz...</option>
-          <option value="current">Mevcut Dönem</option>
-          <option value="all">Tüm Dönemler</option>
+          <option value="current" style={{ color: '#ffffff', backgroundColor: '#0f172a' }}>Mevcut Dönem</option>
+          <option value="all" style={{ color: '#ffffff', backgroundColor: '#0f172a' }}>Tüm Dönemler</option>
         </select>
       </div>
 
@@ -140,17 +140,17 @@ const FacultySectionsPage = () => {
 
                 {/* Stats */}
                 <div className="grid grid-cols-3 gap-3 mb-4">
-                  <div className="p-3 rounded-xl bg-gray-50 text-center border border-gray-200">
-                    <div className="text-lg font-bold text-primary-700">{section.enrolledCount}</div>
-                    <div className="text-xs text-gray-600">Öğrenci</div>
+                  <div className="p-3 rounded-xl bg-slate-800/50 text-center">
+                    <div className="text-lg font-bold text-primary-400">{section.enrolledCount}</div>
+                    <div className="text-xs text-slate-500">Öğrenci</div>
                   </div>
-                  <div className="p-3 rounded-xl bg-gray-50 text-center border border-gray-200">
-                    <div className="text-lg font-bold text-emerald-600">{section.course?.credits}</div>
-                    <div className="text-xs text-gray-600">Kredi</div>
+                  <div className="p-3 rounded-xl bg-slate-800/50 text-center">
+                    <div className="text-lg font-bold text-emerald-400">{section.course?.credits}</div>
+                    <div className="text-xs text-slate-500">Kredi</div>
                   </div>
-                  <div className="p-3 rounded-xl bg-gray-50 text-center border border-gray-200">
-                    <div className="text-lg font-bold text-amber-600">{section.capacity}</div>
-                    <div className="text-xs text-gray-600">Kapasite</div>
+                  <div className="p-3 rounded-xl bg-slate-800/50 text-center">
+                    <div className="text-lg font-bold text-amber-400">{section.capacity}</div>
+                    <div className="text-xs text-slate-500">Kapasite</div>
                   </div>
                 </div>
 
@@ -168,7 +168,7 @@ const FacultySectionsPage = () => {
                 )}
 
                 {section.classroom && (
-                  <div className="flex items-center gap-2 text-sm text-gray-600 mb-4">
+                  <div className="flex items-center gap-2 text-sm text-slate-400 mb-4">
                     <FiMapPin className="w-4 h-4" />
                     {section.classroom}
                   </div>
