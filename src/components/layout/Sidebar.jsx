@@ -1,143 +1,139 @@
-import { NavLink } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import {
-  FiHome,
-  FiUser,
-  FiBook,
-  FiCalendar,
-  FiClipboard,
-  FiUsers,
-  FiSettings,
-  FiBarChart2,
-  FiMapPin,
-  FiFileText,
-  FiCheckSquare,
-  FiGrid,
-  FiBell,
-  FiUserCheck,
+    FiHome, FiBook, FiCalendar, FiClock, FiUsers,
+    FiSettings, FiX, FiAward, FiBell, FiCheckCircle,
+    FiGrid, FiAlertCircle, FiUserCheck, FiPlusCircle
 } from 'react-icons/fi';
 import { useAuth } from '../../context/AuthContext';
 
 const Sidebar = ({ isOpen, onClose }) => {
-  const { user } = useAuth();
+    const location = useLocation();
+    const { user } = useAuth();
+    const userRole = user?.role || 'student';
 
-  const studentLinks = [
-    { to: '/dashboard', icon: FiHome, label: 'Dashboard' },
-    { to: '/announcements', icon: FiBell, label: 'Duyurular' },
-    { to: '/academic-calendar', icon: FiCalendar, label: 'Akademik Takvim' },
-    { to: '/profile', icon: FiUser, label: 'Profil' },
-    { to: '/courses', icon: FiGrid, label: 'Ders Kataloğu' },
-    { to: '/my-courses', icon: FiBook, label: 'Derslerim' },
-    { to: '/schedule', icon: FiCalendar, label: 'Ders Programı' },
-    { to: '/grades', icon: FiClipboard, label: 'Notlarım' },
-    { to: '/my-attendance', icon: FiCheckSquare, label: 'Devam Durumu' },
-    { to: '/my-excuse-requests', icon: FiFileText, label: 'Mazeretlerim' },
-  ];
+    const studentLinks = [
+        { name: 'Dashboard', path: '/dashboard', icon: FiHome },
+        { name: 'Derslerim', path: '/my-courses', icon: FiBook },
+        { name: 'Notlarım', path: '/grades', icon: FiAward },
+        { name: 'Yoklamalarım', path: '/my-attendance', icon: FiCheckCircle },
+        { name: 'Aktif Yoklamalar', path: '/active-sessions', icon: FiClock },
+        { name: 'Mazeret Taleplerim', path: '/my-excuse-requests', icon: FiAlertCircle },
+        { name: 'Ders Programı', path: '/schedule', icon: FiCalendar },
+        { name: 'Duyurular', path: '/announcements', icon: FiBell },
+        { name: 'Akademik Takvim', path: '/academic-calendar', icon: FiCalendar },
+    ];
 
-  const facultyLinks = [
-    { to: '/dashboard', icon: FiHome, label: 'Dashboard' },
-    { to: '/announcements', icon: FiBell, label: 'Duyurular' },
-    { to: '/academic-calendar', icon: FiCalendar, label: 'Akademik Takvim' },
-    { to: '/profile', icon: FiUser, label: 'Profil' },
-    { to: '/faculty/sections', icon: FiBook, label: 'Derslerim' },
-    { to: '/faculty/enrollment-approvals', icon: FiUserCheck, label: 'Kayıt Onayları' },
-    { to: '/attendance/start', icon: FiMapPin, label: 'Yoklama Aç' },
-    { to: '/excuse-requests', icon: FiFileText, label: 'Mazeret Talepleri' },
-  ];
+    const facultyLinks = [
+        { name: 'Dashboard', path: '/dashboard', icon: FiHome },
+        { name: 'Bölümlerim', path: '/faculty/sections', icon: FiGrid },
+        { name: 'Kayıt Onayları', path: '/faculty/enrollment-approvals', icon: FiUserCheck },
+        { name: 'Yoklama Başlat', path: '/attendance/start', icon: FiPlusCircle },
+        { name: 'Yoklama Oturumları', path: '/attendance/sessions', icon: FiClock },
+        { name: 'Mazeret Talepleri', path: '/excuse-requests', icon: FiAlertCircle },
+        { name: 'Duyurular', path: '/announcements', icon: FiBell },
+        { name: 'Akademik Takvim', path: '/academic-calendar', icon: FiCalendar },
+    ];
 
-  const adminLinks = [
-    { to: '/dashboard', icon: FiHome, label: 'Dashboard' },
-    { to: '/announcements', icon: FiBell, label: 'Duyurular' },
-    { to: '/academic-calendar', icon: FiCalendar, label: 'Akademik Takvim' },
-    { to: '/admin/users', icon: FiUsers, label: 'Kullanıcılar' },
-    { to: '/admin/departments', icon: FiBarChart2, label: 'Bölümler' },
-    { to: '/courses', icon: FiGrid, label: 'Ders Kataloğu' },
-    { to: '/admin/courses', icon: FiBook, label: 'Ders Yönetimi' },
-    { to: '/admin/sections', icon: FiClipboard, label: 'Section Yönetimi' },
-    { to: '/settings', icon: FiSettings, label: 'Ayarlar' },
-  ];
+    const adminLinks = [
+        { name: 'Dashboard', path: '/dashboard', icon: FiHome },
+        { name: 'Kullanıcılar', path: '/admin/users', icon: FiUsers },
+        { name: 'Bölümler', path: '/admin/departments', icon: FiGrid },
+        { name: 'Dersler', path: '/admin/courses', icon: FiBook },
+        { name: 'Seksiyonlar', path: '/admin/sections', icon: FiGrid },
+        { name: 'Bölümlerim', path: '/faculty/sections', icon: FiGrid },
+        { name: 'Yoklama Başlat', path: '/attendance/start', icon: FiPlusCircle },
+        { name: 'Yoklama Oturumları', path: '/attendance/sessions', icon: FiClock },
+        { name: 'Mazeret Talepleri', path: '/excuse-requests', icon: FiAlertCircle },
+        { name: 'Duyurular', path: '/announcements', icon: FiBell },
+        { name: 'Akademik Takvim', path: '/academic-calendar', icon: FiCalendar },
+    ];
 
-  const getLinks = () => {
-    switch (user?.role) {
-      case 'admin':
-        return adminLinks;
-      case 'faculty':
-        return facultyLinks;
-      default:
-        return studentLinks;
-    }
-  };
+    const getLinks = () => {
+        switch (userRole) {
+            case 'admin':
+                return adminLinks;
+            case 'faculty':
+                return facultyLinks;
+            default:
+                return studentLinks;
+        }
+    };
 
-  const links = getLinks();
+    const links = getLinks();
 
-  return (
-    <>
-      {/* Overlay */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 bg-black/30 z-40 lg:hidden"
-          onClick={onClose}
-        />
-      )}
+    const isActive = (path) => location.pathname === path;
 
-      {/* Sidebar */}
-      <aside
-        className={`
-          fixed top-16 left-0 h-[calc(100vh-4rem)] w-64 bg-white
-          border-r border-gray-200 z-50 transform transition-transform duration-300
-          lg:translate-x-0 lg:static lg:h-auto flex flex-col overflow-hidden shadow-lg lg:shadow-none
-          ${isOpen ? 'translate-x-0' : '-translate-x-full'}
+    return (
+        <>
+            {/* Mobile overlay */}
+            {isOpen && (
+                <div
+                    className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+                    onClick={onClose}
+                />
+            )}
+
+            {/* Sidebar */}
+            <aside
+                className={`
+          fixed lg:sticky top-16 left-0 h-[calc(100vh-4rem)] w-64 
+          bg-slate-800 border-r border-slate-700 
+          transform transition-transform duration-300 ease-in-out z-50
+          ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+          overflow-y-auto
         `}
-      >
-        {/* Sticky Header with Logo */}
-        <div className="sticky top-0 z-10 bg-white border-b border-gray-200 p-4">
-          <Link to="/dashboard" className="flex items-center gap-3" onClick={onClose}>
-            <img 
-              src="/logo.png" 
-              alt="BHMB Üniversitesi Logo" 
-              className="w-10 h-10 object-contain flex-shrink-0 rounded-xl shadow-sm"
-            />
-            <span className="font-display font-bold text-lg text-gray-800">
-              BHMB <span className="gradient-text">Üniversitesi</span>
-            </span>
-          </Link>
-        </div>
-
-        {/* Scrollable Navigation */}
-        <nav className="flex-1 overflow-y-auto p-4 space-y-2">
-          {links.map((link) => (
-            <NavLink
-              key={link.to}
-              to={link.to}
-              onClick={onClose}
-              className={({ isActive }) => `
-                flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300
-                ${isActive
-                  ? 'bg-primary-50 text-primary-700 border border-primary-200 font-semibold'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-                }
-              `}
             >
-              <link.icon className="w-5 h-5" />
-              <span className="font-medium">{link.label}</span>
-            </NavLink>
-          ))}
-        </nav>
+                {/* Mobile close button */}
+                <div className="lg:hidden flex justify-end p-4">
+                    <button
+                        onClick={onClose}
+                        className="p-2 text-slate-400 hover:text-white hover:bg-slate-700 rounded-lg transition-colors"
+                    >
+                        <FiX className="w-5 h-5" />
+                    </button>
+                </div>
 
-        {/* User Role Badge - Sticky at bottom */}
-        <div className="sticky bottom-0 bg-white border-t border-gray-200 p-4">
-          <div className="px-4 py-2 rounded-xl bg-gray-100">
-            <div className="text-xs text-gray-500 mb-1">Rol</div>
-            <div className="font-medium text-gray-800 capitalize">
-              {user?.role === 'student' && 'Öğrenci'}
-              {user?.role === 'faculty' && 'Öğretim Üyesi'}
-              {user?.role === 'admin' && 'Yönetici'}
-            </div>
-          </div>
-        </div>
-      </aside>
-    </>
-  );
+                {/* Navigation */}
+                <nav className="px-4 py-2 space-y-1">
+                    {links.map((link) => (
+                        <Link
+                            key={link.path}
+                            to={link.path}
+                            onClick={onClose}
+                            className={`
+                flex items-center gap-3 px-4 py-3 rounded-lg transition-colors
+                ${isActive(link.path)
+                                    ? 'bg-primary-500/20 text-primary-400 border-l-4 border-primary-500'
+                                    : 'text-slate-300 hover:text-white hover:bg-slate-700/50'
+                                }
+              `}
+                        >
+                            <link.icon className="w-5 h-5" />
+                            <span className="font-medium">{link.name}</span>
+                        </Link>
+                    ))}
+                </nav>
+
+                {/* Bottom section */}
+                <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-slate-700">
+                    <Link
+                        to="/settings"
+                        onClick={onClose}
+                        className={`
+              flex items-center gap-3 px-4 py-3 rounded-lg transition-colors
+              ${isActive('/settings')
+                                ? 'bg-primary-500/20 text-primary-400'
+                                : 'text-slate-300 hover:text-white hover:bg-slate-700/50'
+                            }
+            `}
+                    >
+                        <FiSettings className="w-5 h-5" />
+                        <span className="font-medium">Ayarlar</span>
+                    </Link>
+                </div>
+            </aside>
+        </>
+    );
 };
 
 export default Sidebar;
