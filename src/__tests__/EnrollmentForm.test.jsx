@@ -1,139 +1,141 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
-import { vi } from 'vitest';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import CourseDetailPage from '../pages/courses/CourseDetailPage';
 
-// Mock the enrollment service
-vi.mock('../services/enrollmentService', () => ({
-  enrollInCourse: vi.fn(() => Promise.resolve({
+// Mock toast
+jest.mock('react-hot-toast', () => ({
+  error: jest.fn(),
+  success: jest.fn(),
+}));
+
+// Mock AuthContext so that user is a student
+const mockUseAuth = jest.fn();
+jest.mock('../context/AuthContext', () => ({
+  useAuth: () => mockUseAuth(),
+}));
+
+// Mock services
+const mockEnrollInCourse = jest.fn();
+const mockCheckEligibility = jest.fn();
+
+jest.mock('../services/enrollmentService', () => ({
+  __esModule: true,
+  default: {
+    enrollInCourse: (...args) => mockEnrollInCourse(...args),
+    checkEligibility: (...args) => mockCheckEligibility(...args),
+  },
+}));
+
+const mockGetCourseById = jest.fn();
+jest.mock('../services/courseService', () => ({
+  __esModule: true,
+  default: {
+    getCourseById: (...args) => mockGetCourseById(...args),
+  },
+}));
+
+const renderWithRoute = () => {
+  mockUseAuth.mockReturnValue({
+    user: { role: 'student' },
+    isAuthenticated: true,
+  });
+
+  mockGetCourseById.mockResolvedValue({
     success: true,
-    message: 'Kayıt başarılı',
-    data: { enrollment: { id: 1, status: 'enrolled' } },
-  })),
-  checkEligibility: vi.fn(() => Promise.resolve({
+    data: {
+      course: {
+        id: 1,
+        code: 'CS101',
+        name: 'Programlamaya Giriş',
+        credits: 3,
+        ects: 5,
+        description: 'Test dersi',
+        department: { name: 'Bilgisayar Mühendisliği' },
+      },
+      prerequisites: [],
+      sections: [
+        {
+          id: 10,
+          sectionNumber: '1',
+          semester: 'fall',
+          year: 2024,
+          instructor: 'Dr. Test',
+          classroom: 'A101',
+          schedule: [
+            { day: 'monday', start_time: '09:00', end_time: '10:30' },
+          ],
+          enrolledCount: 5,
+          capacity: 30,
+          availableSeats: 25,
+        },
+      ],
+    },
+  });
+
+  mockCheckEligibility.mockResolvedValue({
     success: true,
     data: {
       eligible: true,
-      prerequisites: { satisfied: true, missing: [] },
-      scheduleConflict: { hasConflict: false, conflicts: [] },
-      capacity: { available: true, remaining: 10 },
+      issues: [],
+      details: {
+        prerequisites: { satisfied: true, missing: [] },
+        scheduleConflict: { hasConflict: false },
+        hasCapacity: true,
+      },
     },
-  })),
-  dropCourse: vi.fn(() => Promise.resolve({
+  });
+
+  mockEnrollInCourse.mockResolvedValue({
     success: true,
-    message: 'Ders bırakıldı',
-  })),
-}));
+    message: 'Kayıt başarılı',
+    data: { enrollment: { id: 1, status: 'enrolled' } },
+  });
+
+  return render(
+    <MemoryRouter initialEntries={['/courses/1']}>
+      <Routes>
+        <Route path="/courses/:id" element={<CourseDetailPage />} />
+      </Routes>
+    </MemoryRouter>
+  );
+};
 
 describe('Enrollment Form Tests', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   describe('Enrollment Display', () => {
-    it('should display available sections', () => {
-      // Test that sections are displayed
-      expect(true).toBe(true);
-    });
+    it('should display sections with capacity, instructor and schedule', async () => {
+      renderWithRoute();
 
-    it('should show section capacity', () => {
-      // Test capacity display
-      expect(true).toBe(true);
-    });
-
-    it('should show instructor name', () => {
-      // Test instructor display
-      expect(true).toBe(true);
-    });
-
-    it('should show schedule information', () => {
-      // Test schedule display
-      expect(true).toBe(true);
+      expect(await screen.findByText(/Programlamaya Giriş/i)).toBeInTheDocument();
+      expect(screen.getByText(/Section 1/)).toBeInTheDocument();
+      expect(screen.getByText(/Dr. Test/)).toBeInTheDocument();
+      expect(screen.getByText(/A101/)).toBeInTheDocument();
+      expect(screen.getByText(/5\/30 Kayıtlı/)).toBeInTheDocument();
     });
   });
 
   describe('Enrollment Button', () => {
-    it('should display enroll button when eligible', () => {
-      // Test enroll button display
-      expect(true).toBe(true);
-    });
+    it('should enable enroll button when student is eligible and seats are available', async () => {
+      renderWithRoute();
 
-    it('should disable button when section is full', () => {
-      // Test button disabled state
-      expect(true).toBe(true);
-    });
-
-    it('should disable button when already enrolled', () => {
-      // Test already enrolled state
-      expect(true).toBe(true);
+      const button = await screen.findByRole('button', { name: /Kayıt Ol/i });
+      expect(button).toBeEnabled();
     });
   });
 
   describe('Enrollment Process', () => {
-    it('should show confirmation modal before enrollment', () => {
-      // Test confirmation modal
-      expect(true).toBe(true);
-    });
+    it('should call enrollInCourse when enroll button is clicked', async () => {
+      renderWithRoute();
 
-    it('should call enrollment API on confirm', async () => {
-      // Test API call
-      expect(true).toBe(true);
-    });
+      const button = await screen.findByRole('button', { name: /Kayıt Ol/i });
+      fireEvent.click(button);
 
-    it('should show success message after enrollment', async () => {
-      // Test success message
-      expect(true).toBe(true);
-    });
-
-    it('should show error message on failure', async () => {
-      // Test error handling
-      expect(true).toBe(true);
-    });
-  });
-
-  describe('Prerequisite Check', () => {
-    it('should show prerequisite warning when not met', () => {
-      // Test prerequisite warning
-      expect(true).toBe(true);
-    });
-
-    it('should list missing prerequisites', () => {
-      // Test missing prerequisites list
-      expect(true).toBe(true);
-    });
-
-    it('should block enrollment when prerequisites not met', () => {
-      // Test enrollment blocking
-      expect(true).toBe(true);
-    });
-  });
-
-  describe('Schedule Conflict Check', () => {
-    it('should show conflict warning', () => {
-      // Test conflict warning
-      expect(true).toBe(true);
-    });
-
-    it('should list conflicting courses', () => {
-      // Test conflict list
-      expect(true).toBe(true);
-    });
-
-    it('should block enrollment when conflict exists', () => {
-      // Test enrollment blocking
-      expect(true).toBe(true);
-    });
-  });
-
-  describe('Drop Course', () => {
-    it('should show drop button for enrolled courses', () => {
-      // Test drop button display
-      expect(true).toBe(true);
-    });
-
-    it('should show drop confirmation modal', () => {
-      // Test drop confirmation
-      expect(true).toBe(true);
-    });
-
-    it('should call drop API on confirm', async () => {
-      // Test drop API call
-      expect(true).toBe(true);
+      await waitFor(() => {
+        expect(mockEnrollInCourse).toHaveBeenCalledWith(10);
+      });
     });
   });
 });
