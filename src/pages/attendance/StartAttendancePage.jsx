@@ -5,6 +5,7 @@ import {
   FiRefreshCw, FiBook, FiCheckCircle
 } from 'react-icons/fi';
 import toast from 'react-hot-toast';
+import { QRCodeCanvas } from 'qrcode.react';
 import courseService from '../../services/courseService';
 import attendanceService from '../../services/attendanceService';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
@@ -20,7 +21,7 @@ const StartAttendancePage = () => {
   const [activeSession, setActiveSession] = useState(null);
   const [attendanceCount, setAttendanceCount] = useState(0);
   const [qrCode, setQrCode] = useState('');
-  const [qrCountdown, setQrCountdown] = useState(5);
+  const [qrCountdown, setQrCountdown] = useState(15);
   const [qrRefreshing, setQrRefreshing] = useState(false);
 
   useEffect(() => {
@@ -251,8 +252,13 @@ const StartAttendancePage = () => {
                 Otomatik Yenileme
               </span>
             </div>
-            <div className={`inline-block px-6 py-3 rounded-lg bg-white text-slate-900 font-mono text-2xl font-bold transition-opacity ${qrRefreshing ? 'opacity-50' : 'opacity-100'}`}>
-              {qrCode || activeSession.qrCode}
+            <div className="inline-flex flex-col items-center gap-3">
+              <div className={`p-3 bg-white rounded-xl shadow-md transition-opacity ${qrRefreshing ? 'opacity-50' : 'opacity-100'}`}>
+                <QRCodeCanvas value={qrCode || activeSession.qrCode || 'QR not ready'} size={180} includeMargin />
+              </div>
+              <div className="font-mono text-xs text-slate-400">
+                {qrCode || activeSession.qrCode}
+              </div>
             </div>
             <div className="mt-4 flex items-center justify-center gap-3">
               <div className="flex items-center gap-2 text-sm text-slate-400">
@@ -262,12 +268,12 @@ const StartAttendancePage = () => {
               <div className="w-16 h-2 bg-slate-700 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-primary-500 transition-all duration-1000"
-                  style={{ width: `${(qrCountdown / 5) * 100}%` }}
+                  style={{ width: `${Math.min((qrCountdown / 15) * 100, 100)}%` }}
                 />
               </div>
             </div>
             <p className="text-sm text-slate-400 mt-3">
-              QR kod her 5 saniyede bir otomatik yenilenir. Öğrenciler güncel kodu taramalıdır.
+              QR kod her 15 saniyede otomatik yenilenir. Öğrenciler güncel kodu taramalıdır.
             </p>
           </div>
         </div>

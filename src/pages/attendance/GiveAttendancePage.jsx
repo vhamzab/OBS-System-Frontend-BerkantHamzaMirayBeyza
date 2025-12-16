@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { 
   FiMapPin, FiCheckCircle, FiAlertCircle, FiNavigation, 
-  FiClock, FiLoader, FiBook, FiCamera
+  FiClock, FiLoader, FiBook, FiCamera, FiVideoOff
 } from 'react-icons/fi';
+import { BrowserMultiFormatReader } from '@zxing/browser';
 import toast from 'react-hot-toast';
 import attendanceService from '../../services/attendanceService';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
@@ -19,8 +20,12 @@ const GiveAttendancePage = () => {
   const [gettingLocation, setGettingLocation] = useState(false);
   const [qrCode, setQrCode] = useState('');
   const [useQR, setUseQR] = useState(false);
+  const [scanning, setScanning] = useState(false);
+  const [scanError, setScanError] = useState(null);
   const [success, setSuccess] = useState(false);
   const [result, setResult] = useState(null);
+  const videoRef = useRef(null);
+  const scanControlsRef = useRef(null);
 
   useEffect(() => {
     fetchSession();
@@ -109,9 +114,33 @@ const GiveAttendancePage = () => {
     return Math.round(R * c);
   };
 
-  const handleSubmit = async () => {
+  const stopScanner = useCallback(() => {
+    try {
+      scanControlsRef.current?.stop?.();
+    } catch (err) {
+      // ignore
+    }
+    scanControlsRef.current = null;
+    setScanning(false);
+  }, []);
+
+  useEffect(() => () => stopScanner(), [stopScanner]);
+  useEffect(() => {
+    if (!useQR) {
+      stopScanner();
+    }
+  }, [useQR, stopScanner]);
+
+  const handleSubmit = async (scannedCode) => {
+    const finalQr = useQR ? (scannedCode || qrCode) : null;
+
     if (!useQR && !location) {
       toast.error('Lütfen önce konumunuzu alın');
+      return;
+    }
+
+    if (useQR && !finalQr) {
+      toast.error('Lütfen QR kod girin veya okutun');
       return;
     }
 
@@ -121,7 +150,7 @@ const GiveAttendancePage = () => {
       const response = await attendanceService.checkIn(
         sessionId,
         useQR ? {} : location,
-        useQR ? qrCode : null
+        useQR ? finalQr : null
       );
       
       if (response.success) {
@@ -133,6 +162,44 @@ const GiveAttendancePage = () => {
       toast.error(error.response?.data?.message || 'Yoklama verilirken hata oluştu');
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const handleScanSuccess = useCallback((codeText) => {
+    if (!codeText) return;
+    setUseQR(true);
+    setQrCode(codeText.trim());
+    toast.success('QR kod okundu');
+    stopScanner();
+    handleSubmit(codeText.trim());
+  }, [handleSubmit, stopScanner]);
+
+  const startScanner = async () => {
+    try {
+      setUseQR(true);
+      setScanError(null);
+      setScanning(true);
+      const reader = new BrowserMultiFormatReader();
+      const devices = await BrowserMultiFormatReader.listVideoInputDevices();
+      const preferred = devices.find((d) => (d.label || '').toLowerCase().includes('back'));
+      const controls = await reader.decodeFromVideoDevice(
+        preferred?.deviceId,
+        videoRef.current,
+        (result, err) => {
+          if (result) {
+            handleScanSuccess(result.getText());
+            reader.reset();
+            controls.stop();
+          } else if (err && err.name !== 'NotFoundException') {
+            setScanError('QR okunamadı, tekrar deneyin.');
+          }
+        }
+      );
+      scanControlsRef.current = controls;
+    } catch (err) {
+      console.error('QR scanner error', err);
+      setScanError('Kamera açılamadı, izinleri kontrol edin.');
+      setScanning(false);
     }
   };
 
@@ -276,16 +343,48 @@ const GiveAttendancePage = () => {
         /* QR Code Input */
         <div className="card mb-6">
           <h3 className="font-semibold mb-4">QR Kod Girin</h3>
-          <input
-            type="text"
-            value={qrCode}
-            onChange={(e) => setQrCode(e.target.value.toUpperCase())}
-            placeholder="ATT-XXXXXXXX-..."
-            className="input w-full font-mono text-lg text-center"
-          />
-          <p className="text-xs text-slate-500 mt-2">
-            QR kodunu öğretim üyesinden alabilirsiniz
-          </p>
+          <div className="space-y-3">
+            <input
+              type="text"
+              value={qrCode}
+              onChange={(e) => setQrCode(e.target.value.toUpperCase())}
+              placeholder="ATT-XXXXXXXX-..."
+              className="input w-full font-mono text-lg text-center"
+            />
+            <div className="flex flex-col gap-3">
+              <button
+                type="button"
+                onClick={scanning ? stopScanner : startScanner}
+                className="btn btn-secondary flex items-center justify-center gap-2"
+              >
+                {scanning ? (
+                  <>
+                    <FiVideoOff className="w-4 h-4" />
+                    Kamerayı Kapat
+                  </>
+                ) : (
+                  <>
+                    <FiCamera className="w-4 h-4" />
+                    QR Oku (Kamera)
+                  </>
+                )}
+              </button>
+              {scanError && (
+                <div className="text-sm text-red-400 flex items-center gap-2">
+                  <FiAlertCircle className="w-4 h-4" />
+                  {scanError}
+                </div>
+              )}
+              {scanning && (
+                <div className="rounded-xl overflow-hidden border border-slate-700 bg-slate-900">
+                  <video ref={videoRef} className="w-full aspect-video object-cover" autoPlay muted />
+                </div>
+              )}
+            </div>
+            <p className="text-xs text-slate-500">
+              QR kodunu öğretim üyesinden alabilir veya kameradan okutabilirsiniz.
+            </p>
+          </div>
         </div>
       ) : (
         /* GPS Location */

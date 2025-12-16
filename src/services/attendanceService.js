@@ -63,12 +63,14 @@ const attendanceService = {
   /**
    * Check in to session (student)
    */
-  checkIn: async (sessionId, location, qrCode = null) => {
-    const data = {
-      latitude: location.latitude,
-      longitude: location.longitude,
-      accuracy: location.accuracy,
-    };
+  checkIn: async (sessionId, location = {}, qrCode = null) => {
+    const data = {};
+
+    if (location && (location.latitude || location.longitude)) {
+      data.latitude = location.latitude;
+      data.longitude = location.longitude;
+      data.accuracy = location.accuracy;
+    }
 
     if (qrCode) {
       data.qr_code = qrCode;
