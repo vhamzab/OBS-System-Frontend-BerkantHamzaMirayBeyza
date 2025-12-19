@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { FiCalendar, FiX, FiCheckCircle, FiXCircle } from 'react-icons/fi';
+import { FiCalendar, FiX, FiCheckCircle, FiXCircle, FiUser } from 'react-icons/fi';
 import { FaUtensils } from 'react-icons/fa';
 import toast from 'react-hot-toast';
 import mealService from '../../services/mealService';
@@ -11,9 +11,13 @@ const ReservationsPage = () => {
   const [reservations, setReservations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [cancelling, setCancelling] = useState(null);
+  const [pendingTransfers, setPendingTransfers] = useState([]);
+  const [loadingTransfers, setLoadingTransfers] = useState(true);
+  const [accepting, setAccepting] = useState(null);
 
   useEffect(() => {
     fetchReservations();
+    fetchPendingTransfers();
   }, []);
 
   const fetchReservations = async () => {
@@ -28,6 +32,36 @@ const ReservationsPage = () => {
       console.error(error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchPendingTransfers = async () => {
+    try {
+      setLoadingTransfers(true);
+      const response = await mealService.getPendingTransfers();
+      if (response.success) {
+        setPendingTransfers(response.data);
+      }
+    } catch (error) {
+      console.error('Bekleyen transferler yüklenirken hata oluştu:', error);
+    } finally {
+      setLoadingTransfers(false);
+    }
+  };
+
+  const handleAcceptTransfer = async (transferId) => {
+    try {
+      setAccepting(transferId);
+      const response = await mealService.acceptTransfer(transferId);
+      if (response.success) {
+        toast.success(response.message || 'Rezervasyon devri kabul edildi');
+        fetchPendingTransfers();
+        fetchReservations();
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Transfer kabul edilirken hata oluştu');
+    } finally {
+      setAccepting(null);
     }
   };
 
@@ -109,6 +143,65 @@ const ReservationsPage = () => {
         <LoadingSpinner />
       ) : (
         <div className="space-y-8">
+          {/* Pending Transfers */}
+          {pendingTransfers.length > 0 && (
+            <div>
+              <h2 className="text-xl font-bold mb-4">Bekleyen Rezervasyon Devirleri</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {pendingTransfers.map((transfer) => (
+                  <div key={transfer.id} className="card border-2 border-yellow-500/30">
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-2">
+                          <FiCalendar className="text-slate-400" />
+                          <span className="font-semibold">
+                            {new Date(transfer.date).toLocaleDateString('tr-TR', {
+                              weekday: 'long',
+                              year: 'numeric',
+                              month: 'long',
+                              day: 'numeric',
+                            })}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2 mb-2">
+                          <FaUtensils className="text-slate-400" />
+                          <span>{getMealTypeLabel(transfer.meal_type)}</span>
+                        </div>
+                        <div className="text-sm text-slate-400 mb-3">
+                          {transfer.cafeteria?.name} - {transfer.cafeteria?.location}
+                        </div>
+                        <div className="flex items-center gap-2 text-sm text-slate-300">
+                          <FiUser className="text-slate-400" />
+                          <span>
+                            {transfer.user?.first_name} {transfer.user?.last_name}
+                            {transfer.user?.student?.student_number && (
+                              <span className="text-slate-400 ml-1">
+                                ({transfer.user.student.student_number})
+                              </span>
+                            )}
+                          </span>
+                        </div>
+                        <span className="px-2 py-1 bg-yellow-500/20 text-yellow-400 text-xs rounded-full inline-block mt-2">
+                          Beklemede
+                        </span>
+                      </div>
+                    </div>
+                    <div className="border-t border-slate-700/50 pt-4 mt-4">
+                      <Button
+                        onClick={() => handleAcceptTransfer(transfer.id)}
+                        loading={accepting === transfer.id}
+                        fullWidth
+                      >
+                        <FiCheckCircle className="w-4 h-4 mr-2" />
+                        Rezervasyonu Kabul Et
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Upcoming Reservations */}
           {upcomingReservations.length > 0 && (
             <div>
@@ -200,7 +293,7 @@ const ReservationsPage = () => {
             </div>
           )}
 
-          {reservations.length === 0 && (
+          {reservations.length === 0 && pendingTransfers.length === 0 && (
             <div className="card text-center py-12">
               <FaUtensils className="w-16 h-16 text-slate-400 mx-auto mb-4" />
               <p className="text-slate-400">Henüz rezervasyonunuz yok</p>

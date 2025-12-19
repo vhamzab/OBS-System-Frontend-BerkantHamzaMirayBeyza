@@ -15,6 +15,7 @@ import {
   FiGrid,
   FiBell,
   FiUserCheck,
+  FiCoffee,
 } from 'react-icons/fi';
 import { useAuth } from '../../context/AuthContext';
 
@@ -32,6 +33,11 @@ const Sidebar = ({ isOpen, onClose }) => {
     { to: '/grades', icon: FiClipboard, label: 'Notlarım' },
     { to: '/my-attendance', icon: FiCheckSquare, label: 'Devam Durumu' },
     { to: '/my-excuse-requests', icon: FiFileText, label: 'Mazeretlerim' },
+    { to: '/meals/menu', icon: FiCoffee, label: 'Yemek Menüsü' },
+    { to: '/meals/reservations', icon: FiCoffee, label: 'Rezervasyonlarım' },
+    { to: '/wallet', icon: FiUser, label: 'Cüzdan' },
+    { to: '/events', icon: FiCalendar, label: 'Etkinlikler' },
+    { to: '/my-events', icon: FiCalendar, label: 'Etkinliklerim' },
   ];
 
   const facultyLinks = [
@@ -43,6 +49,11 @@ const Sidebar = ({ isOpen, onClose }) => {
     { to: '/faculty/enrollment-approvals', icon: FiUserCheck, label: 'Kayıt Onayları' },
     { to: '/attendance/start', icon: FiMapPin, label: 'Yoklama Aç' },
     { to: '/excuse-requests', icon: FiFileText, label: 'Mazeret Talepleri' },
+    { to: '/meals/menu', icon: FiCoffee, label: 'Yemek Menüsü' },
+    { to: '/meals/reservations', icon: FiCoffee, label: 'Rezervasyonlarım' },
+    { to: '/wallet', icon: FiUser, label: 'Cüzdan' },
+    { to: '/events', icon: FiCalendar, label: 'Etkinlikler' },
+    { to: '/my-events', icon: FiCalendar, label: 'Etkinliklerim' },
   ];
 
   const adminLinks = [
@@ -54,6 +65,15 @@ const Sidebar = ({ isOpen, onClose }) => {
     { to: '/courses', icon: FiGrid, label: 'Ders Kataloğu' },
     { to: '/admin/courses', icon: FiBook, label: 'Ders Yönetimi' },
     { to: '/admin/sections', icon: FiClipboard, label: 'Section Yönetimi' },
+    { to: '/admin/menus', icon: FiCoffee, label: 'Menü Yönetimi' },
+    { to: '/meals/menu', icon: FiCoffee, label: 'Yemek Menüsü' },
+    { to: '/meals/reservations', icon: FiCoffee, label: 'Rezervasyonlarım' },
+    { to: '/meals/scan', icon: FiCoffee, label: 'QR Tarama' },
+    { to: '/wallet', icon: FiUser, label: 'Cüzdan' },
+    { to: '/events', icon: FiCalendar, label: 'Etkinlikler' },
+    { to: '/my-events', icon: FiCalendar, label: 'Etkinliklerim' },
+    { to: '/admin/scheduling/generate', icon: FiCalendar, label: 'Program Oluştur' },
+    { to: '/reservations', icon: FiCalendar, label: 'Derslik Rezervasyonları' },
     { to: '/settings', icon: FiSettings, label: 'Ayarlar' },
   ];
 

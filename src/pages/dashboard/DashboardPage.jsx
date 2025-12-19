@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { FiBook, FiCalendar, FiClipboard, FiUsers, FiTrendingUp, FiBell, FiCheckSquare } from 'react-icons/fi';
+import { FiBook, FiCalendar, FiClipboard, FiUsers, FiTrendingUp, FiBell, FiCheckSquare, FiCoffee } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import courseService from '../../services/courseService';
 import dashboardService from '../../services/dashboardService';
@@ -220,6 +220,20 @@ const DashboardPage = () => {
                   <FiBell className="w-5 h-5 text-orange-500 mb-2" />
                   <span className="block text-sm font-medium text-gray-700">Duyurular</span>
                 </button>
+                <button
+                  onClick={() => navigate('/meals/menu')}
+                  className="p-4 rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-200 transition-colors text-left"
+                >
+                  <FiCoffee className="w-5 h-5 text-amber-500 mb-2" />
+                  <span className="block text-sm font-medium text-gray-700">Yemek Menüsü</span>
+                </button>
+                <button
+                  onClick={() => navigate('/meals/reservations')}
+                  className="p-4 rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-200 transition-colors text-left"
+                >
+                  <FiCoffee className="w-5 h-5 text-amber-600 mb-2" />
+                  <span className="block text-sm font-medium text-gray-700">Rezervasyonlarım</span>
+                </button>
               </>
             )}
             {user?.role === 'faculty' && (
@@ -253,6 +267,20 @@ const DashboardPage = () => {
                   <FiCalendar className="w-5 h-5 text-orange-500 mb-2" />
                   <span className="block text-sm font-medium text-gray-700">Mazeret Talepleri</span>
                 </button>
+                <button
+                  onClick={() => navigate('/meals/menu')}
+                  className="p-4 rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-200 transition-colors text-left"
+                >
+                  <FiCoffee className="w-5 h-5 text-amber-500 mb-2" />
+                  <span className="block text-sm font-medium text-gray-700">Yemek Menüsü</span>
+                </button>
+                <button
+                  onClick={() => navigate('/meals/reservations')}
+                  className="p-4 rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-200 transition-colors text-left"
+                >
+                  <FiCoffee className="w-5 h-5 text-amber-600 mb-2" />
+                  <span className="block text-sm font-medium text-gray-700">Rezervasyonlarım</span>
+                </button>
               </>
             )}
             {user?.role === 'admin' && (
@@ -284,6 +312,20 @@ const DashboardPage = () => {
                 >
                   <FiCalendar className="w-5 h-5 text-orange-500 mb-2" />
                   <span className="block text-sm font-medium text-gray-700">Bölüm Yönetimi</span>
+                </button>
+                <button
+                  onClick={() => navigate('/admin/menus')}
+                  className="p-4 rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-200 transition-colors text-left"
+                >
+                  <FiCoffee className="w-5 h-5 text-amber-500 mb-2" />
+                  <span className="block text-sm font-medium text-gray-700">Menü Yönetimi</span>
+                </button>
+                <button
+                  onClick={() => navigate('/meals/scan')}
+                  className="p-4 rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-200 transition-colors text-left"
+                >
+                  <FiCoffee className="w-5 h-5 text-amber-600 mb-2" />
+                  <span className="block text-sm font-medium text-gray-700">QR Tarama</span>
                 </button>
               </>
             )}

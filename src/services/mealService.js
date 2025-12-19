@@ -83,6 +83,38 @@ const mealService = {
     const response = await api.post(`/meals/reservations/${id}/use`, { qr_code: qrCode });
     return response.data;
   },
+
+  /**
+   * Transfer reservation to another student
+   */
+  transferReservation: async (id, studentNumber) => {
+    const response = await api.post(`/meals/reservations/${id}/transfer`, { student_number: studentNumber });
+    return response.data;
+  },
+
+  /**
+   * Accept transferred reservation
+   */
+  acceptTransfer: async (id) => {
+    const response = await api.post(`/meals/reservations/${id}/accept-transfer`);
+    return response.data;
+  },
+
+  /**
+   * Get pending transfers for current user
+   */
+  getPendingTransfers: async () => {
+    const response = await api.get('/meals/reservations/pending-transfers');
+    return response.data;
+  },
+
+  /**
+   * Get cafeterias
+   */
+  getCafeterias: async () => {
+    const response = await api.get('/meals/cafeterias');
+    return response.data;
+  },
 };
 
 export default mealService;

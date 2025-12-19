@@ -85,7 +85,7 @@ const LoginPage = () => {
       {/* Background image */}
       <div
         className="absolute inset-0 bg-center bg-cover scale-105"
-        style={{ backgroundImage: "url('/yeniArkaPLan.jpg')" }}
+        style={{ backgroundImage: "url('/yeniArkaPLan.jpg')", filter: 'blur(2px)' }}
         aria-hidden="true"
       />
 
@@ -117,7 +117,7 @@ const LoginPage = () => {
         </div>
 
         {/* Form */}
-        <div className="card">
+        <div className="card rounded-3xl border-2 border-gray-300 shadow-2xl">
           <form onSubmit={formik.handleSubmit} className="space-y-5">
             <Input
               label="E-posta Adresi"

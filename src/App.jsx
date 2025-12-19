@@ -50,6 +50,7 @@ import AdminSectionsPage from './pages/admin/AdminSectionsPage';
 import AdminUsersPage from './pages/admin/AdminUsersPage';
 import AdminDepartmentsPage from './pages/admin/AdminDepartmentsPage';
 import AdminCoursesPage from './pages/admin/AdminCoursesPage';
+import AdminMenuPage from './pages/admin/AdminMenuPage';
 
 // Meal Pages
 import MenuPage from './pages/meals/MenuPage';
@@ -437,6 +438,14 @@ function App() {
           element={
             <ProtectedRoute roles={['admin']}>
               <AdminCoursesPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/menus"
+          element={
+            <ProtectedRoute roles={['admin', 'cafeteria_staff']}>
+              <AdminMenuPage />
             </ProtectedRoute>
           }
         />
