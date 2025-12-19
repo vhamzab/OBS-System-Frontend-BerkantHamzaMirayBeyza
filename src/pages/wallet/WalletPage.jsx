@@ -1,0 +1,238 @@
+import { useState, useEffect } from 'react';
+import { FiDollarSign, FiPlus, FiArrowUp, FiArrowDown, FiClock } from 'react-icons/fi';
+import toast from 'react-hot-toast';
+import walletService from '../../services/walletService';
+import LoadingSpinner from '../../components/common/LoadingSpinner';
+import Button from '../../components/common/Button';
+import PaymentForm from '../../components/common/PaymentForm';
+
+const WalletPage = () => {
+  const [balance, setBalance] = useState(null);
+  const [transactions, setTransactions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [transactionsLoading, setTransactionsLoading] = useState(false);
+  const [showTopupModal, setShowTopupModal] = useState(false);
+  const [topupLoading, setTopupLoading] = useState(false);
+  const [pagination, setPagination] = useState({
+    page: 1,
+    limit: 20,
+    total: 0,
+    pages: 0,
+  });
+
+  useEffect(() => {
+    fetchBalance();
+    fetchTransactions();
+  }, []);
+
+  const fetchBalance = async () => {
+    try {
+      const response = await walletService.getBalance();
+      if (response.success) {
+        setBalance(response.data);
+      }
+    } catch (error) {
+      toast.error('Bakiye yüklenirken hata oluştu');
+      console.error(error);
+    }
+  };
+
+  const fetchTransactions = async (page = 1) => {
+    try {
+      setTransactionsLoading(true);
+      const response = await walletService.getTransactions({
+        page,
+        limit: pagination.limit,
+      });
+      if (response.success) {
+        setTransactions(response.data);
+        if (response.pagination) {
+          setPagination(response.pagination);
+        }
+      }
+    } catch (error) {
+      toast.error('İşlem geçmişi yüklenirken hata oluştu');
+      console.error(error);
+    } finally {
+      setTransactionsLoading(false);
+      setLoading(false);
+    }
+  };
+
+  const handleTopup = async ({ amount, paymentMethod }) => {
+    try {
+      setTopupLoading(true);
+      const response = await walletService.createTopup(amount);
+      if (response.success) {
+        // Redirect to payment gateway
+        if (response.data.paymentUrl) {
+          window.location.href = response.data.paymentUrl;
+        } else {
+          toast.success('Ödeme oturumu oluşturuldu');
+          setShowTopupModal(false);
+        }
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Para yükleme başarısız');
+    } finally {
+      setTopupLoading(false);
+    }
+  };
+
+  const getTransactionIcon = (type) => {
+    if (type === 'credit' || type === 'pending_debit') {
+      return <FiArrowUp className="w-5 h-5 text-green-400" />;
+    }
+    return <FiArrowDown className="w-5 h-5 text-red-400" />;
+  };
+
+  const getTransactionLabel = (type) => {
+    const labels = {
+      credit: 'Yükleme',
+      debit: 'Harcama',
+      pending_debit: 'Bekleyen',
+    };
+    return labels[type] || type;
+  };
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString('tr-TR', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  };
+
+  return (
+    <div className="p-6 lg:p-8 max-w-7xl mx-auto">
+      <div className="mb-8">
+        <h1 className="font-display text-3xl font-bold mb-2">Cüzdan</h1>
+        <p className="text-slate-400">Bakiyenizi görüntüleyin ve para yükleyin</p>
+      </div>
+
+      {loading ? (
+        <LoadingSpinner />
+      ) : (
+        <div className="space-y-6">
+          {/* Balance Card */}
+          <div className="card bg-gradient-to-br from-blue-600 to-purple-600">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-slate-300 text-sm mb-1">Toplam Bakiye</h2>
+                <p className="text-4xl font-bold text-white">
+                  {balance?.balance?.toFixed(2) || '0.00'} {balance?.currency || 'TRY'}
+                </p>
+              </div>
+              <div className="w-20 h-20 rounded-full bg-white/20 flex items-center justify-center">
+                <FiDollarSign className="w-10 h-10 text-white" />
+              </div>
+            </div>
+            <Button
+              onClick={() => setShowTopupModal(true)}
+              variant="secondary"
+              className="w-full"
+            >
+              <FiPlus className="mr-2" />
+              Para Yükle
+            </Button>
+          </div>
+
+          {/* Transactions */}
+          <div className="card">
+            <h2 className="text-xl font-bold mb-4">İşlem Geçmişi</h2>
+
+            {transactionsLoading ? (
+              <LoadingSpinner />
+            ) : transactions.length === 0 ? (
+              <div className="text-center py-12">
+                <FiClock className="w-16 h-16 text-slate-400 mx-auto mb-4" />
+                <p className="text-slate-400">Henüz işlem geçmişiniz yok</p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {transactions.map((transaction) => (
+                  <div
+                    key={transaction.id}
+                    className="flex items-center justify-between p-4 bg-slate-700/50 rounded-lg"
+                  >
+                    <div className="flex items-center gap-4 flex-1">
+                      <div className="p-2 bg-slate-600 rounded-lg">
+                        {getTransactionIcon(transaction.type)}
+                      </div>
+                      <div className="flex-1">
+                        <div className="font-semibold">{transaction.description}</div>
+                        <div className="text-sm text-slate-400">
+                          {formatDate(transaction.created_at)}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div
+                        className={`font-bold ${
+                          transaction.type === 'credit'
+                            ? 'text-green-400'
+                            : transaction.type === 'pending_debit'
+                            ? 'text-yellow-400'
+                            : 'text-red-400'
+                        }`}
+                      >
+                        {transaction.type === 'credit' ? '+' : '-'}
+                        {Math.abs(transaction.amount).toFixed(2)} TRY
+                      </div>
+                      <div className="text-xs text-slate-400">
+                        Bakiye: {transaction.balance_after?.toFixed(2)} TRY
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Pagination */}
+            {pagination.pages > 1 && (
+              <div className="flex items-center justify-between mt-6 pt-6 border-t border-slate-700/50">
+                <button
+                  onClick={() => fetchTransactions(pagination.page - 1)}
+                  disabled={pagination.page === 1}
+                  className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Önceki
+                </button>
+                <span className="text-sm text-slate-400">
+                  Sayfa {pagination.page} / {pagination.pages}
+                </span>
+                <button
+                  onClick={() => fetchTransactions(pagination.page + 1)}
+                  disabled={pagination.page === pagination.pages}
+                  className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Sonraki
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Top-up Modal */}
+      {showTopupModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 p-4">
+          <div className="bg-slate-800 rounded-2xl p-6 max-w-md w-full">
+            <h3 className="text-xl font-bold mb-4">Para Yükle</h3>
+            <PaymentForm
+              onSubmit={handleTopup}
+              onCancel={() => setShowTopupModal(false)}
+              minAmount={50}
+              loading={topupLoading}
+            />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default WalletPage;
+

@@ -51,6 +51,27 @@ import AdminUsersPage from './pages/admin/AdminUsersPage';
 import AdminDepartmentsPage from './pages/admin/AdminDepartmentsPage';
 import AdminCoursesPage from './pages/admin/AdminCoursesPage';
 
+// Meal Pages
+import MenuPage from './pages/meals/MenuPage';
+import ReservationsPage from './pages/meals/ReservationsPage';
+import ScanPage from './pages/meals/ScanPage';
+
+// Wallet Pages
+import WalletPage from './pages/wallet/WalletPage';
+
+// Event Pages
+import EventsPage from './pages/events/EventsPage';
+import EventDetailPage from './pages/events/EventDetailPage';
+import MyEventsPage from './pages/events/MyEventsPage';
+import CheckInPage from './pages/events/CheckInPage';
+
+// Scheduling Pages
+import MySchedulePage from './pages/schedule/MySchedulePage';
+import GenerateSchedulePage from './pages/schedule/GenerateSchedulePage';
+
+// Reservation Pages
+import ClassroomReservationsPage from './pages/reservations/ReservationsPage';
+
 // Error Pages
 import NotFoundPage from './pages/NotFoundPage';
 
@@ -226,6 +247,104 @@ function App() {
           element={
             <ProtectedRoute>
               <AcademicCalendarPage />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Meal Routes */}
+        <Route
+          path="/meals/menu"
+          element={
+            <ProtectedRoute>
+              <MenuPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/meals/reservations"
+          element={
+            <ProtectedRoute>
+              <ReservationsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/meals/scan"
+          element={
+            <ProtectedRoute roles={['admin', 'cafeteria_staff']}>
+              <ScanPage />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Wallet Routes */}
+        <Route
+          path="/wallet"
+          element={
+            <ProtectedRoute>
+              <WalletPage />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Event Routes */}
+        <Route
+          path="/events"
+          element={
+            <ProtectedRoute>
+              <EventsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/events/:id"
+          element={
+            <ProtectedRoute>
+              <EventDetailPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/my-events"
+          element={
+            <ProtectedRoute>
+              <MyEventsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/events/checkin"
+          element={
+            <ProtectedRoute roles={['admin', 'event_manager']}>
+              <CheckInPage />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Scheduling Routes */}
+        <Route
+          path="/my-schedule"
+          element={
+            <ProtectedRoute>
+              <MySchedulePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/scheduling/generate"
+          element={
+            <ProtectedRoute roles={['admin']}>
+              <GenerateSchedulePage />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Classroom Reservation Routes */}
+        <Route
+          path="/reservations"
+          element={
+            <ProtectedRoute>
+              <ClassroomReservationsPage />
             </ProtectedRoute>
           }
         />
