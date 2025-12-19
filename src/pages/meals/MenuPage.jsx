@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { FiCalendar, FiUtensils, FiLeaf, FiDroplet } from 'react-icons/fi';
+import { FiCalendar, FiLeaf, FiDroplet } from 'react-icons/fi';
+import { FaUtensils } from 'react-icons/fa';
 import toast from 'react-hot-toast';
 import mealService from '../../services/mealService';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
@@ -73,7 +74,7 @@ const MenuPage = () => {
   };
 
   const getMealTypeIcon = (type) => {
-    return <FiUtensils className="w-5 h-5" />;
+    return <FaUtensils className="w-5 h-5" />;
   };
 
   const groupedMenus = menus.reduce((acc, menu) => {
@@ -107,7 +108,7 @@ const MenuPage = () => {
             <LoadingSpinner />
           ) : menus.length === 0 ? (
             <div className="card text-center py-12">
-              <FiUtensils className="w-16 h-16 text-slate-400 mx-auto mb-4" />
+              <FaUtensils className="w-16 h-16 text-slate-400 mx-auto mb-4" />
               <p className="text-slate-400">Seçilen tarih için menü bulunamadı</p>
             </div>
           ) : (
