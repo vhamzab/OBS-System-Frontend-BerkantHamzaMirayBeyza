@@ -252,32 +252,56 @@ const MyCoursesPage = () => {
                   {/* Schedule */}
                   <div className="flex flex-wrap gap-2 lg:w-48">
                     {scheduleItems.map((item, idx) => (
-                      <div key={idx} className="flex items-center gap-1 px-2 py-1 rounded bg-slate-800/50 text-xs">
-                        <FiCalendar className="w-3 h-3 text-primary-400" />
-                        <span className="font-medium">{item.day}</span>
-                        <span className="text-slate-400">{item.time}</span>
+                      <div key={idx} className="flex items-center gap-1 px-2 py-1 rounded bg-blue-50 border border-blue-200 text-xs shadow-sm">
+                        <FiCalendar className="w-3 h-3 text-blue-600" />
+                        <span className="font-medium text-blue-700">{item.day}</span>
+                        <span className="text-blue-600">{item.time}</span>
                       </div>
                     ))}
                   </div>
 
                   {/* Attendance */}
                   <div className="flex items-center gap-4">
-                    <div className={`px-4 py-2 rounded-xl ${attendanceStatus.bg}`}>
+                    <div className={`px-4 py-2 rounded-xl border-2 shadow-md hover:scale-105 transition-all duration-300 ${
+                      attendanceStatus.color === 'text-red-400' 
+                        ? 'bg-red-100 border-red-300' 
+                        : attendanceStatus.color === 'text-amber-400'
+                        ? 'bg-amber-100 border-amber-300'
+                        : 'bg-green-100 border-green-300'
+                    }`}>
                       <div className="flex items-center gap-2">
                         {attendanceStatus.icon && (
-                          <attendanceStatus.icon className={`w-4 h-4 ${attendanceStatus.color}`} />
+                          <attendanceStatus.icon className={`w-4 h-4 ${
+                            attendanceStatus.color === 'text-red-400' 
+                              ? 'text-red-700' 
+                              : attendanceStatus.color === 'text-amber-400'
+                              ? 'text-amber-700'
+                              : 'text-green-700'
+                          }`} />
                         )}
-                        <span className={`text-lg font-bold ${attendanceStatus.color}`}>
+                        <span className={`text-lg font-bold ${
+                          attendanceStatus.color === 'text-red-400' 
+                            ? 'text-red-700' 
+                            : attendanceStatus.color === 'text-amber-400'
+                            ? 'text-amber-700'
+                            : 'text-green-700'
+                        }`}>
                           %{enrollment.attendance?.attendancePercentage || 100}
                         </span>
                       </div>
-                      <div className="text-xs text-slate-400 mt-1">Devam</div>
+                      <div className={`text-xs font-medium mt-1 ${
+                        attendanceStatus.color === 'text-red-400' 
+                          ? 'text-red-600' 
+                          : attendanceStatus.color === 'text-amber-400'
+                          ? 'text-amber-600'
+                          : 'text-green-600'
+                      }`}>Devam</div>
                     </div>
 
                     {/* Actions */}
                     <button
                       onClick={() => setShowDropModal(enrollment.id)}
-                      className="p-2 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors"
+                      className="p-2 rounded-lg bg-red-100 border-2 border-red-300 text-red-700 hover:bg-red-200 hover:scale-110 transition-all duration-300 shadow-md"
                       title="Dersi Bırak"
                     >
                       <FiTrash2 className="w-5 h-5" />

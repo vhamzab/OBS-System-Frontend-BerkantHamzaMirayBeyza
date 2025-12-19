@@ -288,18 +288,18 @@ const CourseDetailPage = () => {
                   return (
                     <div
                       key={section.id}
-                      className="p-4 rounded-xl bg-slate-800/50 border border-slate-700/50"
+                      className="p-4 rounded-xl bg-white border-2 border-gray-200 shadow-md"
                     >
                       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-2">
-                            <span className="font-semibold">Section {section.sectionNumber}</span>
-                            <span className="px-2 py-0.5 rounded bg-slate-700 text-xs">
+                            <span className="font-semibold text-gray-800">Section {section.sectionNumber}</span>
+                            <span className="px-2 py-0.5 rounded bg-blue-100 border border-blue-300 text-blue-700 text-xs font-medium">
                               {section.semester === 'fall' ? 'Güz' : section.semester === 'spring' ? 'Bahar' : 'Yaz'} {section.year}
                             </span>
                           </div>
                           
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-slate-400">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-700">
                             {section.instructor && (
                               <div className="flex items-center gap-2">
                                 <FiUser className="w-4 h-4" />
@@ -324,9 +324,12 @@ const CourseDetailPage = () => {
                         </div>
                         
                         <div className="flex flex-col items-end gap-2">
-                          <div className={`text-sm font-medium ${
-                            section.availableSeats > 5 ? 'text-green-400' : 
-                            section.availableSeats > 0 ? 'text-amber-400' : 'text-red-400'
+                          <div className={`text-sm font-semibold px-3 py-1 rounded-lg border-2 ${
+                            section.availableSeats > 5 
+                              ? 'text-green-700 bg-green-50 border-green-300' 
+                              : section.availableSeats > 0 
+                              ? 'text-amber-700 bg-amber-50 border-amber-300' 
+                              : 'text-red-700 bg-red-50 border-red-300'
                           }`}>
                             {section.availableSeats > 0 ? `${section.availableSeats} Boş Yer` : 'Dolu'}
                           </div>
@@ -336,12 +339,12 @@ const CourseDetailPage = () => {
                               {elig && (
                                 <div className="w-full mb-2">
                                   {!elig.eligible && elig.issues && elig.issues.length > 0 && (
-                                    <div className="text-xs text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg p-2 mb-2">
+                                    <div className="text-xs text-red-700 bg-red-50 border-2 border-red-300 rounded-lg p-3 mb-2 shadow-sm">
                                       <div className="flex items-start gap-2">
-                                        <FiAlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
+                                        <FiAlertCircle className="w-4 h-4 mt-0.5 shrink-0 text-red-600" />
                                         <div className="flex-1">
-                                          <div className="font-medium mb-1">Kayıt Yapılamaz:</div>
-                                          <ul className="list-disc list-inside space-y-0.5">
+                                          <div className="font-semibold mb-1 text-red-800">Kayıt Yapılamaz:</div>
+                                          <ul className="list-disc list-inside space-y-0.5 text-red-700">
                                             {elig.issues.map((issue, idx) => (
                                               <li key={idx}>{issue}</li>
                                             ))}
@@ -351,25 +354,25 @@ const CourseDetailPage = () => {
                                     </div>
                                   )}
                                   {elig.eligible && (
-                                    <div className="text-xs text-green-400 bg-green-500/10 border border-green-500/20 rounded-lg p-2 mb-2 flex items-center gap-2">
-                                      <FiCheckCircle className="w-4 h-4" />
-                                      <span>Kayıt için uygunsunuz</span>
+                                    <div className="text-xs text-green-700 bg-green-50 border-2 border-green-300 rounded-lg p-3 mb-2 flex items-center gap-2 shadow-sm">
+                                      <FiCheckCircle className="w-4 h-4 text-green-600" />
+                                      <span className="font-medium">Kayıt için uygunsunuz</span>
                                     </div>
                                   )}
                                   {elig.details && (
-                                    <details className="text-xs text-slate-400 mt-2">
-                                      <summary className="cursor-pointer hover:text-slate-300 flex items-center gap-1">
+                                    <details className="text-xs text-gray-700 mt-2">
+                                      <summary className="cursor-pointer hover:text-gray-900 font-medium flex items-center gap-1">
                                         <FiInfo className="w-3 h-3" />
                                         Detaylı Bilgi
                                       </summary>
                                       <div className="mt-2 space-y-1 pl-4">
                                         {elig.details.prerequisites && (
                                           <div>
-                                            <span className="font-medium">Önkoşullar: </span>
+                                            <span className="font-medium text-gray-800">Önkoşullar: </span>
                                             {elig.details.prerequisites.satisfied ? (
-                                              <span className="text-green-400">✓ Tamamlandı</span>
+                                              <span className="text-green-700 font-medium">✓ Tamamlandı</span>
                                             ) : (
-                                              <span className="text-red-400">
+                                              <span className="text-red-700 font-medium">
                                                 ✗ Eksik: {elig.details.prerequisites.missing?.map(m => m.courseCode).join(', ')}
                                               </span>
                                             )}
@@ -377,21 +380,21 @@ const CourseDetailPage = () => {
                                         )}
                                         {elig.details.scheduleConflict && (
                                           <div>
-                                            <span className="font-medium">Çakışma: </span>
+                                            <span className="font-medium text-gray-800">Çakışma: </span>
                                             {elig.details.scheduleConflict.hasConflict ? (
-                                              <span className="text-red-400">✗ Var</span>
+                                              <span className="text-red-700 font-medium">✗ Var</span>
                                             ) : (
-                                              <span className="text-green-400">✓ Yok</span>
+                                              <span className="text-green-700 font-medium">✓ Yok</span>
                                             )}
                                           </div>
                                         )}
                                         {elig.details.hasCapacity !== undefined && (
                                           <div>
-                                            <span className="font-medium">Kapasite: </span>
+                                            <span className="font-medium text-gray-800">Kapasite: </span>
                                             {elig.details.hasCapacity ? (
-                                              <span className="text-green-400">✓ Yer var</span>
+                                              <span className="text-green-700 font-medium">✓ Yer var</span>
                                             ) : (
-                                              <span className="text-red-400">✗ Dolu</span>
+                                              <span className="text-red-700 font-medium">✗ Dolu</span>
                                             )}
                                           </div>
                                         )}
@@ -406,7 +409,7 @@ const CourseDetailPage = () => {
                                 className={`btn w-full ${
                                   canEnroll
                                     ? 'btn-primary'
-                                    : 'bg-slate-200 text-slate-600 cursor-not-allowed border border-slate-300'
+                                    : 'bg-gray-100 text-gray-800 cursor-not-allowed border-2 border-gray-300 shadow-sm font-medium'
                                 }`}
                               >
                                 {enrolling === section.id ? (
