@@ -202,7 +202,7 @@ const StartAttendancePage = () => {
               <div className="w-3 h-3 rounded-full bg-green-400 animate-pulse" />
               <span className="font-semibold text-green-400">Aktif Oturum</span>
             </div>
-            <button onClick={handleCloseSession} className="btn bg-red-500 hover:bg-red-600 text-white">
+            <button onClick={handleCloseSession} className="btn bg-red-500 hover:bg-red-600 text-white font-medium shadow-md hover:shadow-lg transition-all">
               <FiStopCircle className="w-4 h-4 mr-2" />
               Yoklamayı Kapat
             </button>
@@ -213,30 +213,30 @@ const StartAttendancePage = () => {
               <h3 className="text-lg font-semibold mb-4">
                 {activeSession.course?.code} - {activeSession.course?.name}
               </h3>
-              <div className="space-y-3 text-sm text-slate-400">
+              <div className="space-y-3 text-sm text-slate-600 dark:text-slate-300">
                 <div className="flex items-center gap-2">
-                  <FiBook className="w-4 h-4" />
+                  <FiBook className="w-4 h-4 text-primary-500" />
                   Section {activeSession.sectionNumber}
                 </div>
                 <div className="flex items-center gap-2">
-                  <FiClock className="w-4 h-4" />
+                  <FiClock className="w-4 h-4 text-primary-500" />
                   {activeSession.startTime} - {activeSession.endTime}
                 </div>
                 <div className="flex items-center gap-2">
-                  <FiMapPin className="w-4 h-4" />
+                  <FiMapPin className="w-4 h-4 text-primary-500" />
                   {activeSession.location?.classroom || 'Konum belirtilmemiş'}
                 </div>
               </div>
             </div>
 
-            <div className="flex flex-col items-center justify-center p-6 rounded-xl bg-gradient-to-br from-primary-500/10 to-accent-500/10">
-              <div className="text-5xl font-bold text-primary-400 mb-2">
+            <div className="flex flex-col items-center justify-center p-6 rounded-xl bg-gradient-to-br from-primary-500/20 to-accent-500/20 border border-primary-500/30">
+              <div className="text-5xl font-bold text-primary-600 dark:text-primary-400 mb-2">
                 {attendanceCount}
               </div>
-              <div className="text-slate-400">Yoklama Veren</div>
+              <div className="text-slate-700 dark:text-slate-300 font-medium">Yoklama Veren</div>
               <button
                 onClick={fetchSessionStatus}
-                className="mt-4 text-sm text-primary-400 flex items-center gap-1 hover:text-primary-300"
+                className="mt-4 text-sm text-primary-600 dark:text-primary-400 flex items-center gap-1 hover:text-primary-700 dark:hover:text-primary-300 font-medium transition-colors"
               >
                 <FiRefreshCw className="w-4 h-4" />
                 Yenile
@@ -245,34 +245,34 @@ const StartAttendancePage = () => {
           </div>
 
           {/* QR Code */}
-          <div className="p-6 rounded-xl bg-slate-800/50 text-center">
+          <div className="p-6 rounded-xl bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 border border-slate-300 dark:border-slate-700 text-center">
             <div className="flex items-center justify-center gap-2 mb-4">
-              <h4 className="font-semibold">Yoklama QR Kodu</h4>
-              <span className="px-2 py-1 text-xs rounded-full bg-primary-500/20 text-primary-400">
+              <h4 className="font-semibold text-slate-800 dark:text-slate-100">Yoklama QR Kodu</h4>
+              <span className="px-3 py-1 text-xs rounded-full bg-primary-500 text-white font-medium shadow-sm">
                 Otomatik Yenileme
               </span>
             </div>
             <div className="inline-flex flex-col items-center gap-3">
-              <div className={`p-3 bg-white rounded-xl shadow-md transition-opacity ${qrRefreshing ? 'opacity-50' : 'opacity-100'}`}>
+              <div className={`p-3 bg-white rounded-xl shadow-lg transition-opacity ${qrRefreshing ? 'opacity-50' : 'opacity-100'}`}>
                 <QRCodeCanvas value={qrCode || activeSession.qrCode || 'QR not ready'} size={180} includeMargin />
               </div>
-              <div className="font-mono text-xs text-slate-400">
+              <div className="font-mono text-xs text-slate-700 dark:text-slate-200 bg-white/80 dark:bg-slate-800/80 px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-600">
                 {qrCode || activeSession.qrCode}
               </div>
             </div>
             <div className="mt-4 flex items-center justify-center gap-3">
-              <div className="flex items-center gap-2 text-sm text-slate-400">
+              <div className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-200 font-medium">
                 <FiRefreshCw className={`w-4 h-4 ${qrRefreshing ? 'animate-spin' : ''}`} />
                 <span>Yeni kod: {qrCountdown}s</span>
               </div>
-              <div className="w-16 h-2 bg-slate-700 rounded-full overflow-hidden">
+              <div className="w-20 h-2.5 bg-slate-300 dark:bg-slate-700 rounded-full overflow-hidden shadow-inner">
                 <div
-                  className="h-full bg-primary-500 transition-all duration-1000"
+                  className="h-full bg-gradient-to-r from-primary-500 to-primary-600 transition-all duration-1000 shadow-sm"
                   style={{ width: `${Math.min((qrCountdown / 15) * 100, 100)}%` }}
                 />
               </div>
             </div>
-            <p className="text-sm text-slate-400 mt-3">
+            <p className="text-sm text-slate-600 dark:text-slate-300 mt-3 font-medium">
               QR kod her 15 saniyede otomatik yenilenir. Öğrenciler güncel kodu taramalıdır.
             </p>
           </div>
@@ -309,17 +309,17 @@ const StartAttendancePage = () => {
 
             {/* Section Info */}
             {selectedSectionData && (
-              <div className="p-4 rounded-xl bg-slate-800/50 space-y-2">
+              <div className="p-4 rounded-xl bg-slate-100 dark:bg-slate-800/30 border border-slate-200 dark:border-slate-700 space-y-2">
                 <div className="flex items-center gap-2 text-sm">
-                  <FiUsers className="w-4 h-4 text-primary-400" />
-                  <span className="text-slate-400">Kayıtlı Öğrenci:</span>
-                  <span className="font-medium">{selectedSectionData.enrolledCount}</span>
+                  <FiUsers className="w-4 h-4 text-primary-600 dark:text-primary-400" />
+                  <span className="text-slate-700 dark:text-slate-300 font-medium">Kayıtlı Öğrenci:</span>
+                  <span className="font-semibold text-slate-900 dark:text-slate-100">{selectedSectionData.enrolledCount}</span>
                 </div>
                 {selectedSectionData.classroom && (
                   <div className="flex items-center gap-2 text-sm">
-                    <FiMapPin className="w-4 h-4 text-primary-400" />
-                    <span className="text-slate-400">Derslik:</span>
-                    <span className="font-medium">{selectedSectionData.classroom}</span>
+                    <FiMapPin className="w-4 h-4 text-primary-600 dark:text-primary-400" />
+                    <span className="text-slate-700 dark:text-slate-300 font-medium">Derslik:</span>
+                    <span className="font-semibold text-slate-900 dark:text-slate-100">{selectedSectionData.classroom}</span>
                   </div>
                 )}
               </div>

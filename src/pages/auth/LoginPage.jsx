@@ -84,13 +84,13 @@ const LoginPage = () => {
     <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-gray-50 relative overflow-hidden">
       {/* Background image */}
       <div
-        className="absolute inset-0 bg-center bg-cover scale-105 blur-none"
+        className="absolute inset-0 bg-center bg-cover scale-105"
         style={{ backgroundImage: "url('/yeniArkaPLan.jpg')" }}
         aria-hidden="true"
       />
 
       {/* Gradient overlay for readability */}
-      <div className="absolute inset-0 bg-gradient-to-br from-white/85 via-white/75 to-white/60 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-white/15 to-white/10 pointer-events-none" />
 
       {/* Background decoration */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
