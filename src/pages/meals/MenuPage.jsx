@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { FiCalendar, FiLeaf, FiDroplet } from 'react-icons/fi';
-import { FaUtensils } from 'react-icons/fa';
+import { FiCalendar } from 'react-icons/fi';
+import { FaUtensils, FaTint, FaSeedling } from 'react-icons/fa';
 import toast from 'react-hot-toast';
 import mealService from '../../services/mealService';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
@@ -142,13 +142,13 @@ const MenuPage = () => {
                             <div className="flex flex-wrap gap-4 mt-3">
                               {menu.nutrition_json.calories && (
                                 <div className="flex items-center gap-2 text-xs text-slate-400">
-                                  <FiDroplet />
+                                  <FaTint />
                                   <span>{menu.nutrition_json.calories} kcal</span>
                                 </div>
                               )}
                               {menu.nutrition_json.protein && (
                                 <div className="flex items-center gap-2 text-xs text-slate-400">
-                                  <FiLeaf />
+                                  <FaSeedling />
                                   <span>{menu.nutrition_json.protein}g protein</span>
                                 </div>
                               )}
