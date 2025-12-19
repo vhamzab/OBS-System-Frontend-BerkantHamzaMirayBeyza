@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { FiCalendar, FiUtensils, FiX, FiCheckCircle, FiXCircle } from 'react-icons/fi';
+import { FiCalendar, FiX, FiCheckCircle, FiXCircle } from 'react-icons/fi';
+import { FaUtensils } from 'react-icons/fa';
 import toast from 'react-hot-toast';
 import mealService from '../../services/mealService';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
@@ -129,7 +130,7 @@ const ReservationsPage = () => {
                           </span>
                         </div>
                         <div className="flex items-center gap-2 mb-2">
-                          <FiUtensils className="text-slate-400" />
+                          <FaUtensils className="text-slate-400" />
                           <span>{getMealTypeLabel(reservation.meal_type)}</span>
                         </div>
                         <div className="text-sm text-slate-400 mb-3">
@@ -201,7 +202,7 @@ const ReservationsPage = () => {
 
           {reservations.length === 0 && (
             <div className="card text-center py-12">
-              <FiUtensils className="w-16 h-16 text-slate-400 mx-auto mb-4" />
+              <FaUtensils className="w-16 h-16 text-slate-400 mx-auto mb-4" />
               <p className="text-slate-400">Henüz rezervasyonunuz yok</p>
             </div>
           )}

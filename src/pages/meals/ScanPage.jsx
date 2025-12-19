@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { FiCamera, FiCheckCircle, FiXCircle, FiUser, FiUtensils, FiCalendar } from 'react-icons/fi';
+import { FiCamera, FiCheckCircle, FiXCircle, FiUser, FiCalendar } from 'react-icons/fi';
+import { FaUtensils } from 'react-icons/fa';
 import toast from 'react-hot-toast';
 import mealService from '../../services/mealService';
 import QRScanner from '../../components/common/QRScanner';
@@ -99,7 +100,7 @@ const ScanPage = () => {
             </div>
 
             <div className="flex items-center gap-3 p-4 bg-slate-700/50 rounded-lg">
-              <FiUtensils className="text-slate-400" />
+              <FaUtensils className="text-slate-400" />
               <div>
                 <div className="text-sm text-slate-400">Öğün</div>
                 <div className="font-semibold">
