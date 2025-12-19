@@ -83,7 +83,7 @@ const Sidebar = ({ isOpen, onClose }) => {
       {/* Sidebar */}
       <aside
         className={`
-          fixed top-20 left-0 h-[calc(100vh-5rem)] w-64 bg-white/95 backdrop-blur-md
+          fixed top-16 left-0 h-[calc(100vh-4rem)] w-64 bg-white/95 backdrop-blur-md
           border-r-2 border-gray-300 z-50 transform transition-transform duration-300
           lg:translate-x-0 lg:static lg:h-auto flex flex-col overflow-hidden shadow-xl lg:shadow-lg
           ${isOpen ? 'translate-x-0' : '-translate-x-full'}
@@ -95,10 +95,10 @@ const Sidebar = ({ isOpen, onClose }) => {
             <img 
               src="/logo2.png" 
               alt="Doğu Karadeniz Üniversitesi Logo" 
-              className="w-20 h-20 object-contain flex-shrink-0 rounded-lg shadow-md"
+              className="w-12 h-12 object-contain flex-shrink-0 rounded-lg shadow-md"
             />
-            <span className="font-display font-bold text-lg text-gray-800">
-              <span className="gradient-text">DKÜ</span> Doğu Karadeniz Üniversitesi
+            <span className="font-sans font-normal text-lg text-gray-800">
+              DKÜ Doğu Karadeniz Üniversitesi
             </span>
           </Link>
         </div>

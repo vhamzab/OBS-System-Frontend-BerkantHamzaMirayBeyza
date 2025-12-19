@@ -141,8 +141,8 @@ const DashboardPage = () => {
     <div className="p-6 lg:p-8 max-w-7xl mx-auto">
       {/* Welcome Section */}
       <div className="mb-8">
-        <h1 className="font-display text-3xl font-bold mb-2 text-gray-800">
-          Hoş Geldiniz, <span className="gradient-text">{user?.first_name}</span>!
+        <h1 className="font-sans text-3xl font-normal mb-2 text-gray-800">
+          Hoş Geldiniz, {user?.first_name}!
         </h1>
         <p className="text-gray-500">
           {getRoleLabel(user?.role)} paneline hoş geldiniz. Bugün neler yapmak istersiniz?
@@ -188,7 +188,7 @@ const DashboardPage = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Quick Actions */}
         <div className="card">
-          <h2 className="font-display text-xl font-bold mb-4 text-gray-800">Hızlı İşlemler</h2>
+          <h2 className="font-sans text-xl font-normal mb-4 text-gray-800">Hızlı İşlemler</h2>
           <div className="grid grid-cols-2 gap-3">
             {user?.role === 'student' && (
               <>
@@ -292,7 +292,7 @@ const DashboardPage = () => {
 
         {/* Recent Activity */}
         <div className="card">
-          <h2 className="font-display text-xl font-bold mb-4 text-gray-800">Son Aktiviteler</h2>
+          <h2 className="font-sans text-xl font-normal mb-4 text-gray-800">Son Aktiviteler</h2>
           <div className="space-y-4">
             {loading ? (
               Array(4).fill(0).map((_, index) => (

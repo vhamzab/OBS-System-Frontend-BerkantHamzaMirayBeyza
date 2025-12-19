@@ -108,7 +108,7 @@ const LoginPage = () => {
               className="w-32 h-32 object-contain rounded-lg shadow-lg"
             />
           </Link>
-          <h1 className="font-display text-3xl font-bold mb-2 text-gray-800">
+          <h1 className="font-sans text-3xl font-normal mb-2 text-gray-800">
             Tekrar Hoş Geldiniz
           </h1>
           <p className="text-gray-500">
