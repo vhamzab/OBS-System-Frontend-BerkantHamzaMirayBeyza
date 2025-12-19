@@ -16,7 +16,7 @@ const Button = ({
     primary: 'btn-primary',
     secondary: 'btn-secondary',
     ghost: 'btn-ghost',
-    danger: 'bg-red-600 text-white font-semibold rounded-xl hover:bg-red-500 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-red-500',
+    danger: 'bg-red-600 text-white font-semibold rounded-xl border-2 border-red-700 hover:bg-red-500 hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-red-500 shadow-lg shadow-red-500/30',
   };
 
   const sizes = {

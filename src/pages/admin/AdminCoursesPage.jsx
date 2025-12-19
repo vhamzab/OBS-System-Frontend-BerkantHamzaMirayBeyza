@@ -137,7 +137,7 @@ const AdminCoursesPage = () => {
             {/* Header */}
             <div className="flex items-center justify-between mb-8">
                 <div>
-                    <h1 className="font-display text-3xl font-bold mb-2">Ders Yönetimi</h1>
+                    <h1 className="font-sans text-3xl font-bold mb-2">Ders Yönetimi</h1>
                     <p className="text-slate-400">Tüm dersleri görüntüleyin ve yönetin</p>
                 </div>
                 <button
@@ -252,12 +252,12 @@ const AdminCoursesPage = () => {
                                             </span>
                                         </td>
                                         <td className="p-4 text-center">
-                                            <span className="px-2 py-1 rounded bg-slate-700 text-sm font-medium">
+                                            <span className="px-2 py-1 rounded bg-primary-100 border-2 border-primary-300 text-primary-700 text-sm font-medium shadow-sm">
                                                 {course.credits}
                                             </span>
                                         </td>
                                         <td className="p-4 text-center">
-                                            <span className="px-2 py-1 rounded bg-slate-700 text-sm font-medium">
+                                            <span className="px-2 py-1 rounded bg-accent-100 border-2 border-accent-300 text-accent-700 text-sm font-medium shadow-sm">
                                                 {course.ects}
                                             </span>
                                         </td>
@@ -291,7 +291,7 @@ const AdminCoursesPage = () => {
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
                     <div className="card w-full max-w-lg mx-4 max-h-[90vh] overflow-y-auto">
                         <div className="flex items-center justify-between mb-6">
-                            <h3 className="font-display text-xl font-semibold">
+                            <h3 className="font-sans text-xl font-semibold">
                                 {editingCourse ? 'Ders Düzenle' : 'Yeni Ders'}
                             </h3>
                             <button

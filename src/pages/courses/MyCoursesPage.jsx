@@ -222,7 +222,7 @@ const MyCoursesPage = () => {
                         
                         <Link 
                           to={`/courses/${enrollment.course?.id}`}
-                          className="font-display text-lg font-semibold hover:text-primary-400 transition-colors"
+                          className="font-sans text-lg font-semibold hover:text-primary-600 transition-colors"
                         >
                           {enrollment.course?.name}
                         </Link>

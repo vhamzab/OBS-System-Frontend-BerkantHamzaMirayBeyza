@@ -205,7 +205,7 @@ const CourseCatalogPage = () => {
     <div className="p-6 lg:p-8 max-w-7xl mx-auto">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="font-display text-3xl font-bold mb-2">Ders Kataloğu</h1>
+        <h1 className="font-sans text-3xl font-bold mb-2">Ders Kataloğu</h1>
         <p className="text-slate-400">Mevcut dersleri görüntüleyin ve kayıt olun</p>
       </div>
 
@@ -343,7 +343,7 @@ const CourseCatalogPage = () => {
                     </span>
                   </div>
 
-                  <h3 className="font-display text-lg font-semibold mb-2 group-hover:text-primary-400 transition-colors line-clamp-2">
+                  <h3 className="font-sans text-lg font-semibold mb-2 group-hover:text-primary-600 transition-colors line-clamp-2">
                     {course.name}
                   </h3>
 
@@ -378,7 +378,7 @@ const CourseCatalogPage = () => {
                   </span>
                   <Link
                     to={`/courses/${course.id}`}
-                    className="btn btn-primary btn-sm flex items-center gap-1"
+                    className="btn btn-primary flex items-center gap-1 text-sm py-2 px-4"
                   >
                     <span>Detayları Gör / Kayıt Ol</span>
                     <FiChevronRight className="w-4 h-4" />

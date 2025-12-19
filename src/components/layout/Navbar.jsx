@@ -45,16 +45,16 @@ const Navbar = () => {
   return (
     <nav className="glass sticky top-0 z-50 border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-20 py-2">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3">
             <img 
-              src="/logo.png" 
-              alt="BHMB Üniversitesi Logo" 
-              className="w-10 h-10 object-contain rounded-xl shadow-sm"
+              src="/logo2.png" 
+              alt="Doğu Karadeniz Üniversitesi Logo" 
+              className="w-20 h-20 object-contain rounded-lg shadow-md"
             />
             <span className="font-display font-bold text-xl hidden sm:block text-gray-800">
-              BHMB <span className="gradient-text">Üniversitesi</span>
+              <span className="gradient-text">DKÜ</span> Doğu Karadeniz Üniversitesi
             </span>
           </Link>
 

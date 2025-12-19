@@ -162,16 +162,16 @@ const CourseDetailPage = () => {
                 <span className="px-3 py-1 rounded-full bg-primary-500/20 text-primary-400 text-sm font-medium">
                   {course.code}
                 </span>
-                <h1 className="font-display text-2xl md:text-3xl font-bold mt-2">{course.name}</h1>
+                <h1 className="font-sans text-2xl md:text-3xl font-semibold mt-2">{course.name}</h1>
               </div>
               <div className="flex gap-4 text-center">
-                <div className="px-4 py-2 rounded-xl bg-slate-800/50">
-                  <div className="text-2xl font-bold text-primary-400">{course.credits}</div>
-                  <div className="text-xs text-slate-400">Kredi</div>
+                <div className="px-4 py-2 rounded-xl bg-primary-600 border-2 border-primary-700 shadow-lg hover:scale-105 transition-all duration-300">
+                  <div className="text-2xl font-bold text-white">{course.credits}</div>
+                  <div className="text-xs text-primary-100 font-medium">Kredi</div>
                 </div>
-                <div className="px-4 py-2 rounded-xl bg-slate-800/50">
-                  <div className="text-2xl font-bold text-accent-400">{course.ects}</div>
-                  <div className="text-xs text-slate-400">AKTS</div>
+                <div className="px-4 py-2 rounded-xl bg-accent-600 border-2 border-accent-700 shadow-lg hover:scale-105 transition-all duration-300">
+                  <div className="text-2xl font-bold text-white">{course.ects}</div>
+                  <div className="text-xs text-accent-100 font-medium">AKTS</div>
                 </div>
               </div>
             </div>
@@ -203,7 +203,7 @@ const CourseDetailPage = () => {
         {/* Prerequisites */}
         <div className="lg:col-span-1">
           <div className="card">
-            <h2 className="font-display text-lg font-semibold mb-4">Önkoşullar</h2>
+            <h2 className="font-sans text-lg font-semibold mb-4">Önkoşullar</h2>
             
             {prerequisites.length === 0 ? (
               <p className="text-slate-400 text-sm">Bu ders için önkoşul bulunmuyor.</p>
@@ -275,7 +275,7 @@ const CourseDetailPage = () => {
         {/* Available Sections */}
         <div className="lg:col-span-2">
           <div className="card">
-            <h2 className="font-display text-lg font-semibold mb-4">Mevcut Sectionlar</h2>
+            <h2 className="font-sans text-lg font-semibold mb-4">Mevcut Sectionlar</h2>
             
             {sections.length === 0 ? (
               <p className="text-slate-400 text-sm">Bu ders için aktif section bulunmuyor.</p>

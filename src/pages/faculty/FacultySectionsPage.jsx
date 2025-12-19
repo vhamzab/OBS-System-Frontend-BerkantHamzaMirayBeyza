@@ -131,7 +131,7 @@ const FacultySectionsPage = () => {
                         Section {section.sectionNumber}
                       </span>
                     </div>
-                    <h3 className="font-display text-lg font-semibold">{section.course?.name}</h3>
+                    <h3 className="font-sans text-lg font-semibold">{section.course?.name}</h3>
                     <div className="text-sm text-slate-400">
                       {semesterNames[section.semester]} {section.year}
                     </div>
@@ -140,17 +140,17 @@ const FacultySectionsPage = () => {
 
                 {/* Stats */}
                 <div className="grid grid-cols-3 gap-3 mb-4">
-                  <div className="p-3 rounded-xl bg-slate-800/50 text-center">
-                    <div className="text-lg font-bold text-primary-400">{section.enrolledCount}</div>
-                    <div className="text-xs text-slate-500">Öğrenci</div>
+                  <div className="p-3 rounded-xl bg-primary-100 border-2 border-primary-300 shadow-md hover:scale-105 transition-all duration-300 text-center">
+                    <div className="text-lg font-bold text-primary-700">{section.enrolledCount}</div>
+                    <div className="text-xs text-primary-600 font-medium">Öğrenci</div>
                   </div>
-                  <div className="p-3 rounded-xl bg-slate-800/50 text-center">
-                    <div className="text-lg font-bold text-emerald-400">{section.course?.credits}</div>
-                    <div className="text-xs text-slate-500">Kredi</div>
+                  <div className="p-3 rounded-xl bg-emerald-100 border-2 border-emerald-300 shadow-md hover:scale-105 transition-all duration-300 text-center">
+                    <div className="text-lg font-bold text-emerald-700">{section.course?.credits}</div>
+                    <div className="text-xs text-emerald-600 font-medium">Kredi</div>
                   </div>
-                  <div className="p-3 rounded-xl bg-slate-800/50 text-center">
-                    <div className="text-lg font-bold text-amber-400">{section.capacity}</div>
-                    <div className="text-xs text-slate-500">Kapasite</div>
+                  <div className="p-3 rounded-xl bg-blue-100 border-2 border-blue-300 shadow-md hover:scale-105 transition-all duration-300 text-center">
+                    <div className="text-lg font-bold text-blue-700">{section.capacity}</div>
+                    <div className="text-xs text-blue-600 font-medium">Kapasite</div>
                   </div>
                 </div>
 

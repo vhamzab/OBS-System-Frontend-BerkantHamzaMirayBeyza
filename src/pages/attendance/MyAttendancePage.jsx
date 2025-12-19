@@ -96,14 +96,14 @@ const MyAttendancePage = () => {
   return (
     <div className="p-6 lg:p-8 max-w-6xl mx-auto">
       <div className="mb-8">
-        <h1 className="font-display text-3xl font-bold mb-2">Devam Durumum</h1>
+        <h1 className="font-sans text-3xl font-bold mb-2">Devam Durumum</h1>
         <p className="text-slate-400">Derslere katılım durumunuzu görüntüleyin</p>
       </div>
 
       {/* Active Sessions Banner */}
       {activeSessions.length > 0 && (
         <div className="mb-8">
-          <h2 className="font-display text-lg font-semibold mb-4 flex items-center gap-2">
+          <h2 className="font-sans text-lg font-semibold mb-4 flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
             Aktif Yoklamalar
           </h2>
@@ -203,21 +203,21 @@ const MyAttendancePage = () => {
 
                 {/* Stats */}
                 <div className="grid grid-cols-4 gap-2 text-center">
-                  <div className="p-2 rounded-lg bg-slate-800/50">
-                    <div className="text-lg font-bold text-green-400">{course.present}</div>
-                    <div className="text-xs text-slate-500">Katıldı</div>
+                  <div className="p-2 rounded-lg bg-green-100 border-2 border-green-300 shadow-md hover:scale-105 transition-all duration-300">
+                    <div className="text-lg font-bold text-green-700">{course.present}</div>
+                    <div className="text-xs text-green-600 font-medium">Katıldı</div>
                   </div>
-                  <div className="p-2 rounded-lg bg-slate-800/50">
-                    <div className="text-lg font-bold text-amber-400">{course.late}</div>
-                    <div className="text-xs text-slate-500">Geç</div>
+                  <div className="p-2 rounded-lg bg-amber-100 border-2 border-amber-300 shadow-md hover:scale-105 transition-all duration-300">
+                    <div className="text-lg font-bold text-amber-700">{course.late}</div>
+                    <div className="text-xs text-amber-600 font-medium">Geç</div>
                   </div>
-                  <div className="p-2 rounded-lg bg-slate-800/50">
-                    <div className="text-lg font-bold text-blue-400">{course.excused}</div>
-                    <div className="text-xs text-slate-500">Mazeretli</div>
+                  <div className="p-2 rounded-lg bg-blue-100 border-2 border-blue-300 shadow-md hover:scale-105 transition-all duration-300">
+                    <div className="text-lg font-bold text-blue-700">{course.excused}</div>
+                    <div className="text-xs text-blue-600 font-medium">Mazeretli</div>
                   </div>
-                  <div className="p-2 rounded-lg bg-slate-800/50">
-                    <div className="text-lg font-bold text-red-400">{course.absent}</div>
-                    <div className="text-xs text-slate-500">Devamsız</div>
+                  <div className="p-2 rounded-lg bg-red-100 border-2 border-red-300 shadow-md hover:scale-105 transition-all duration-300">
+                    <div className="text-lg font-bold text-red-700">{course.absent}</div>
+                    <div className="text-xs text-red-600 font-medium">Devamsız</div>
                   </div>
                 </div>
 

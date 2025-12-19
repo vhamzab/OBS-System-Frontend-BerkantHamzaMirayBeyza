@@ -142,7 +142,7 @@ const AnnouncementsPage = () => {
             <FiBell className="w-6 h-6 text-primary-400" />
           </div>
           <div>
-            <h1 className="font-display text-3xl font-bold">Duyurular</h1>
+            <h1 className="font-sans text-3xl font-bold">Duyurular</h1>
             <p className="text-slate-400">Önemli bildirimler ve haberler</p>
           </div>
         </div>
@@ -191,7 +191,7 @@ const AnnouncementsPage = () => {
                   <div className="flex items-start justify-between">
                     <h3 className="font-semibold text-lg mb-2">{announcement.title}</h3>
                     {/* Target Audience Badge */}
-                    <span className="text-xs px-2 py-1 rounded bg-slate-800 text-slate-400 border border-slate-700">
+                    <span className="text-xs px-2 py-1 rounded bg-gray-100 text-gray-700 border-2 border-gray-300 font-medium shadow-sm">
                       {announcement.target_audience === 'all' ? 'Herkese Açık' :
                         announcement.target_audience === 'students' ? 'Öğrenciler' :
                           announcement.target_audience === 'faculty' ? 'Öğretim Üyeleri' : announcement.target_audience}
@@ -213,7 +213,7 @@ const AnnouncementsPage = () => {
               {isAdmin && (
                 <button
                   onClick={() => handleDelete(announcement.id)}
-                  className="absolute top-4 right-4 p-2 rounded-lg bg-slate-800 text-red-400 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-slate-700"
+                  className="absolute top-4 right-4 p-2 rounded-lg bg-red-100 border-2 border-red-300 text-red-700 opacity-0 group-hover:opacity-100 transition-all hover:bg-red-200 hover:scale-110 shadow-md"
                   title="Sil"
                 >
                   <FiTrash2 className="w-4 h-4" />
@@ -229,7 +229,7 @@ const AnnouncementsPage = () => {
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="card w-full max-w-lg shadow-xl border border-slate-700">
             <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-700/50">
-              <h3 className="font-display text-xl font-semibold flex items-center gap-2">
+              <h3 className="font-sans text-xl font-semibold flex items-center gap-2">
                 <FiPlus className="w-5 h-5 text-primary-400" />
                 Yeni Duyuru Oluştur
               </h3>

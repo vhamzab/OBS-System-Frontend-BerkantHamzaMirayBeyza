@@ -275,7 +275,7 @@ const EnrollmentApprovalsPage = () => {
       ) : (
         <div className="space-y-3">
           {/* Select All Header */}
-          <div className="card bg-slate-800/30 py-3">
+          <div className="card bg-gray-50 border-2 border-gray-200 shadow-md py-3">
             <label className="flex items-center gap-3 cursor-pointer">
               <input
                 type="checkbox"
@@ -348,7 +348,7 @@ const EnrollmentApprovalsPage = () => {
                   </div>
 
                   {/* Course Info */}
-                  <div className="lg:w-64 px-4 py-3 rounded-xl bg-slate-800/50">
+                  <div className="lg:w-64 px-4 py-3 rounded-xl bg-blue-50 border-2 border-blue-200 shadow-md">
                     <div className="flex items-center gap-2 mb-1">
                       <span className="px-2 py-0.5 rounded bg-primary-500/20 text-primary-400 text-xs font-medium">
                         {enrollment.course.code}
@@ -392,7 +392,7 @@ const EnrollmentApprovalsPage = () => {
                     <button
                       onClick={() => setShowRejectModal(enrollment.id)}
                       disabled={isProcessing}
-                      className="btn bg-red-500/10 text-red-400 hover:bg-red-500/20 px-4"
+                      className="btn bg-red-100 border-2 border-red-300 text-red-700 hover:bg-red-200 hover:scale-105 shadow-md px-4 transition-all duration-300"
                       title="Reddet"
                     >
                       {isProcessing === 'rejecting' ? (

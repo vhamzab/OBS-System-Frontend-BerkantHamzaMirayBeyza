@@ -149,7 +149,7 @@ const ForgotPasswordPage = () => {
               label="E-posta Adresi"
               name="email"
               type="email"
-              placeholder="ornek@university.edu"
+              placeholder="ornek@dku.edu.tr"
               icon={FiMail}
               value={emailFormik.values.email}
               onChange={emailFormik.handleChange}

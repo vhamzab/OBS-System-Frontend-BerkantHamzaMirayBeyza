@@ -83,22 +83,22 @@ const Sidebar = ({ isOpen, onClose }) => {
       {/* Sidebar */}
       <aside
         className={`
-          fixed top-16 left-0 h-[calc(100vh-4rem)] w-64 bg-white
-          border-r border-gray-200 z-50 transform transition-transform duration-300
-          lg:translate-x-0 lg:static lg:h-auto flex flex-col overflow-hidden shadow-lg lg:shadow-none
+          fixed top-20 left-0 h-[calc(100vh-5rem)] w-64 bg-white/95 backdrop-blur-md
+          border-r-2 border-gray-300 z-50 transform transition-transform duration-300
+          lg:translate-x-0 lg:static lg:h-auto flex flex-col overflow-hidden shadow-xl lg:shadow-lg
           ${isOpen ? 'translate-x-0' : '-translate-x-full'}
         `}
       >
         {/* Sticky Header with Logo */}
-        <div className="sticky top-0 z-10 bg-white border-b border-gray-200 p-4">
+        <div className="sticky top-0 z-10 bg-gradient-to-r from-primary-50/50 to-purple-50/50 border-b-2 border-gray-300 p-4 backdrop-blur-sm">
           <Link to="/dashboard" className="flex items-center gap-3" onClick={onClose}>
             <img 
-              src="/logo.png" 
-              alt="BHMB Üniversitesi Logo" 
-              className="w-10 h-10 object-contain flex-shrink-0 rounded-xl shadow-sm"
+              src="/logo2.png" 
+              alt="Doğu Karadeniz Üniversitesi Logo" 
+              className="w-20 h-20 object-contain flex-shrink-0 rounded-lg shadow-md"
             />
             <span className="font-display font-bold text-lg text-gray-800">
-              BHMB <span className="gradient-text">Üniversitesi</span>
+              <span className="gradient-text">DKÜ</span> Doğu Karadeniz Üniversitesi
             </span>
           </Link>
         </div>
@@ -112,9 +112,10 @@ const Sidebar = ({ isOpen, onClose }) => {
               onClick={onClose}
               className={({ isActive }) => `
                 flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300
+                border-2 shadow-sm
                 ${isActive
-                  ? 'bg-primary-50 text-primary-700 border border-primary-200 font-semibold'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                  ? 'bg-primary-100 text-primary-800 border-primary-400 font-semibold shadow-md scale-105'
+                  : 'text-gray-700 hover:text-gray-900 hover:bg-gray-100 hover:border-gray-300 hover:scale-105 border-transparent'
                 }
               `}
             >
@@ -125,8 +126,8 @@ const Sidebar = ({ isOpen, onClose }) => {
         </nav>
 
         {/* User Role Badge - Sticky at bottom */}
-        <div className="sticky bottom-0 bg-white border-t border-gray-200 p-4">
-          <div className="px-4 py-2 rounded-xl bg-gray-100">
+        <div className="sticky bottom-0 bg-gradient-to-r from-primary-50/50 to-purple-50/50 border-t-2 border-gray-300 p-4 backdrop-blur-sm">
+          <div className="px-4 py-2 rounded-xl bg-white/80 border-2 border-gray-200 shadow-md">
             <div className="text-xs text-gray-500 mb-1">Rol</div>
             <div className="font-medium text-gray-800 capitalize">
               {user?.role === 'student' && 'Öğrenci'}

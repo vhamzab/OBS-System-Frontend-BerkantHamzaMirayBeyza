@@ -112,16 +112,16 @@ const RegisterPage = () => {
         <div className="text-center mb-8">
           <Link to="/" className="inline-flex items-center gap-3 mb-6">
             <img 
-              src="/logo.png" 
-              alt="BHMB Üniversitesi Logo" 
-              className="w-16 h-16 object-contain"
+              src="/logo2.png" 
+              alt="Doğu Karadeniz Üniversitesi Logo" 
+              className="w-32 h-32 object-contain rounded-lg shadow-lg"
             />
           </Link>
           <h1 className="font-display text-3xl font-bold mb-2 text-gray-800">
             Hesap Oluşturun
           </h1>
           <p className="text-gray-500">
-            BHMB Üniversitesi OBS'ye kayıt olun
+            Doğu Karadeniz Üniversitesi (DKÜ) OBS'ye kayıt olun
           </p>
         </div>
 
@@ -158,7 +158,7 @@ const RegisterPage = () => {
               label="E-posta Adresi"
               name="email"
               type="email"
-              placeholder="ornek@university.edu"
+              placeholder="ornek@dku.edu.tr"
               icon={FiMail}
               value={formik.values.email}
               onChange={formik.handleChange}
