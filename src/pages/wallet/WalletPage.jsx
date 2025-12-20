@@ -65,15 +65,15 @@ const WalletPage = () => {
       const response = await walletService.createTopup(amount);
       if (response.success) {
         // Test modu: Direkt ödeme başarılı
-        toast.success('Ödemeniz başarıyla gerçekleşti');
+        toast.success('Yükleme başarılı');
         setShowTopupModal(false);
-        // Bakiye ve işlem geçmişini yenile
-        await fetchBalance();
-        await fetchTransactions();
+        setTopupLoading(false);
+        // Bakiye ve işlem geçmişini arka planda yenile
+        fetchBalance().catch(console.error);
+        fetchTransactions().catch(console.error);
       }
     } catch (error) {
       toast.error(error.response?.data?.message || 'Para yükleme başarısız');
-    } finally {
       setTopupLoading(false);
     }
   };
@@ -217,9 +217,17 @@ const WalletPage = () => {
 
       {/* Top-up Modal */}
       {showTopupModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
-          <div className="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl border border-gray-200">
-            <h3 className="text-xl font-bold mb-4 text-gray-800">Para Yükle</h3>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-in">
+          <div className="bg-gradient-to-br from-white via-blue-50/30 to-accent-50/20 rounded-3xl p-8 max-w-md w-full shadow-2xl border-2 border-primary-100/50 backdrop-blur-xl">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center shadow-lg">
+                <FiDollarSign className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h3 className="text-2xl font-bold text-gray-900">Para Yükle</h3>
+                <p className="text-sm text-gray-600">Cüzdanınıza bakiye ekleyin</p>
+              </div>
+            </div>
             <PaymentForm
               onSubmit={handleTopup}
               onCancel={() => setShowTopupModal(false)}

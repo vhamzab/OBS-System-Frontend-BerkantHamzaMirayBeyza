@@ -21,13 +21,16 @@ const PaymentForm = ({ onSubmit, onCancel, minAmount = 50, loading = false }) =>
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
+    <form onSubmit={handleSubmit} className="space-y-6">
       <div>
-        <label className="block text-sm font-semibold text-gray-800 mb-2">
+        <label className="block text-sm font-bold text-gray-900 mb-3 flex items-center gap-2">
+          <span className="w-1 h-4 bg-gradient-to-b from-primary-500 to-accent-500 rounded-full"></span>
           Tutar (TRY)
         </label>
-        <div className="relative">
-          <FiDollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
+        <div className="relative group">
+          <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-primary-600 group-focus-within:text-primary-700 transition-colors">
+            <FiDollarSign className="w-5 h-5" />
+          </div>
           <input
             type="number"
             value={amount}
@@ -35,59 +38,97 @@ const PaymentForm = ({ onSubmit, onCancel, minAmount = 50, loading = false }) =>
             min={minAmount}
             step="0.01"
             placeholder={`Minimum ${minAmount} TRY`}
-            className="w-full pl-10 pr-4 py-3 bg-white border-2 border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all"
+            className="w-full pl-12 pr-4 py-4 bg-white/90 backdrop-blur-sm border-2 border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 font-medium focus:outline-none focus:ring-4 focus:ring-primary-500/20 focus:border-primary-500 transition-all shadow-sm hover:border-gray-300"
             required
           />
         </div>
-        <p className="mt-2 text-xs text-gray-600 font-medium">
-          Minimum yükleme tutarı: {minAmount} TRY
-        </p>
+        <div className="mt-3 flex items-center gap-2 px-3 py-2 bg-blue-50/50 rounded-lg border border-blue-100">
+          <span className="text-xs font-semibold text-blue-700">ℹ️</span>
+          <p className="text-xs text-blue-700 font-medium">
+            Minimum yükleme tutarı: <span className="font-bold">{minAmount} TRY</span>
+          </p>
+        </div>
       </div>
 
       <div>
-        <label className="block text-sm font-semibold text-gray-800 mb-2">
+        <label className="block text-sm font-bold text-gray-900 mb-3 flex items-center gap-2">
+          <span className="w-1 h-4 bg-gradient-to-b from-primary-500 to-accent-500 rounded-full"></span>
           Ödeme Yöntemi
         </label>
-        <div className="space-y-2">
-          <label className={`flex items-center p-4 border-2 rounded-lg cursor-pointer transition-all ${
+        <div className="space-y-3">
+          <label className={`group flex items-center p-5 border-2 rounded-xl cursor-pointer transition-all duration-300 ${
             paymentMethod === 'card' 
-              ? 'border-primary-500 bg-primary-50' 
-              : 'border-gray-300 bg-white hover:border-gray-400 hover:bg-gray-50'
+              ? 'border-primary-500 bg-gradient-to-br from-primary-50 to-accent-50 shadow-lg shadow-primary-500/20 scale-[1.02]' 
+              : 'border-gray-200 bg-white/80 hover:border-primary-300 hover:bg-primary-50/30 hover:shadow-md'
           }`}>
+            <div className={`mr-4 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
+              paymentMethod === 'card' 
+                ? 'border-primary-600 bg-primary-600' 
+                : 'border-gray-300 bg-white group-hover:border-primary-400'
+            }`}>
+              {paymentMethod === 'card' && (
+                <div className="w-2.5 h-2.5 rounded-full bg-white"></div>
+              )}
+            </div>
+            <div className="flex items-center gap-3 flex-1">
+              <div className={`p-2.5 rounded-lg ${
+                paymentMethod === 'card' 
+                  ? 'bg-primary-100 text-primary-700' 
+                  : 'bg-gray-100 text-gray-600 group-hover:bg-primary-100 group-hover:text-primary-600'
+              } transition-colors`}>
+                <FiCreditCard className="w-5 h-5" />
+              </div>
+              <div>
+                <span className={`font-bold text-base block ${
+                  paymentMethod === 'card' ? 'text-primary-900' : 'text-gray-900'
+                }`}>
+                  Kredi/Banka Kartı
+                </span>
+                <span className={`text-xs mt-0.5 block ${
+                  paymentMethod === 'card' ? 'text-primary-700' : 'text-gray-500'
+                }`}>
+                  Güvenli ödeme
+                </span>
+              </div>
+            </div>
             <input
               type="radio"
               name="paymentMethod"
               value="card"
               checked={paymentMethod === 'card'}
               onChange={(e) => setPaymentMethod(e.target.value)}
-              className="mr-3 w-4 h-4 text-primary-600 focus:ring-primary-500"
+              className="sr-only"
             />
-            <FiCreditCard className={`mr-2 ${paymentMethod === 'card' ? 'text-primary-600' : 'text-gray-600'}`} />
-            <span className={`font-medium ${paymentMethod === 'card' ? 'text-primary-800' : 'text-gray-800'}`}>
-              Kredi/Banka Kartı
-            </span>
           </label>
         </div>
       </div>
 
-      <div className="flex gap-3 pt-2">
-        <Button
+      <div className="flex gap-4 pt-4 border-t border-gray-200">
+        <button
           type="button"
-          variant="secondary"
           onClick={onCancel}
           disabled={loading}
-          className="flex-1 bg-white text-gray-700 border-2 border-gray-300 hover:bg-gray-50 hover:border-gray-400 font-semibold"
+          className="flex-1 px-6 py-3.5 bg-white border-2 border-gray-300 text-gray-700 font-bold rounded-xl hover:bg-gray-50 hover:border-gray-400 active:scale-95 transition-all duration-200 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
         >
           İptal
-        </Button>
-        <Button
+        </button>
+        <button
           type="submit"
-          loading={loading}
-          disabled={!amount || parseFloat(amount) < minAmount}
-          className="flex-1 bg-primary-600 hover:bg-primary-700 text-white font-semibold shadow-lg shadow-primary-500/30"
+          disabled={!amount || parseFloat(amount) < minAmount || loading}
+          className="flex-1 px-6 py-3.5 bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white font-bold rounded-xl shadow-lg shadow-primary-500/40 hover:shadow-xl hover:shadow-primary-500/50 active:scale-95 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-lg flex items-center justify-center gap-2"
         >
-          Ödemeye Devam Et
-        </Button>
+          {loading ? (
+            <>
+              <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              İşleniyor...
+            </>
+          ) : (
+            'Ödemeye Devam Et'
+          )}
+        </button>
       </div>
     </form>
   );
