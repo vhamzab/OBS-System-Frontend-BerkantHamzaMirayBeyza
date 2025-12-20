@@ -34,6 +34,11 @@ const WalletPage = () => {
     } catch (error) {
       toast.error('Bakiye yüklenirken hata oluştu');
       console.error(error);
+      setBalance({ balance: 0, currency: 'TRY', is_active: true });
+    } finally {
+      if (loading) {
+        setLoading(false);
+      }
     }
   };
 
@@ -121,7 +126,7 @@ const WalletPage = () => {
               <div>
                 <h2 className="text-slate-300 text-sm mb-1">Toplam Bakiye</h2>
                 <p className="text-4xl font-bold text-white">
-                  {balance?.balance?.toFixed(2) || '0.00'} {balance?.currency || 'TRY'}
+                  {balance?.balance != null ? parseFloat(balance.balance).toFixed(2) : '0.00'} {balance?.currency || 'TRY'}
                 </p>
               </div>
               <div className="w-20 h-20 rounded-full bg-white/20 flex items-center justify-center">
@@ -178,10 +183,10 @@ const WalletPage = () => {
                         }`}
                       >
                         {transaction.type === 'credit' ? '+' : '-'}
-                        {Math.abs(transaction.amount).toFixed(2)} TRY
+                        {transaction.amount != null ? Math.abs(parseFloat(transaction.amount)).toFixed(2) : '0.00'} TRY
                       </div>
                       <div className="text-xs text-slate-400">
-                        Bakiye: {transaction.balance_after?.toFixed(2)} TRY
+                        Bakiye: {transaction.balance_after != null ? parseFloat(transaction.balance_after).toFixed(2) : '0.00'} TRY
                       </div>
                     </div>
                   </div>
