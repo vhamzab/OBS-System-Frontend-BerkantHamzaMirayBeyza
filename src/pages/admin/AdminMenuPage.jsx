@@ -62,7 +62,7 @@ const AdminMenuPage = () => {
       setFormData({
         cafeteria_id: menu.cafeteria_id,
         date: menu.date,
-        meal_type: menu.meal_type,
+        meal_type: menu.meal_type === 'breakfast' ? 'lunch' : (menu.meal_type === 'dinner' ? 'dinner' : 'lunch'),
         items_json: menu.items_json || [],
         nutrition_json: menu.nutrition_json || {
           calories: '',
@@ -273,7 +273,7 @@ const AdminMenuPage = () => {
               </h3>
               <button
                 onClick={handleCloseModal}
-                className="text-white hover:text-slate-300"
+                className="text-slate-400 hover:text-white"
               >
                 <FiX className="w-6 h-6" />
               </button>
@@ -289,13 +289,13 @@ const AdminMenuPage = () => {
                     className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-white"
                     required
                   >
-                    <option value="" className="text-slate-400">Seçiniz</option>
-                    <option value="batı_kampüs" className="text-white">Batı Kampüs</option>
-                    <option value="doğu_kampüs" className="text-white">Doğu Kampüs</option>
-                    <option value="kuzey_kampüs" className="text-white">Kuzey Kampüs</option>
-                    <option value="güney_kampüs" className="text-white">Güney Kampüs</option>
+                    <option value="">Seçiniz</option>
+                    <option value="batı_kampüs">Batı Kampüs</option>
+                    <option value="doğu_kampüs">Doğu Kampüs</option>
+                    <option value="kuzey_kampüs">Kuzey Kampüs</option>
+                    <option value="güney_kampüs">Güney Kampüs</option>
                     {cafeterias.map((cafeteria) => (
-                      <option key={cafeteria.id} value={cafeteria.id} className="text-white">
+                      <option key={cafeteria.id} value={cafeteria.id}>
                         {cafeteria.name}
                       </option>
                     ))}
@@ -316,29 +316,29 @@ const AdminMenuPage = () => {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium mb-2 text-white">Ne zaman *</label>
+                  <label className="block text-sm font-medium mb-2 text-white">Ne Zaman *</label>
                   <select
-                    value={formData.meal_type}
+                    value={formData.meal_type === 'lunch' ? 'lunch' : formData.meal_type === 'dinner' ? 'dinner' : 'lunch'}
                     onChange={(e) => setFormData({ ...formData, meal_type: e.target.value })}
                     className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-white"
                     required
                   >
-                    <option value="lunch" className="text-white">Öğle</option>
-                    <option value="dinner" className="text-white">Akşam</option>
+                    <option value="lunch">Öğle</option>
+                    <option value="dinner">Akşam</option>
                   </select>
                 </div>
-              </div>
 
-              <div>
-                <label className="block text-sm font-medium mb-2 text-white">Fiyat (₺)</label>
-                <input
-                  type="number"
-                  step="0.01"
-                  min="0"
-                  value={formData.price}
-                  onChange={(e) => setFormData({ ...formData, price: parseFloat(e.target.value) || 0 })}
-                  className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-white"
-                />
+                <div>
+                  <label className="block text-sm font-medium mb-2 text-white">Fiyat (₺)</label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    value={formData.price}
+                    onChange={(e) => setFormData({ ...formData, price: parseFloat(e.target.value) || 0 })}
+                    className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-white"
+                  />
+                </div>
               </div>
 
               <div>

@@ -29,12 +29,10 @@ const GenerateSchedulePage = () => {
       ]);
 
       if (sectionsRes.success) {
-        const sectionsData = sectionsRes.data;
-        setSections(Array.isArray(sectionsData) ? sectionsData : []);
+        setSections(sectionsRes.data || []);
       }
       if (classroomsRes.success) {
-        const classroomsData = classroomsRes.data;
-        setClassrooms(Array.isArray(classroomsData) ? classroomsData : []);
+        setClassrooms(classroomsRes.data || []);
       }
     } catch (error) {
       toast.error('Veriler yüklenirken hata oluştu');
@@ -58,26 +56,21 @@ const GenerateSchedulePage = () => {
     try {
       setGenerating(true);
       const constraints = {
-        sections: Array.isArray(selectedSections) && Array.isArray(sections)
-          ? selectedSections.map((id) => {
-              const section = sections.find((s) => s.id === id);
-              if (!section) return null;
-              return {
-                id: section.id,
-                course_id: section.course_id,
-                instructor_id: section.instructor_id,
-                capacity: section.capacity || section.enrolled_count || 30,
-                course_requirements: section.course?.requirements || {},
-              };
-            }).filter(Boolean)
-          : [],
-        classrooms: Array.isArray(classrooms)
-          ? classrooms.map((c) => ({
-              id: c.id,
-              capacity: c.capacity,
-              features: c.features_json || {},
-            }))
-          : [],
+        sections: selectedSections.map((id) => {
+          const section = sections.find((s) => s.id === id);
+          return {
+            id: section.id,
+            course_id: section.course_id,
+            instructor_id: section.instructor_id,
+            capacity: section.capacity || section.enrolled_count || 30,
+            course_requirements: section.course?.requirements || {},
+          };
+        }),
+        classrooms: classrooms.map((c) => ({
+          id: c.id,
+          capacity: c.capacity,
+          features: c.features_json || {},
+        })),
         timeSlots: [
           { day_of_week: 'monday', start_time: '09:00', end_time: '17:00' },
           { day_of_week: 'tuesday', start_time: '09:00', end_time: '17:00' },
@@ -89,12 +82,7 @@ const GenerateSchedulePage = () => {
 
       const response = await schedulingService.generateSchedule(constraints);
       if (response.success) {
-        // Backend'den dönen data formatını normalize et
-        const scheduleData = response.data || {};
-        setGeneratedSchedule({
-          schedule: Array.isArray(scheduleData.schedule) ? scheduleData.schedule : [],
-          stats: scheduleData.stats || {},
-        });
+        setGeneratedSchedule(response.data);
         toast.success('Ders programı oluşturuldu');
       }
     } catch (error) {
@@ -170,28 +158,25 @@ const GenerateSchedulePage = () => {
                 Seçilen Section'lar ({selectedSections.length})
               </h3>
               <div className="space-y-2">
-                {Array.isArray(selectedSections) && Array.isArray(sections)
-                  ? selectedSections.map((id) => {
-                      const section = sections.find((s) => s.id === id);
-                      if (!section) return null;
-                      return (
-                        <div
-                          key={id}
-                          className="p-2 bg-slate-700/50 rounded flex items-center justify-between"
-                        >
-                          <span className="text-sm">
-                            {section?.course?.code} - {section?.section_number}
-                          </span>
-                          <button
-                            onClick={() => toggleSection(id)}
-                            className="text-red-400 hover:text-red-300"
-                          >
-                            <FiX />
-                          </button>
-                        </div>
-                      );
-                    }).filter(Boolean)
-                  : null}
+                {selectedSections.map((id) => {
+                  const section = sections.find((s) => s.id === id);
+                  return (
+                    <div
+                      key={id}
+                      className="p-2 bg-slate-700/50 rounded flex items-center justify-between"
+                    >
+                      <span className="text-sm">
+                        {section?.course?.code} - {section?.section_number}
+                      </span>
+                      <button
+                        onClick={() => toggleSection(id)}
+                        className="text-red-400 hover:text-red-300"
+                      >
+                        <FiX />
+                      </button>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           )}
@@ -202,33 +187,31 @@ const GenerateSchedulePage = () => {
           <div className="card">
             <h2 className="text-xl font-bold mb-4">Section'ları Seçin</h2>
             <div className="space-y-2 max-h-[600px] overflow-y-auto">
-              {Array.isArray(sections) && sections.length > 0
-                ? sections.map((section) => (
-                    <div
-                      key={section.id}
-                      className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-                        selectedSections.includes(section.id)
-                          ? 'border-blue-500 bg-blue-500/20'
-                          : 'border-slate-700 bg-slate-700/50 hover:border-slate-600'
-                      }`}
-                      onClick={() => toggleSection(section.id)}
-                    >
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <div className="font-semibold">
-                            {section.course?.code} - {section.course?.name}
-                          </div>
-                          <div className="text-sm text-slate-400">
-                            Section {section.section_number} - Kapasite: {section.capacity}
-                          </div>
-                        </div>
-                        {selectedSections.includes(section.id) && (
-                          <FiCheck className="text-blue-400" />
-                        )}
+              {sections.map((section) => (
+                <div
+                  key={section.id}
+                  className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                    selectedSections.includes(section.id)
+                      ? 'border-blue-500 bg-blue-500/20'
+                      : 'border-slate-700 bg-slate-700/50 hover:border-slate-600'
+                  }`}
+                  onClick={() => toggleSection(section.id)}
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="font-semibold">
+                        {section.course?.code} - {section.course?.name}
+                      </div>
+                      <div className="text-sm text-slate-400">
+                        Section {section.section_number} - Kapasite: {section.capacity}
                       </div>
                     </div>
-                  ))
-                : <div className="text-center py-8 text-slate-400">Section bulunamadı</div>}
+                    {selectedSections.includes(section.id) && (
+                      <FiCheck className="text-blue-400" />
+                    )}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -246,23 +229,21 @@ const GenerateSchedulePage = () => {
               <div className="font-semibold">Derslik</div>
               <div className="font-semibold">İşlem</div>
             </div>
-            {Array.isArray(generatedSchedule.schedule) && generatedSchedule.schedule.length > 0
-              ? generatedSchedule.schedule.map((item) => (
-                  <div key={item.id} className="grid grid-cols-5 gap-4 p-3 bg-slate-700/50 rounded">
-                    <div>{item.section?.course?.code}</div>
-                    <div>{item.day_of_week}</div>
-                    <div>
-                      {item.start_time} - {item.end_time}
-                    </div>
-                    <div>{item.classroom?.building} {item.classroom?.room_number}</div>
-                    <div>
-                      <Button size="sm" variant="secondary">
-                        Kaydet
-                      </Button>
-                    </div>
-                  </div>
-                ))
-              : <div className="text-center py-8 text-slate-400">Program oluşturulmadı</div>}
+            {generatedSchedule.schedule?.map((item) => (
+              <div key={item.id} className="grid grid-cols-5 gap-4 p-3 bg-slate-700/50 rounded">
+                <div>{item.section?.course?.code}</div>
+                <div>{item.day_of_week}</div>
+                <div>
+                  {item.start_time} - {item.end_time}
+                </div>
+                <div>{item.classroom?.building} {item.classroom?.room_number}</div>
+                <div>
+                  <Button size="sm" variant="secondary">
+                    Kaydet
+                  </Button>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       )}
