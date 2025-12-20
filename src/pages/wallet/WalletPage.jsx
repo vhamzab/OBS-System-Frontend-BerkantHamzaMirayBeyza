@@ -175,7 +175,7 @@ const WalletPage = () => {
               <div>
                 <h2 className="text-slate-300 text-sm mb-1">Toplam Bakiye</h2>
                 <p className="text-4xl font-bold text-white">
-                  {formatAmount(balance?.balance)} {balance?.currency || 'TRY'}
+                  {formatAmount(balance?.balance)} ₺
                 </p>
               </div>
               <div className="w-20 h-20 rounded-full bg-white/20 flex items-center justify-center">
@@ -240,10 +240,10 @@ const WalletPage = () => {
                               }`}
                             >
                               {transactionType === 'credit' ? '+' : '-'}
-                              {amount} TRY
+                              {amount} ₺
                             </div>
                             <div className="text-xs text-slate-400">
-                              Bakiye: {balanceAfter} TRY
+                              Bakiye: {balanceAfter} ₺
                             </div>
                           </div>
                         </div>
