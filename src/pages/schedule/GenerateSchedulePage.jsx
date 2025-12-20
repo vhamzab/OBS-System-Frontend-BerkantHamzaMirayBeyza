@@ -29,14 +29,23 @@ const GenerateSchedulePage = () => {
       ]);
 
       if (sectionsRes.success) {
-        setSections(sectionsRes.data || []);
+        const sectionsData = sectionsRes.data;
+        setSections(Array.isArray(sectionsData) ? sectionsData : []);
+      } else {
+        setSections([]);
       }
+      
       if (classroomsRes.success) {
-        setClassrooms(classroomsRes.data || []);
+        const classroomsData = classroomsRes.data;
+        setClassrooms(Array.isArray(classroomsData) ? classroomsData : []);
+      } else {
+        setClassrooms([]);
       }
     } catch (error) {
       toast.error('Veriler yüklenirken hata oluştu');
       console.error(error);
+      setSections([]);
+      setClassrooms([]);
     } finally {
       setLoading(false);
     }
@@ -56,8 +65,9 @@ const GenerateSchedulePage = () => {
     try {
       setGenerating(true);
       const constraints = {
-        sections: selectedSections.map((id) => {
-          const section = sections.find((s) => s.id === id);
+        sections: Array.isArray(selectedSections) ? selectedSections.map((id) => {
+          const section = Array.isArray(sections) ? sections.find((s) => s.id === id) : null;
+          if (!section) return null;
           return {
             id: section.id,
             course_id: section.course_id,
@@ -65,12 +75,12 @@ const GenerateSchedulePage = () => {
             capacity: section.capacity || section.enrolled_count || 30,
             course_requirements: section.course?.requirements || {},
           };
-        }),
-        classrooms: classrooms.map((c) => ({
+        }).filter(s => s !== null) : [],
+        classrooms: Array.isArray(classrooms) ? classrooms.map((c) => ({
           id: c.id,
-          capacity: c.capacity,
-          features: c.features_json || {},
-        })),
+          capacity: c.capacity || 30,
+          features: c.features || c.features_json || {},
+        })) : [],
         timeSlots: [
           { day_of_week: 'monday', start_time: '09:00', end_time: '17:00' },
           { day_of_week: 'tuesday', start_time: '09:00', end_time: '17:00' },
@@ -158,8 +168,9 @@ const GenerateSchedulePage = () => {
                 Seçilen Section'lar ({selectedSections.length})
               </h3>
               <div className="space-y-2">
-                {selectedSections.map((id) => {
-                  const section = sections.find((s) => s.id === id);
+                {Array.isArray(selectedSections) ? selectedSections.map((id) => {
+                  const section = Array.isArray(sections) ? sections.find((s) => s.id === id) : null;
+                  if (!section) return null;
                   return (
                     <div
                       key={id}
@@ -176,7 +187,7 @@ const GenerateSchedulePage = () => {
                       </button>
                     </div>
                   );
-                })}
+                }).filter(item => item !== null) : null}
               </div>
             </div>
           )}
@@ -187,7 +198,7 @@ const GenerateSchedulePage = () => {
           <div className="card">
             <h2 className="text-xl font-bold mb-4">Section'ları Seçin</h2>
             <div className="space-y-2 max-h-[600px] overflow-y-auto">
-              {sections.map((section) => (
+              {Array.isArray(sections) && sections.length > 0 ? sections.map((section) => (
                 <div
                   key={section.id}
                   className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
@@ -211,7 +222,11 @@ const GenerateSchedulePage = () => {
                     )}
                   </div>
                 </div>
-              ))}
+              )) : (
+                <div className="text-center py-8 text-slate-400">
+                  Henüz section bulunamadı
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -229,7 +244,7 @@ const GenerateSchedulePage = () => {
               <div className="font-semibold">Derslik</div>
               <div className="font-semibold">İşlem</div>
             </div>
-            {generatedSchedule.schedule?.map((item) => (
+            {Array.isArray(generatedSchedule.schedule) && generatedSchedule.schedule.length > 0 ? generatedSchedule.schedule.map((item) => (
               <div key={item.id} className="grid grid-cols-5 gap-4 p-3 bg-slate-700/50 rounded">
                 <div>{item.section?.course?.code}</div>
                 <div>{item.day_of_week}</div>
@@ -243,7 +258,11 @@ const GenerateSchedulePage = () => {
                   </Button>
                 </div>
               </div>
-            ))}
+            )) : (
+              <div className="text-center py-8 text-slate-400">
+                Program oluşturulmadı
+              </div>
+            )}
           </div>
         </div>
       )}
