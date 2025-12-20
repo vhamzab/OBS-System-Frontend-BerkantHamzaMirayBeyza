@@ -47,25 +47,36 @@ const AdminMenuPage = () => {
       }
       if (cafeteriasRes.success) {
         const cafeteriasData = cafeteriasRes.data || [];
-        setCafeterias(cafeteriasData);
         
         // Eğer kafeterya yoksa otomatik olarak seed yap
         if (Array.isArray(cafeteriasData) && cafeteriasData.length === 0) {
           try {
+            console.log('No cafeterias found, seeding...');
             const seedRes = await mealService.seedCafeterias();
             if (seedRes.success) {
               // Seed'den sonra tekrar cafeterias'ları getir
               const newCafeteriasRes = await mealService.getCafeterias();
               if (newCafeteriasRes.success) {
-                setCafeterias(newCafeteriasRes.data || []);
+                const newCafeteriasData = newCafeteriasRes.data || [];
+                setCafeterias(newCafeteriasData);
+                console.log('Cafeterias seeded:', newCafeteriasData);
                 toast.success('Kafeteryalar otomatik olarak oluşturuldu');
               }
+            } else {
+              console.error('Seed failed:', seedRes);
+              setCafeterias([]);
             }
           } catch (seedError) {
             console.error('Seed cafeterias error:', seedError);
-            // Seed hatası kritik değil, sessizce devam et
+            toast.error('Kafeteryalar yüklenirken hata oluştu');
+            setCafeterias([]);
           }
+        } else {
+          setCafeterias(cafeteriasData);
+          console.log('Cafeterias loaded:', cafeteriasData);
         }
+      } else {
+        setCafeterias([]);
       }
     } catch (error) {
       toast.error('Veriler yüklenirken hata oluştu');
@@ -146,6 +157,18 @@ const AdminMenuPage = () => {
     // Validate cafeteria_id is a valid UUID (not empty string)
     if (!formData.cafeteria_id || formData.cafeteria_id.trim() === '') {
       toast.error('Geçerli bir kafeterya seçmelisiniz');
+      return;
+    }
+
+    // Check if selected cafeteria exists in the list
+    const selectedCafeteria = cafeterias.find(c => c.id === formData.cafeteria_id);
+    if (!selectedCafeteria) {
+      toast.error('Seçilen kafeterya bulunamadı. Lütfen sayfayı yenileyin ve tekrar deneyin.');
+      // Refresh cafeterias
+      const refreshRes = await mealService.getCafeterias();
+      if (refreshRes.success) {
+        setCafeterias(refreshRes.data || []);
+      }
       return;
     }
 
