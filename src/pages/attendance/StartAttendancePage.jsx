@@ -21,7 +21,7 @@ const StartAttendancePage = () => {
   const [activeSession, setActiveSession] = useState(null);
   const [attendanceCount, setAttendanceCount] = useState(0);
   const [qrCode, setQrCode] = useState('');
-  const [qrCountdown, setQrCountdown] = useState(300); // 5 minutes = 300 seconds
+  const [qrCountdown, setQrCountdown] = useState(15);
   const [qrRefreshing, setQrRefreshing] = useState(false);
 
   useEffect(() => {
@@ -49,7 +49,7 @@ const StartAttendancePage = () => {
     }
   };
 
-  // QR Code auto-refresh every 5 minutes
+  // QR Code auto-refresh every 15 seconds
   useEffect(() => {
     let qrInterval;
     let countdownInterval;
@@ -57,33 +57,33 @@ const StartAttendancePage = () => {
     if (activeSession) {
       // Set initial QR code
       setQrCode(activeSession.qrCode || '');
-      setQrCountdown(300); // 5 minutes = 300 seconds
+      setQrCountdown(15);
 
       // Countdown timer
       countdownInterval = setInterval(() => {
         setQrCountdown(prev => {
           if (prev <= 1) {
-            return 300; // Reset countdown to 5 minutes
+            return 15; // Reset countdown
           }
           return prev - 1;
         });
       }, 1000);
 
-      // QR code refresh every 5 minutes
+      // QR code refresh every 15 seconds
       qrInterval = setInterval(async () => {
         try {
           setQrRefreshing(true);
           const response = await attendanceService.regenerateQRCode(activeSession.id);
           if (response.success) {
             setQrCode(response.data.qr_code);
-            setQrCountdown(300); // 5 minutes = 300 seconds
+            setQrCountdown(15);
           }
         } catch (error) {
           console.error('QR regeneration error:', error);
         } finally {
           setQrRefreshing(false);
         }
-      }, 300000); // 5 minutes = 300000 ms
+      }, 15000);
     }
 
     return () => {
@@ -268,12 +268,12 @@ const StartAttendancePage = () => {
               <div className="w-20 h-2.5 bg-slate-300 dark:bg-slate-700 rounded-full overflow-hidden shadow-inner">
                 <div
                   className="h-full bg-gradient-to-r from-primary-500 to-primary-600 transition-all duration-1000 shadow-sm"
-                  style={{ width: `${Math.min((qrCountdown / 300) * 100, 100)}%` }}
+                  style={{ width: `${Math.min((qrCountdown / 15) * 100, 100)}%` }}
                 />
               </div>
             </div>
             <p className="text-sm text-slate-600 dark:text-slate-300 mt-3 font-medium">
-              QR kod her 5 dakikada otomatik yenilenir. Öğrenciler güncel kodu taramalıdır.
+              QR kod her 15 saniyede otomatik yenilenir. Öğrenciler güncel kodu taramalıdır.
             </p>
           </div>
         </div>

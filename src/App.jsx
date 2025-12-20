@@ -57,8 +57,6 @@ import MenuPage from './pages/meals/MenuPage';
 import ReservationsPage from './pages/meals/ReservationsPage';
 import ScanPage from './pages/meals/ScanPage';
 
-// Wallet Pages
-import WalletPage from './pages/wallet/WalletPage';
 
 // Event Pages
 import EventsPage from './pages/events/EventsPage';
@@ -278,15 +276,6 @@ function App() {
           }
         />
 
-        {/* Wallet Routes */}
-        <Route
-          path="/wallet"
-          element={
-            <ProtectedRoute>
-              <WalletPage />
-            </ProtectedRoute>
-          }
-        />
 
         {/* Event Routes */}
         <Route

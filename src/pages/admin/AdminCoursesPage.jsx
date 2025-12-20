@@ -204,7 +204,7 @@ const AdminCoursesPage = () => {
                     <div className="text-sm text-slate-400">Matematik</div>
                 </div>
                 <div className="card text-center py-4">
-                    <div className="text-2xl font-bold text-purple-400">
+                    <div className="text-2xl font-bold text-accent-400">
                         {courses.filter(c => c.credits >= 4).length}
                     </div>
                     <div className="text-sm text-slate-400">4+ Kredi Ders</div>

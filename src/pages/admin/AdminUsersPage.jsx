@@ -82,7 +82,7 @@ const AdminUsersPage = () => {
             case 'admin':
                 return 'bg-red-500/20 text-red-400';
             case 'faculty':
-                return 'bg-purple-500/20 text-purple-400';
+                return 'bg-blue-500/20 text-blue-400';
             case 'student':
                 return 'bg-blue-500/20 text-blue-400';
             default:
@@ -167,7 +167,7 @@ const AdminUsersPage = () => {
                     <div className="text-sm text-slate-400">Öğrenci</div>
                 </div>
                 <div className="card text-center py-4">
-                    <div className="text-2xl font-bold text-purple-400">
+                    <div className="text-2xl font-bold text-blue-400">
                         {users.filter(u => u.role === 'faculty').length}
                     </div>
                     <div className="text-sm text-slate-400">Öğretim Üyesi</div>

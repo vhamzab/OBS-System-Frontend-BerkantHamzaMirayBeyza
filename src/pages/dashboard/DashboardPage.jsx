@@ -46,21 +46,21 @@ const DashboardPage = () => {
     if (user?.role === 'student') {
       return [
         { label: 'Aktif Dersler', value: data.activeCourses?.toString() || '0', icon: FiBook, color: 'from-blue-500 to-cyan-500' },
-        { label: 'Bugünkü Dersler', value: data.todayCourses?.toString() || '0', icon: FiCalendar, color: 'from-purple-500 to-pink-500' },
+        { label: 'Bugünkü Dersler', value: data.todayCourses?.toString() || '0', icon: FiCalendar, color: 'from-blue-500 to-accent-500' },
         { label: 'Genel Not Ort.', value: data.gpa || '0.00', icon: FiClipboard, color: 'from-green-500 to-emerald-500' },
         { label: 'Duyurular', value: data.notifications?.toString() || '0', icon: FiBell, color: 'from-orange-500 to-red-500' },
       ];
     } else if (user?.role === 'faculty') {
       return [
         { label: 'Verdiğim Dersler', value: data.teachingCourses?.toString() || '0', icon: FiBook, color: 'from-blue-500 to-cyan-500' },
-        { label: 'Toplam Öğrenci', value: data.totalStudents?.toString() || '0', icon: FiUsers, color: 'from-purple-500 to-pink-500' },
+        { label: 'Toplam Öğrenci', value: data.totalStudents?.toString() || '0', icon: FiUsers, color: 'from-blue-500 to-accent-500' },
         { label: 'Bugünkü Dersler', value: data.todayCourses?.toString() || '0', icon: FiCalendar, color: 'from-green-500 to-emerald-500' },
         { label: 'Aktif Yoklamalar', value: data.activeSessions?.toString() || '0', icon: FiCheckSquare, color: 'from-orange-500 to-red-500' },
       ];
     } else if (user?.role === 'admin') {
       return [
         { label: 'Toplam Kullanıcı', value: data.totalUsers?.toString() || '0', icon: FiUsers, color: 'from-blue-500 to-cyan-500' },
-        { label: 'Aktif Öğrenci', value: data.activeStudents?.toString() || '0', icon: FiTrendingUp, color: 'from-purple-500 to-pink-500' },
+        { label: 'Aktif Öğrenci', value: data.activeStudents?.toString() || '0', icon: FiTrendingUp, color: 'from-blue-500 to-accent-500' },
         { label: 'Öğretim Üyesi', value: data.facultyCount?.toString() || '0', icon: FiBook, color: 'from-green-500 to-emerald-500' },
         { label: 'Bölümler', value: data.departmentsCount?.toString() || '0', icon: FiCalendar, color: 'from-orange-500 to-red-500' },
       ];
@@ -72,21 +72,21 @@ const DashboardPage = () => {
     if (user?.role === 'student') {
       return [
         { label: 'Aktif Dersler', value: '-', icon: FiBook, color: 'from-blue-500 to-cyan-500' },
-        { label: 'Bugünkü Dersler', value: '-', icon: FiCalendar, color: 'from-purple-500 to-pink-500' },
+        { label: 'Bugünkü Dersler', value: '-', icon: FiCalendar, color: 'from-blue-500 to-accent-500' },
         { label: 'Genel Not Ort.', value: '-', icon: FiClipboard, color: 'from-green-500 to-emerald-500' },
         { label: 'Duyurular', value: '-', icon: FiBell, color: 'from-orange-500 to-red-500' },
       ];
     } else if (user?.role === 'faculty') {
       return [
         { label: 'Verdiğim Dersler', value: '-', icon: FiBook, color: 'from-blue-500 to-cyan-500' },
-        { label: 'Toplam Öğrenci', value: '-', icon: FiUsers, color: 'from-purple-500 to-pink-500' },
+        { label: 'Toplam Öğrenci', value: '-', icon: FiUsers, color: 'from-blue-500 to-accent-500' },
         { label: 'Bugünkü Dersler', value: '-', icon: FiCalendar, color: 'from-green-500 to-emerald-500' },
         { label: 'Aktif Yoklamalar', value: '-', icon: FiCheckSquare, color: 'from-orange-500 to-red-500' },
       ];
     }
     return [
       { label: 'Toplam Kullanıcı', value: '-', icon: FiUsers, color: 'from-blue-500 to-cyan-500' },
-      { label: 'Aktif Öğrenci', value: '-', icon: FiTrendingUp, color: 'from-purple-500 to-pink-500' },
+      { label: 'Aktif Öğrenci', value: '-', icon: FiTrendingUp, color: 'from-blue-500 to-accent-500' },
       { label: 'Öğretim Üyesi', value: '-', icon: FiBook, color: 'from-green-500 to-emerald-500' },
       { label: 'Bölümler', value: '-', icon: FiCalendar, color: 'from-orange-500 to-red-500' },
     ];
@@ -203,7 +203,7 @@ const DashboardPage = () => {
                   onClick={() => navigate('/schedule')}
                   className="p-4 rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-200 transition-colors text-left"
                 >
-                  <FiCalendar className="w-5 h-5 text-purple-500 mb-2" />
+                  <FiCalendar className="w-5 h-5 text-blue-500 mb-2" />
                   <span className="block text-sm font-medium text-gray-700">Ders Programı</span>
                 </button>
                 <button
@@ -250,7 +250,7 @@ const DashboardPage = () => {
                   disabled={loadingGradeEntry}
                   className="p-4 rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-200 transition-colors text-left disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <FiClipboard className="w-5 h-5 text-purple-500 mb-2" />
+                  <FiClipboard className="w-5 h-5 text-blue-500 mb-2" />
                   <span className="block text-sm font-medium text-gray-700">Not Girişi</span>
                 </button>
                 <button
@@ -296,7 +296,7 @@ const DashboardPage = () => {
                   onClick={() => navigate('/admin/courses')}
                   className="p-4 rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-200 transition-colors text-left"
                 >
-                  <FiBook className="w-5 h-5 text-purple-500 mb-2" />
+                  <FiBook className="w-5 h-5 text-accent-500 mb-2" />
                   <span className="block text-sm font-medium text-gray-700">Ders Yönetimi</span>
                 </button>
                 <button

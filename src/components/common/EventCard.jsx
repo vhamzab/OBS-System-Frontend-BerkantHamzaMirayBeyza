@@ -22,7 +22,7 @@ const EventCard = ({ event }) => {
   const getCategoryColor = (category) => {
     const colors = {
       conference: 'bg-blue-100 text-blue-800',
-      workshop: 'bg-purple-100 text-purple-800',
+      workshop: 'bg-accent-100 text-accent-800',
       social: 'bg-green-100 text-green-800',
       sports: 'bg-orange-100 text-orange-800',
       default: 'bg-slate-100 text-slate-800',

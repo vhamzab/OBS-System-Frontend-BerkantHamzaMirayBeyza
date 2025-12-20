@@ -40,7 +40,7 @@ export default {
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'mesh-gradient': 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        'mesh-gradient': 'linear-gradient(135deg, #3b82f6 0%, #16a34a 100%)', // Blue to Green - Official institution theme
       },
       animation: {
         'float': 'float 6s ease-in-out infinite',

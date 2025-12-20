@@ -35,7 +35,6 @@ const Sidebar = ({ isOpen, onClose }) => {
     { to: '/my-excuse-requests', icon: FiFileText, label: 'Mazeretlerim' },
     { to: '/meals/menu', icon: FiCoffee, label: 'Yemek Menüsü' },
     { to: '/meals/reservations', icon: FiCoffee, label: 'Rezervasyonlarım' },
-    { to: '/wallet', icon: FiUser, label: 'Cüzdan' },
     { to: '/events', icon: FiCalendar, label: 'Etkinlikler' },
     { to: '/my-events', icon: FiCalendar, label: 'Etkinliklerim' },
   ];
@@ -51,7 +50,6 @@ const Sidebar = ({ isOpen, onClose }) => {
     { to: '/excuse-requests', icon: FiFileText, label: 'Mazeret Talepleri' },
     { to: '/meals/menu', icon: FiCoffee, label: 'Yemek Menüsü' },
     { to: '/meals/reservations', icon: FiCoffee, label: 'Rezervasyonlarım' },
-    { to: '/wallet', icon: FiUser, label: 'Cüzdan' },
     { to: '/events', icon: FiCalendar, label: 'Etkinlikler' },
     { to: '/my-events', icon: FiCalendar, label: 'Etkinliklerim' },
   ];
@@ -69,7 +67,6 @@ const Sidebar = ({ isOpen, onClose }) => {
     { to: '/meals/menu', icon: FiCoffee, label: 'Yemek Menüsü' },
     { to: '/meals/reservations', icon: FiCoffee, label: 'Rezervasyonlarım' },
     { to: '/meals/scan', icon: FiCoffee, label: 'QR Tarama' },
-    { to: '/wallet', icon: FiUser, label: 'Cüzdan' },
     { to: '/events', icon: FiCalendar, label: 'Etkinlikler' },
     { to: '/my-events', icon: FiCalendar, label: 'Etkinliklerim' },
     { to: '/admin/scheduling/generate', icon: FiCalendar, label: 'Program Oluştur' },
@@ -110,7 +107,7 @@ const Sidebar = ({ isOpen, onClose }) => {
         `}
       >
         {/* Sticky Header with Logo */}
-        <div className="sticky top-0 z-10 bg-gradient-to-r from-primary-50/50 to-purple-50/50 border-b-2 border-gray-300 p-4 backdrop-blur-sm">
+        <div className="sticky top-0 z-10 bg-gradient-to-r from-primary-50/60 to-accent-50/50 border-b-2 border-gray-200 p-4 backdrop-blur-sm">
           <Link to="/dashboard" className="flex items-center gap-3" onClick={onClose}>
             <img 
               src="/logo2.png" 
@@ -146,7 +143,7 @@ const Sidebar = ({ isOpen, onClose }) => {
         </nav>
 
         {/* User Role Badge - Sticky at bottom */}
-        <div className="sticky bottom-0 bg-gradient-to-r from-primary-50/50 to-purple-50/50 border-t-2 border-gray-300 p-4 backdrop-blur-sm">
+        <div className="sticky bottom-0 bg-gradient-to-r from-primary-50/60 to-accent-50/50 border-t-2 border-gray-200 p-4 backdrop-blur-sm">
           <div className="px-4 py-2 rounded-xl bg-white/80 border-2 border-gray-200 shadow-md">
             <div className="text-xs text-gray-500 mb-1">Rol</div>
             <div className="font-medium text-gray-800 capitalize">
