@@ -50,14 +50,34 @@ const WalletPage = () => {
         limit: pagination.limit,
       });
       if (response.success) {
-        setTransactions(response.data);
+        // Güvenli veri işleme - tüm transaction'ları normalize et
+        const data = response.data || [];
+        const normalizedTransactions = Array.isArray(data) 
+          ? data.map((tx) => {
+              if (!tx || typeof tx !== 'object') return null;
+              return {
+                id: tx.id || '',
+                type: tx.type || 'debit',
+                description: tx.description || 'İşlem',
+                created_at: tx.created_at || new Date().toISOString(),
+                amount: tx.amount != null ? (typeof tx.amount === 'number' ? tx.amount : parseFloat(tx.amount) || 0) : 0,
+                balance_after: tx.balance_after != null ? (typeof tx.balance_after === 'number' ? tx.balance_after : parseFloat(tx.balance_after) || 0) : 0,
+                reference_type: tx.reference_type || null,
+                reference_id: tx.reference_id || null,
+              };
+            }).filter(tx => tx !== null)
+          : [];
+        setTransactions(normalizedTransactions);
         if (response.pagination) {
           setPagination(response.pagination);
         }
+      } else {
+        setTransactions([]);
       }
     } catch (error) {
       toast.error('İşlem geçmişi yüklenirken hata oluştu');
-      console.error(error);
+      console.error('Transaction fetch error:', error);
+      setTransactions([]);
     } finally {
       setTransactionsLoading(false);
       setLoading(false);
@@ -115,27 +135,40 @@ const WalletPage = () => {
   };
 
   const formatAmount = (value) => {
-    if (value == null || value === undefined || value === '') {
+    try {
+      if (value == null || value === undefined || value === '') {
+        return '0.00';
+      }
+      // String veya number kontrolü
+      if (typeof value !== 'string' && typeof value !== 'number') {
+        return '0.00';
+      }
+      const numValue = typeof value === 'string' ? parseFloat(value) : Number(value);
+      if (isNaN(numValue) || !isFinite(numValue)) {
+        return '0.00';
+      }
+      // toFixed güvenli kullanımı
+      if (typeof numValue.toFixed === 'function') {
+        return numValue.toFixed(2);
+      }
+      return '0.00';
+    } catch (error) {
+      console.error('formatAmount error:', error, value);
       return '0.00';
     }
-    const numValue = typeof value === 'string' ? parseFloat(value) : Number(value);
-    if (isNaN(numValue)) {
-      return '0.00';
-    }
-    return numValue.toFixed(2);
   };
 
   return (
     <div className="p-6 lg:p-8 max-w-7xl mx-auto">
-      <div className="mb-8">
-        <h1 className="font-display text-3xl font-bold mb-2">Cüzdan</h1>
-        <p className="text-slate-400">Bakiyenizi görüntüleyin ve para yükleyin</p>
-      </div>
+        <div className="mb-8">
+          <h1 className="font-display text-3xl font-bold mb-2">Cüzdan</h1>
+          <p className="text-slate-400">Bakiyenizi görüntüleyin ve para yükleyin</p>
+        </div>
 
-      {loading ? (
-        <LoadingSpinner />
-      ) : (
-        <div className="space-y-6">
+        {loading ? (
+          <LoadingSpinner />
+        ) : (
+          <div className="space-y-6">
           {/* Balance Card */}
           <div className="card bg-gradient-to-br from-blue-600 to-purple-600">
             <div className="flex items-center justify-between mb-6">
@@ -165,51 +198,61 @@ const WalletPage = () => {
 
             {transactionsLoading ? (
               <LoadingSpinner />
-            ) : transactions.length === 0 ? (
+            ) : !transactions || !Array.isArray(transactions) || transactions.length === 0 ? (
               <div className="text-center py-12">
                 <FiClock className="w-16 h-16 text-slate-400 mx-auto mb-4" />
                 <p className="text-slate-400">Henüz işlem geçmişiniz yok</p>
               </div>
             ) : (
               <div className="space-y-3">
-                {transactions && Array.isArray(transactions) && transactions.map((transaction) => {
-                  if (!transaction || !transaction.id) return null;
-                  return (
-                  <div
-                    key={transaction.id}
-                    className="flex items-center justify-between p-4 bg-slate-700/50 rounded-lg"
-                  >
-                    <div className="flex items-center gap-4 flex-1">
-                      <div className="p-2 bg-slate-600 rounded-lg">
-                        {getTransactionIcon(transaction.type)}
-                      </div>
-                      <div className="flex-1">
-                        <div className="font-semibold">{transaction.description || 'İşlem'}</div>
-                        <div className="text-sm text-slate-400">
-                          {formatDate(transaction.created_at)}
+                {transactions
+                  .filter((transaction) => transaction && transaction.id)
+                  .map((transaction) => {
+                    try {
+                      const amount = formatAmount(transaction?.amount || 0);
+                      const balanceAfter = formatAmount(transaction?.balance_after || 0);
+                      const transactionType = transaction?.type || 'debit';
+                      
+                      return (
+                        <div
+                          key={transaction.id}
+                          className="flex items-center justify-between p-4 bg-slate-700/50 rounded-lg"
+                        >
+                          <div className="flex items-center gap-4 flex-1">
+                            <div className="p-2 bg-slate-600 rounded-lg">
+                              {getTransactionIcon(transactionType)}
+                            </div>
+                            <div className="flex-1">
+                              <div className="font-semibold">{transaction.description || 'İşlem'}</div>
+                              <div className="text-sm text-slate-400">
+                                {formatDate(transaction.created_at)}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div
+                              className={`font-bold ${
+                                transactionType === 'credit'
+                                  ? 'text-green-400'
+                                  : transactionType === 'pending_debit'
+                                  ? 'text-yellow-400'
+                                  : 'text-red-400'
+                              }`}
+                            >
+                              {transactionType === 'credit' ? '+' : '-'}
+                              {amount} TRY
+                            </div>
+                            <div className="text-xs text-slate-400">
+                              Bakiye: {balanceAfter} TRY
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <div
-                        className={`font-bold ${
-                          transaction.type === 'credit'
-                            ? 'text-green-400'
-                            : transaction.type === 'pending_debit'
-                            ? 'text-yellow-400'
-                            : 'text-red-400'
-                        }`}
-                      >
-                        {transaction.type === 'credit' ? '+' : '-'}
-                        {formatAmount(Math.abs(transaction?.amount || 0))} TRY
-                      </div>
-                      <div className="text-xs text-slate-400">
-                        Bakiye: {formatAmount(transaction?.balance_after)} TRY
-                      </div>
-                    </div>
-                  </div>
-                  );
-                })}
+                      );
+                    } catch (error) {
+                      console.error('Transaction render error:', error, transaction);
+                      return null;
+                    }
+                  })}
               </div>
             )}
 
