@@ -143,13 +143,42 @@ const AdminMenuPage = () => {
       return;
     }
 
+    // Validate cafeteria_id is a valid UUID (not empty string)
+    if (!formData.cafeteria_id || formData.cafeteria_id.trim() === '') {
+      toast.error('Geçerli bir kafeterya seçmelisiniz');
+      return;
+    }
+
     setSaving(true);
     try {
+      // Clean nutrition_json - remove empty strings
+      const cleanedNutrition = {};
+      if (formData.nutrition_json.calories && formData.nutrition_json.calories !== '') {
+        cleanedNutrition.calories = formData.nutrition_json.calories;
+      }
+      if (formData.nutrition_json.protein && formData.nutrition_json.protein !== '') {
+        cleanedNutrition.protein = formData.nutrition_json.protein;
+      }
+      if (formData.nutrition_json.carbs && formData.nutrition_json.carbs !== '') {
+        cleanedNutrition.carbs = formData.nutrition_json.carbs;
+      }
+      if (formData.nutrition_json.fat && formData.nutrition_json.fat !== '') {
+        cleanedNutrition.fat = formData.nutrition_json.fat;
+      }
+
+      const cleanedFormData = {
+        ...formData,
+        nutrition_json: Object.keys(cleanedNutrition).length > 0 ? cleanedNutrition : {},
+        price: formData.price || 0,
+      };
+
+      console.log('Creating menu with data:', cleanedFormData);
+
       let response;
       if (editingMenu) {
-        response = await mealService.updateMenu(editingMenu.id, formData);
+        response = await mealService.updateMenu(editingMenu.id, cleanedFormData);
       } else {
-        response = await mealService.createMenu(formData);
+        response = await mealService.createMenu(cleanedFormData);
       }
 
       if (response.success) {
