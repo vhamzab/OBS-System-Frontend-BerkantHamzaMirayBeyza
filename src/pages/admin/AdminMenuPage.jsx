@@ -87,11 +87,29 @@ const AdminMenuPage = () => {
   };
 
   const handleOpenModal = (menu = null) => {
+    // Reset form data first
+    const resetFormData = {
+      cafeteria_id: '',
+      date: selectedDate,
+      meal_type: 'lunch',
+      items_json: [],
+      nutrition_json: {
+        calories: '',
+        protein: '',
+        carbs: '',
+        fat: '',
+      },
+      price: 0,
+      is_published: false,
+    };
+
     if (menu) {
       setEditingMenu(menu);
+      // Ensure we use the actual UUID from the menu
       setFormData({
-        cafeteria_id: menu.cafeteria_id,
-        date: menu.date,
+        ...resetFormData,
+        cafeteria_id: menu.cafeteria_id || '',
+        date: menu.date || selectedDate,
         meal_type: menu.meal_type === 'breakfast' ? 'lunch' : (menu.meal_type === 'dinner' ? 'dinner' : 'lunch'),
         items_json: menu.items_json || [],
         nutrition_json: menu.nutrition_json || {
@@ -105,20 +123,7 @@ const AdminMenuPage = () => {
       });
     } else {
       setEditingMenu(null);
-      setFormData({
-        cafeteria_id: '',
-        date: selectedDate,
-        meal_type: 'lunch',
-        items_json: [],
-        nutrition_json: {
-          calories: '',
-          protein: '',
-          carbs: '',
-          fat: '',
-        },
-        price: 0,
-        is_published: false,
-      });
+      setFormData(resetFormData);
     }
     setShowModal(true);
   };
@@ -160,6 +165,15 @@ const AdminMenuPage = () => {
       return;
     }
 
+    // Validate cafeteria_id is a UUID format (not a string like "kuzey_kampüs")
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    if (!uuidRegex.test(formData.cafeteria_id)) {
+      toast.error('Geçersiz kafeterya seçimi. Lütfen dropdown\'dan bir kafeterya seçin.');
+      // Reset cafeteria_id
+      setFormData({ ...formData, cafeteria_id: '' });
+      return;
+    }
+
     // Check if selected cafeteria exists in the list
     const selectedCafeteria = cafeterias.find(c => c.id === formData.cafeteria_id);
     if (!selectedCafeteria) {
@@ -169,6 +183,8 @@ const AdminMenuPage = () => {
       if (refreshRes.success) {
         setCafeterias(refreshRes.data || []);
       }
+      // Reset cafeteria_id
+      setFormData({ ...formData, cafeteria_id: '' });
       return;
     }
 
@@ -358,23 +374,45 @@ const AdminMenuPage = () => {
                   <label className="block text-sm font-medium mb-2 text-white">Kafeterya *</label>
                   <select
                     value={formData.cafeteria_id}
-                    onChange={(e) => setFormData({ ...formData, cafeteria_id: e.target.value })}
+                    onChange={(e) => {
+                      const selectedId = e.target.value;
+                      console.log('Cafeteria selected:', selectedId);
+                      // Validate it's a UUID before setting
+                      const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+                      if (selectedId === '' || uuidRegex.test(selectedId)) {
+                        setFormData({ ...formData, cafeteria_id: selectedId });
+                      } else {
+                        console.error('Invalid cafeteria ID format:', selectedId);
+                        toast.error('Geçersiz kafeterya seçimi');
+                      }
+                    }}
                     className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-white"
                     required
+                    disabled={!Array.isArray(cafeterias) || cafeterias.length === 0}
                   >
-                    <option value="">Seçiniz</option>
+                    <option value="">
+                      {Array.isArray(cafeterias) && cafeterias.length > 0 ? 'Seçiniz' : 'Kafeteryalar yükleniyor...'}
+                    </option>
                     {Array.isArray(cafeterias) && cafeterias.length > 0 ? (
-                      cafeterias.map((cafeteria) => (
-                        <option key={cafeteria.id} value={cafeteria.id}>
-                          {cafeteria.name}
-                        </option>
-                      ))
-                    ) : (
-                      <option value="" disabled>
-                        Kafeterya bulunamadı
-                      </option>
-                    )}
+                      cafeterias.map((cafeteria) => {
+                        // Double check that we're using the UUID, not the name
+                        if (!cafeteria.id || typeof cafeteria.id !== 'string') {
+                          console.error('Invalid cafeteria object:', cafeteria);
+                          return null;
+                        }
+                        return (
+                          <option key={cafeteria.id} value={cafeteria.id}>
+                            {cafeteria.name}
+                          </option>
+                        );
+                      })
+                    ) : null}
                   </select>
+                  {(!Array.isArray(cafeterias) || cafeterias.length === 0) && (
+                    <p className="text-xs text-yellow-400 mt-1">
+                      Kafeteryalar yükleniyor veya bulunamadı. Lütfen bekleyin...
+                    </p>
+                  )}
                 </div>
 
                 <div>
