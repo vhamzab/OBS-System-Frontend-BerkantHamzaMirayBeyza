@@ -196,6 +196,8 @@ const AdminMenuPage = () => {
       };
 
       console.log('Creating menu with data:', cleanedFormData);
+      console.log('Cafeterias available:', cafeterias);
+      console.log('Selected cafeteria:', selectedCafeteria);
 
       let response;
       if (editingMenu) {
