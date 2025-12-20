@@ -64,13 +64,12 @@ const WalletPage = () => {
       setTopupLoading(true);
       const response = await walletService.createTopup(amount);
       if (response.success) {
-        // Redirect to payment gateway
-        if (response.data.paymentUrl) {
-          window.location.href = response.data.paymentUrl;
-        } else {
-          toast.success('Ödeme oturumu oluşturuldu');
-          setShowTopupModal(false);
-        }
+        // Test modu: Direkt ödeme başarılı
+        toast.success('Ödemeniz başarıyla gerçekleşti');
+        setShowTopupModal(false);
+        // Bakiye ve işlem geçmişini yenile
+        await fetchBalance();
+        await fetchTransactions();
       }
     } catch (error) {
       toast.error(error.response?.data?.message || 'Para yükleme başarısız');
@@ -218,9 +217,9 @@ const WalletPage = () => {
 
       {/* Top-up Modal */}
       {showTopupModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 p-4">
-          <div className="bg-slate-800 rounded-2xl p-6 max-w-md w-full">
-            <h3 className="text-xl font-bold mb-4">Para Yükle</h3>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
+          <div className="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl border border-gray-200">
+            <h3 className="text-xl font-bold mb-4 text-gray-800">Para Yükle</h3>
             <PaymentForm
               onSubmit={handleTopup}
               onCancel={() => setShowTopupModal(false)}
