@@ -100,13 +100,29 @@ const WalletPage = () => {
   };
 
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('tr-TR', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
+    if (!dateString) return '-';
+    try {
+      return new Date(dateString).toLocaleDateString('tr-TR', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      });
+    } catch (error) {
+      return '-';
+    }
+  };
+
+  const formatAmount = (value) => {
+    if (value == null || value === undefined || value === '') {
+      return '0.00';
+    }
+    const numValue = typeof value === 'string' ? parseFloat(value) : Number(value);
+    if (isNaN(numValue)) {
+      return '0.00';
+    }
+    return numValue.toFixed(2);
   };
 
   return (
@@ -126,7 +142,7 @@ const WalletPage = () => {
               <div>
                 <h2 className="text-slate-300 text-sm mb-1">Toplam Bakiye</h2>
                 <p className="text-4xl font-bold text-white">
-                  {balance?.balance != null ? parseFloat(balance.balance).toFixed(2) : '0.00'} {balance?.currency || 'TRY'}
+                  {formatAmount(balance?.balance)} {balance?.currency || 'TRY'}
                 </p>
               </div>
               <div className="w-20 h-20 rounded-full bg-white/20 flex items-center justify-center">
@@ -156,7 +172,9 @@ const WalletPage = () => {
               </div>
             ) : (
               <div className="space-y-3">
-                {transactions.map((transaction) => (
+                {transactions && Array.isArray(transactions) && transactions.map((transaction) => {
+                  if (!transaction || !transaction.id) return null;
+                  return (
                   <div
                     key={transaction.id}
                     className="flex items-center justify-between p-4 bg-slate-700/50 rounded-lg"
@@ -166,7 +184,7 @@ const WalletPage = () => {
                         {getTransactionIcon(transaction.type)}
                       </div>
                       <div className="flex-1">
-                        <div className="font-semibold">{transaction.description}</div>
+                        <div className="font-semibold">{transaction.description || 'İşlem'}</div>
                         <div className="text-sm text-slate-400">
                           {formatDate(transaction.created_at)}
                         </div>
@@ -183,14 +201,15 @@ const WalletPage = () => {
                         }`}
                       >
                         {transaction.type === 'credit' ? '+' : '-'}
-                        {transaction.amount != null ? Math.abs(parseFloat(transaction.amount)).toFixed(2) : '0.00'} TRY
+                        {formatAmount(Math.abs(transaction?.amount || 0))} TRY
                       </div>
                       <div className="text-xs text-slate-400">
-                        Bakiye: {transaction.balance_after != null ? parseFloat(transaction.balance_after).toFixed(2) : '0.00'} TRY
+                        Bakiye: {formatAmount(transaction?.balance_after)} TRY
                       </div>
                     </div>
                   </div>
-                ))}
+                  );
+                })}
               </div>
             )}
 
