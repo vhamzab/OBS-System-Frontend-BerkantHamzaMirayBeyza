@@ -25,7 +25,7 @@ const PaymentForm = ({ onSubmit, onCancel, minAmount = 50, loading = false }) =>
       <div>
         <label className="block text-sm font-bold text-gray-900 mb-3 flex items-center gap-2">
           <span className="w-1 h-4 bg-gradient-to-b from-primary-500 to-accent-500 rounded-full"></span>
-          Tutar (TRY)
+          Tutar (₺)
         </label>
         <div className="relative group">
           <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-primary-600 group-focus-within:text-primary-700 transition-colors">
@@ -37,7 +37,7 @@ const PaymentForm = ({ onSubmit, onCancel, minAmount = 50, loading = false }) =>
             onChange={(e) => setAmount(e.target.value)}
             min={minAmount}
             step="0.01"
-            placeholder={`Minimum ${minAmount} TRY`}
+            placeholder={`Minimum ${minAmount} ₺`}
             className="w-full pl-12 pr-4 py-4 bg-white/90 backdrop-blur-sm border-2 border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 font-medium focus:outline-none focus:ring-4 focus:ring-primary-500/20 focus:border-primary-500 transition-all shadow-sm hover:border-gray-300"
             required
           />
@@ -45,7 +45,7 @@ const PaymentForm = ({ onSubmit, onCancel, minAmount = 50, loading = false }) =>
         <div className="mt-3 flex items-center gap-2 px-3 py-2 bg-blue-50/50 rounded-lg border border-blue-100">
           <span className="text-xs font-semibold text-blue-700">ℹ️</span>
           <p className="text-xs text-blue-700 font-medium">
-            Minimum yükleme tutarı: <span className="font-bold">{minAmount} TRY</span>
+            Minimum yükleme tutarı: <span className="font-bold">{minAmount} ₺</span>
           </p>
         </div>
       </div>
