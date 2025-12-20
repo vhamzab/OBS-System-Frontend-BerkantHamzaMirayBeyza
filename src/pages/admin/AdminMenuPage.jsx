@@ -26,7 +26,6 @@ const AdminMenuPage = () => {
       fat: '',
     },
     price: 0,
-    meal_time: '12:00',
     is_published: false,
   });
   const [newItem, setNewItem] = useState('');
@@ -72,7 +71,6 @@ const AdminMenuPage = () => {
           fat: '',
         },
         price: menu.price || 0,
-        meal_time: menu.meal_time || '12:00',
         is_published: menu.is_published || false,
       });
     } else {
@@ -89,7 +87,6 @@ const AdminMenuPage = () => {
           fat: '',
         },
         price: 0,
-        meal_time: '12:00',
         is_published: false,
       });
     }
@@ -271,12 +268,12 @@ const AdminMenuPage = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 p-4">
           <div className="bg-slate-800 rounded-2xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-bold">
+              <h3 className="text-xl font-bold text-white">
                 {editingMenu ? 'Menü Düzenle' : 'Yeni Menü Oluştur'}
               </h3>
               <button
                 onClick={handleCloseModal}
-                className="text-slate-400 hover:text-white"
+                className="text-white hover:text-slate-300"
               >
                 <FiX className="w-6 h-6" />
               </button>
@@ -285,16 +282,20 @@ const AdminMenuPage = () => {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium mb-2">Kafeterya *</label>
+                  <label className="block text-sm font-medium mb-2 text-white">Kafeterya *</label>
                   <select
                     value={formData.cafeteria_id}
                     onChange={(e) => setFormData({ ...formData, cafeteria_id: e.target.value })}
-                    className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-white"
                     required
                   >
-                    <option value="">Seçiniz</option>
+                    <option value="" className="text-slate-400">Seçiniz</option>
+                    <option value="batı_kampüs" className="text-white">Batı Kampüs</option>
+                    <option value="doğu_kampüs" className="text-white">Doğu Kampüs</option>
+                    <option value="kuzey_kampüs" className="text-white">Kuzey Kampüs</option>
+                    <option value="güney_kampüs" className="text-white">Güney Kampüs</option>
                     {cafeterias.map((cafeteria) => (
-                      <option key={cafeteria.id} value={cafeteria.id}>
+                      <option key={cafeteria.id} value={cafeteria.id} className="text-white">
                         {cafeteria.name}
                       </option>
                     ))}
@@ -302,12 +303,12 @@ const AdminMenuPage = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2">Tarih *</label>
+                  <label className="block text-sm font-medium mb-2 text-white">Tarih *</label>
                   <input
                     type="date"
                     value={formData.date}
                     onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                    className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-white"
                     required
                   />
                 </div>
@@ -315,44 +316,33 @@ const AdminMenuPage = () => {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium mb-2">Öğün Tipi *</label>
+                  <label className="block text-sm font-medium mb-2 text-white">Ne zaman *</label>
                   <select
                     value={formData.meal_type}
                     onChange={(e) => setFormData({ ...formData, meal_type: e.target.value })}
-                    className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-white"
                     required
                   >
-                    <option value="breakfast">Kahvaltı</option>
-                    <option value="lunch">Öğle Yemeği</option>
-                    <option value="dinner">Akşam Yemeği</option>
+                    <option value="lunch" className="text-white">Öğle</option>
+                    <option value="dinner" className="text-white">Akşam</option>
                   </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2">Yemek Saati</label>
-                  <input
-                    type="time"
-                    value={formData.meal_time}
-                    onChange={(e) => setFormData({ ...formData, meal_time: e.target.value })}
-                    className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
-                  />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">Fiyat (TRY)</label>
+                <label className="block text-sm font-medium mb-2 text-white">Fiyat (₺)</label>
                 <input
                   type="number"
                   step="0.01"
                   min="0"
                   value={formData.price}
                   onChange={(e) => setFormData({ ...formData, price: parseFloat(e.target.value) || 0 })}
-                  className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-white"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">Yemekler</label>
+                <label className="block text-sm font-medium mb-2 text-white">Yemekler</label>
                 <div className="flex gap-2 mb-2">
                   <input
                     type="text"
@@ -365,7 +355,7 @@ const AdminMenuPage = () => {
                       }
                     }}
                     placeholder="Yemek adı ekleyin"
-                    className="flex-1 px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    className="flex-1 px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-white placeholder-slate-400"
                   />
                   <Button type="button" onClick={handleAddItem}>
                     Ekle
@@ -377,7 +367,7 @@ const AdminMenuPage = () => {
                       key={index}
                       className="flex items-center justify-between px-3 py-2 bg-slate-700 rounded-lg"
                     >
-                      <span className="text-sm">{item}</span>
+                      <span className="text-sm text-white">{item}</span>
                       <button
                         type="button"
                         onClick={() => handleRemoveItem(index)}
@@ -392,7 +382,7 @@ const AdminMenuPage = () => {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium mb-2">Kalori (kcal)</label>
+                  <label className="block text-sm font-medium mb-2 text-white">Kalori (kcal)</label>
                   <input
                     type="number"
                     value={formData.nutrition_json.calories}
@@ -402,11 +392,11 @@ const AdminMenuPage = () => {
                         nutrition_json: { ...formData.nutrition_json, calories: e.target.value },
                       })
                     }
-                    className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-white"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-2">Protein (g)</label>
+                  <label className="block text-sm font-medium mb-2 text-white">Protein (g)</label>
                   <input
                     type="number"
                     value={formData.nutrition_json.protein}
@@ -416,7 +406,7 @@ const AdminMenuPage = () => {
                         nutrition_json: { ...formData.nutrition_json, protein: e.target.value },
                       })
                     }
-                    className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-white"
                   />
                 </div>
               </div>
@@ -429,7 +419,7 @@ const AdminMenuPage = () => {
                   onChange={(e) => setFormData({ ...formData, is_published: e.target.checked })}
                   className="w-4 h-4 text-primary-500 bg-slate-700 border-slate-600 rounded focus:ring-primary-500"
                 />
-                <label htmlFor="is_published" className="text-sm">
+                <label htmlFor="is_published" className="text-sm text-white">
                   Hemen yayınla
                 </label>
               </div>
