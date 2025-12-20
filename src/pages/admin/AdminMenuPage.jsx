@@ -46,7 +46,26 @@ const AdminMenuPage = () => {
         setMenus(menusRes.data);
       }
       if (cafeteriasRes.success) {
-        setCafeterias(cafeteriasRes.data);
+        const cafeteriasData = cafeteriasRes.data || [];
+        setCafeterias(cafeteriasData);
+        
+        // Eğer kafeterya yoksa otomatik olarak seed yap
+        if (Array.isArray(cafeteriasData) && cafeteriasData.length === 0) {
+          try {
+            const seedRes = await mealService.seedCafeterias();
+            if (seedRes.success) {
+              // Seed'den sonra tekrar cafeterias'ları getir
+              const newCafeteriasRes = await mealService.getCafeterias();
+              if (newCafeteriasRes.success) {
+                setCafeterias(newCafeteriasRes.data || []);
+                toast.success('Kafeteryalar otomatik olarak oluşturuldu');
+              }
+            }
+          } catch (seedError) {
+            console.error('Seed cafeterias error:', seedError);
+            // Seed hatası kritik değil, sessizce devam et
+          }
+        }
       }
     } catch (error) {
       toast.error('Veriler yüklenirken hata oluştu');
@@ -290,15 +309,17 @@ const AdminMenuPage = () => {
                     required
                   >
                     <option value="">Seçiniz</option>
-                    <option value="batı_kampüs">Batı Kampüs</option>
-                    <option value="doğu_kampüs">Doğu Kampüs</option>
-                    <option value="kuzey_kampüs">Kuzey Kampüs</option>
-                    <option value="güney_kampüs">Güney Kampüs</option>
-                    {cafeterias.map((cafeteria) => (
-                      <option key={cafeteria.id} value={cafeteria.id}>
-                        {cafeteria.name}
+                    {Array.isArray(cafeterias) && cafeterias.length > 0 ? (
+                      cafeterias.map((cafeteria) => (
+                        <option key={cafeteria.id} value={cafeteria.id}>
+                          {cafeteria.name}
+                        </option>
+                      ))
+                    ) : (
+                      <option value="" disabled>
+                        Kafeterya bulunamadı
                       </option>
-                    ))}
+                    )}
                   </select>
                 </div>
 

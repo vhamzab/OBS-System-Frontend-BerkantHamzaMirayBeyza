@@ -115,6 +115,14 @@ const mealService = {
     const response = await api.get('/meals/cafeterias');
     return response.data;
   },
+
+  /**
+   * Seed cafeterias (admin only)
+   */
+  seedCafeterias: async () => {
+    const response = await api.post('/meals/cafeterias/seed');
+    return response.data;
+  },
 };
 
 export default mealService;
