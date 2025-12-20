@@ -16,6 +16,7 @@ import {
   FiBell,
   FiUserCheck,
   FiCoffee,
+  FiDollarSign,
 } from 'react-icons/fi';
 import { useAuth } from '../../context/AuthContext';
 
@@ -35,6 +36,7 @@ const Sidebar = ({ isOpen, onClose }) => {
     { to: '/my-excuse-requests', icon: FiFileText, label: 'Mazeretlerim' },
     { to: '/meals/menu', icon: FiCoffee, label: 'Yemek Menüsü' },
     { to: '/meals/reservations', icon: FiCoffee, label: 'Rezervasyonlarım' },
+    { to: '/wallet', icon: FiDollarSign, label: 'Cüzdan' },
     { to: '/events', icon: FiCalendar, label: 'Etkinlikler' },
     { to: '/my-events', icon: FiCalendar, label: 'Etkinliklerim' },
   ];
@@ -50,6 +52,7 @@ const Sidebar = ({ isOpen, onClose }) => {
     { to: '/excuse-requests', icon: FiFileText, label: 'Mazeret Talepleri' },
     { to: '/meals/menu', icon: FiCoffee, label: 'Yemek Menüsü' },
     { to: '/meals/reservations', icon: FiCoffee, label: 'Rezervasyonlarım' },
+    { to: '/wallet', icon: FiDollarSign, label: 'Cüzdan' },
     { to: '/events', icon: FiCalendar, label: 'Etkinlikler' },
     { to: '/my-events', icon: FiCalendar, label: 'Etkinliklerim' },
   ];
@@ -67,6 +70,7 @@ const Sidebar = ({ isOpen, onClose }) => {
     { to: '/meals/menu', icon: FiCoffee, label: 'Yemek Menüsü' },
     { to: '/meals/reservations', icon: FiCoffee, label: 'Rezervasyonlarım' },
     { to: '/meals/scan', icon: FiCoffee, label: 'QR Tarama' },
+    { to: '/wallet', icon: FiDollarSign, label: 'Cüzdan' },
     { to: '/events', icon: FiCalendar, label: 'Etkinlikler' },
     { to: '/my-events', icon: FiCalendar, label: 'Etkinliklerim' },
     { to: '/admin/scheduling/generate', icon: FiCalendar, label: 'Program Oluştur' },
