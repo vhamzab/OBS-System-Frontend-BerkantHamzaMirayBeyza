@@ -90,7 +90,7 @@ const WalletPage = () => {
       const response = await walletService.createTopup(amount);
       if (response.success) {
         // Test modu: Direkt ödeme başarılı
-        toast.success('Yükleme başarılı');
+        toast.success('Para yatırma işlemi başarıyla gerçekleşti');
         setShowTopupModal(false);
         setTopupLoading(false);
         // Bakiye ve işlem geçmişini arka planda yenile
