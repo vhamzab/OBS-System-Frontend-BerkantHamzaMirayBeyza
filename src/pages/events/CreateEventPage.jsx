@@ -1,12 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiCalendar, FiClock, FiMapPin, FiUsers, FiTag, FiDollarSign, FiArrowLeft } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import eventService from '../../services/eventService';
 import Button from '../../components/common/Button';
+import { useAuth } from '../../context/AuthContext';
 
 const CreateEventPage = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
@@ -22,6 +24,14 @@ const CreateEventPage = () => {
     registration_deadline: '',
     status: 'published',
   });
+
+  useEffect(() => {
+    // Öğrenciler etkinlik oluşturamaz
+    if (user && user.role === 'student') {
+      toast.error('Öğrenciler etkinlik oluşturamaz');
+      navigate('/events');
+    }
+  }, [user, navigate]);
 
   const categories = [
     { value: 'conference', label: 'Konferans' },

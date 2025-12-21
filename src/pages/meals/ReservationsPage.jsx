@@ -14,6 +14,7 @@ const ReservationsPage = () => {
   const [pendingTransfers, setPendingTransfers] = useState([]);
   const [loadingTransfers, setLoadingTransfers] = useState(true);
   const [accepting, setAccepting] = useState(null);
+  const [selectedReservation, setSelectedReservation] = useState(null);
 
   useEffect(() => {
     fetchReservations();
@@ -276,7 +277,11 @@ const ReservationsPage = () => {
               <h2 className="text-xl font-bold mb-4">Geçmiş Rezervasyonlar</h2>
               <div className="space-y-3">
                 {pastReservations.map((reservation) => (
-                  <div key={reservation.id} className="card">
+                  <div 
+                    key={reservation.id} 
+                    className="card cursor-pointer hover:bg-slate-700/70 transition-colors"
+                    onClick={() => setSelectedReservation(reservation)}
+                  >
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-4">
                         <div>
@@ -295,29 +300,6 @@ const ReservationsPage = () => {
                         </div>
                       )}
                     </div>
-                    {reservation.status === 'reserved' && (
-                      <div className="border-t border-slate-700/50 pt-4 mt-4">
-                        <div className="mb-4 flex flex-col items-center">
-                          <h3 className="text-sm font-semibold mb-3 text-slate-300">Yemek Rezervasyon QR Kodu</h3>
-                          <QRCodeDisplay 
-                            qrCode={reservation.qr_code || `MEAL-RES-${reservation.id}-${reservation.date}`} 
-                            title="Yemek QR Kodu" 
-                            size={250} 
-                          />
-                          <div className="mt-4 w-full">
-                            <p className="text-xs text-slate-400 mb-2 text-center">QR Kod Barkodu:</p>
-                            <div className="bg-slate-800 p-3 rounded-lg border border-slate-700">
-                              <p className="font-mono text-sm text-white text-center break-all">
-                                {reservation.qr_code || `MEAL-RES-${reservation.id}-${reservation.date}`}
-                              </p>
-                            </div>
-                          </div>
-                          <p className="text-xs text-slate-400 mt-2 text-center">
-                            Bu QR kodu kafeteryada göstererek yemeğinizi alabilirsiniz
-                          </p>
-                        </div>
-                      </div>
-                    )}
                   </div>
                 ))}
               </div>
@@ -330,6 +312,55 @@ const ReservationsPage = () => {
               <p className="text-slate-400">Henüz rezervasyonunuz yok</p>
             </div>
           )}
+        </div>
+      )}
+
+      {/* QR Code Modal for Past Reservations */}
+      {selectedReservation && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-in"
+          onClick={() => setSelectedReservation(null)}
+        >
+          <div 
+            className="bg-gradient-to-br from-white via-blue-50/30 to-accent-50/20 rounded-3xl p-8 max-w-md w-full shadow-2xl border-2 border-primary-100/50 backdrop-blur-xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h3 className="text-2xl font-bold text-gray-900">Rezervasyon QR Kodu</h3>
+                <p className="text-sm text-gray-600">
+                  {new Date(selectedReservation.date).toLocaleDateString('tr-TR')} - {getMealTypeLabel(selectedReservation.meal_type)}
+                </p>
+              </div>
+              <button
+                onClick={() => setSelectedReservation(null)}
+                className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+              >
+                <FiX className="w-5 h-5 text-gray-600" />
+              </button>
+            </div>
+            <div className="flex flex-col items-center gap-6">
+              <div className="p-6 bg-white rounded-xl shadow-lg">
+                <QRCodeDisplay 
+                  qrCode={selectedReservation.qr_code || `MEAL-RES-${selectedReservation.id}-${selectedReservation.date}`} 
+                  title="Yemek QR Kodu" 
+                  size={300}
+                  showFullScreen={false}
+                />
+              </div>
+              <div className="w-full">
+                <p className="text-xs text-gray-600 mb-2 text-center">QR Kod Barkodu:</p>
+                <div className="bg-slate-800 p-3 rounded-lg border border-slate-700">
+                  <p className="font-mono text-sm text-white text-center break-all">
+                    {selectedReservation.qr_code || `MEAL-RES-${selectedReservation.id}-${selectedReservation.date}`}
+                  </p>
+                </div>
+              </div>
+              <p className="text-xs text-gray-600 text-center">
+                Bu QR kodu kafeteryada göstererek yemeğinizi alabilirsiniz
+              </p>
+            </div>
+          </div>
         </div>
       )}
     </div>
