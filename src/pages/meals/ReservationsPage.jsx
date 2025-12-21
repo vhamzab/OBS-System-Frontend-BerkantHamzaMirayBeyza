@@ -277,7 +277,7 @@ const ReservationsPage = () => {
               <div className="space-y-3">
                 {pastReservations.map((reservation) => (
                   <div key={reservation.id} className="card">
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-4">
                         <div>
                           <div className="font-semibold">
@@ -295,6 +295,21 @@ const ReservationsPage = () => {
                         </div>
                       )}
                     </div>
+                    {reservation.status === 'reserved' && (
+                      <div className="border-t border-slate-700/50 pt-4 mt-4">
+                        <div className="mb-4 flex flex-col items-center">
+                          <h3 className="text-sm font-semibold mb-3 text-slate-300">Yemek Rezervasyon QR Kodu</h3>
+                          <QRCodeDisplay 
+                            qrCode={reservation.qr_code || `MEAL-RES-${reservation.id}-${reservation.date}`} 
+                            title="Yemek QR Kodu" 
+                            size={250} 
+                          />
+                          <p className="text-xs text-slate-400 mt-2 text-center">
+                            Bu QR kodu kafeteryada göstererek yemeğinizi alabilirsiniz
+                          </p>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>

@@ -6,7 +6,6 @@ import eventService from '../../services/eventService';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import EventCard from '../../components/common/EventCard';
 import { useAuth } from '../../context/AuthContext';
-import Button from '../../components/common/Button';
 
 const EventsPage = () => {
   const navigate = useNavigate();
@@ -73,10 +72,13 @@ const EventsPage = () => {
           <p className="text-slate-400">Yaklaşan etkinlikleri görüntüleyin ve kayıt olun</p>
         </div>
         {canCreateEvent && (
-          <Button onClick={() => navigate('/events/create')}>
-            <FiPlus className="mr-2" />
+          <button
+            onClick={() => navigate('/events/create')}
+            className="btn-primary flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium transition-colors"
+          >
+            <FiPlus className="w-5 h-5" />
             Etkinlik Oluştur
-          </Button>
+          </button>
         )}
       </div>
 
