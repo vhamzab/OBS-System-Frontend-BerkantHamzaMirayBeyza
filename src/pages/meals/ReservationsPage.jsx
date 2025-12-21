@@ -235,8 +235,12 @@ const ReservationsPage = () => {
 
                     {reservation.status === 'reserved' && (
                       <div className="border-t border-slate-700/50 pt-4 mt-4">
-                        <div className="mb-4">
-                          <QRCodeDisplay qrCode={reservation.qr_code} title="Yemek QR Kodu" />
+                        <div className="mb-4 flex flex-col items-center">
+                          <h3 className="text-sm font-semibold mb-3 text-slate-300">Yemek Rezervasyon QR Kodu</h3>
+                          <QRCodeDisplay qrCode={reservation.qr_code} title="Yemek QR Kodu" size={250} />
+                          <p className="text-xs text-slate-400 mt-2 text-center">
+                            Bu QR kodu kafeteryada göstererek yemeğinizi alabilirsiniz
+                          </p>
                         </div>
                         {canCancel(reservation) && (
                           <Button

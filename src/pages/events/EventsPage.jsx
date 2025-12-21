@@ -1,15 +1,22 @@
 import { useState, useEffect } from 'react';
-import { FiSearch, FiFilter, FiX } from 'react-icons/fi';
+import { useNavigate } from 'react-router-dom';
+import { FiSearch, FiFilter, FiX, FiPlus } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import eventService from '../../services/eventService';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import EventCard from '../../components/common/EventCard';
+import { useAuth } from '../../context/AuthContext';
+import Button from '../../components/common/Button';
 
 const EventsPage = () => {
+  const navigate = useNavigate();
+  const { user } = useAuth();
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
+
+  const canCreateEvent = user?.role === 'admin' || user?.role === 'faculty';
 
   useEffect(() => {
     fetchEvents();
@@ -60,9 +67,17 @@ const EventsPage = () => {
 
   return (
     <div className="p-6 lg:p-8 max-w-7xl mx-auto">
-      <div className="mb-8">
-        <h1 className="font-display text-3xl font-bold mb-2">Etkinlikler</h1>
-        <p className="text-slate-400">Yaklaşan etkinlikleri görüntüleyin ve kayıt olun</p>
+      <div className="mb-8 flex items-start justify-between">
+        <div>
+          <h1 className="font-display text-3xl font-bold mb-2">Etkinlikler</h1>
+          <p className="text-slate-400">Yaklaşan etkinlikleri görüntüleyin ve kayıt olun</p>
+        </div>
+        {canCreateEvent && (
+          <Button onClick={() => navigate('/events/create')}>
+            <FiPlus className="mr-2" />
+            Etkinlik Oluştur
+          </Button>
+        )}
       </div>
 
       {/* Search and Filter */}

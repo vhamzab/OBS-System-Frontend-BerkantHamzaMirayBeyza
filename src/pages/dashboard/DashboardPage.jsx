@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { FiBook, FiCalendar, FiClipboard, FiUsers, FiTrendingUp, FiBell, FiCheckSquare, FiCoffee } from 'react-icons/fi';
+import { FiBook, FiCalendar, FiClipboard, FiUsers, FiTrendingUp, FiBell, FiCheckSquare, FiCoffee, FiPlus } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import courseService from '../../services/courseService';
 import dashboardService from '../../services/dashboardService';
@@ -234,6 +234,20 @@ const DashboardPage = () => {
                   <FiCoffee className="w-5 h-5 text-amber-600 mb-2" />
                   <span className="block text-sm font-medium text-gray-700">Rezervasyonlarım</span>
                 </button>
+                <button
+                  onClick={() => navigate('/events')}
+                  className="p-4 rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-200 transition-colors text-left"
+                >
+                  <FiCalendar className="w-5 h-5 text-purple-500 mb-2" />
+                  <span className="block text-sm font-medium text-gray-700">Etkinlikler</span>
+                </button>
+                <button
+                  onClick={() => navigate('/events/create')}
+                  className="p-4 rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-200 transition-colors text-left"
+                >
+                  <FiPlus className="w-5 h-5 text-purple-600 mb-2" />
+                  <span className="block text-sm font-medium text-gray-700">Etkinlik Oluştur</span>
+                </button>
               </>
             )}
             {user?.role === 'faculty' && (
@@ -281,6 +295,20 @@ const DashboardPage = () => {
                   <FiCoffee className="w-5 h-5 text-amber-600 mb-2" />
                   <span className="block text-sm font-medium text-gray-700">Rezervasyonlarım</span>
                 </button>
+                <button
+                  onClick={() => navigate('/events')}
+                  className="p-4 rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-200 transition-colors text-left"
+                >
+                  <FiCalendar className="w-5 h-5 text-purple-500 mb-2" />
+                  <span className="block text-sm font-medium text-gray-700">Etkinlikler</span>
+                </button>
+                <button
+                  onClick={() => navigate('/events/create')}
+                  className="p-4 rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-200 transition-colors text-left"
+                >
+                  <FiPlus className="w-5 h-5 text-purple-600 mb-2" />
+                  <span className="block text-sm font-medium text-gray-700">Etkinlik Oluştur</span>
+                </button>
               </>
             )}
             {user?.role === 'admin' && (
@@ -326,6 +354,20 @@ const DashboardPage = () => {
                 >
                   <FiCoffee className="w-5 h-5 text-amber-600 mb-2" />
                   <span className="block text-sm font-medium text-gray-700">QR Tarama</span>
+                </button>
+                <button
+                  onClick={() => navigate('/events')}
+                  className="p-4 rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-200 transition-colors text-left"
+                >
+                  <FiCalendar className="w-5 h-5 text-purple-500 mb-2" />
+                  <span className="block text-sm font-medium text-gray-700">Etkinlikler</span>
+                </button>
+                <button
+                  onClick={() => navigate('/events/create')}
+                  className="p-4 rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-200 transition-colors text-left"
+                >
+                  <FiPlus className="w-5 h-5 text-purple-600 mb-2" />
+                  <span className="block text-sm font-medium text-gray-700">Etkinlik Oluştur</span>
                 </button>
               </>
             )}

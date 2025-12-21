@@ -65,6 +65,7 @@ import EventsPage from './pages/events/EventsPage';
 import EventDetailPage from './pages/events/EventDetailPage';
 import MyEventsPage from './pages/events/MyEventsPage';
 import CheckInPage from './pages/events/CheckInPage';
+import CreateEventPage from './pages/events/CreateEventPage';
 
 // Scheduling Pages
 import MySchedulePage from './pages/schedule/MySchedulePage';
@@ -318,6 +319,14 @@ function App() {
           element={
             <ProtectedRoute roles={['admin', 'event_manager']}>
               <CheckInPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/events/create"
+          element={
+            <ProtectedRoute roles={['admin', 'faculty']}>
+              <CreateEventPage />
             </ProtectedRoute>
           }
         />
