@@ -1,16 +1,21 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { FiCalendar, FiClock, FiMapPin, FiCheckCircle, FiXCircle } from 'react-icons/fi';
+import { Link, useNavigate } from 'react-router-dom';
+import { FiCalendar, FiClock, FiMapPin, FiCheckCircle, FiXCircle, FiPlus } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import eventService from '../../services/eventService';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import Button from '../../components/common/Button';
 import QRCodeDisplay from '../../components/common/QRCodeDisplay';
+import { useAuth } from '../../context/AuthContext';
 
 const MyEventsPage = () => {
+  const navigate = useNavigate();
+  const { user } = useAuth();
   const [registrations, setRegistrations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [cancelling, setCancelling] = useState(null);
+
+  const canCreateEvent = user?.role === 'admin' || user?.role === 'faculty';
 
   useEffect(() => {
     fetchMyEvents();
@@ -72,9 +77,22 @@ const MyEventsPage = () => {
 
   return (
     <div className="p-6 lg:p-8 max-w-7xl mx-auto">
-      <div className="mb-8">
-        <h1 className="font-display text-3xl font-bold mb-2">Etkinliklerim</h1>
-        <p className="text-slate-400">Kayıt olduğunuz etkinlikleri görüntüleyin</p>
+      <div className="mb-8 flex items-start justify-between">
+        <div>
+          <h1 className="font-display text-3xl font-bold mb-2">Etkinliklerim</h1>
+          <p className="text-slate-400">
+            {canCreateEvent ? 'Etkinliklerinizi yönetin ve yeni etkinlik oluşturun' : 'Kayıt olduğunuz etkinlikleri görüntüleyin'}
+          </p>
+        </div>
+        {canCreateEvent && (
+          <button
+            onClick={() => navigate('/events/create')}
+            className="btn-primary flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium transition-colors"
+          >
+            <FiPlus className="w-5 h-5" />
+            Yeni Etkinlik Oluştur
+          </button>
+        )}
       </div>
 
       {loading ? (

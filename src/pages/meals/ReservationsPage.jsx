@@ -304,6 +304,14 @@ const ReservationsPage = () => {
                             title="Yemek QR Kodu" 
                             size={250} 
                           />
+                          <div className="mt-4 w-full">
+                            <p className="text-xs text-slate-400 mb-2 text-center">QR Kod Barkodu:</p>
+                            <div className="bg-slate-800 p-3 rounded-lg border border-slate-700">
+                              <p className="font-mono text-sm text-white text-center break-all">
+                                {reservation.qr_code || `MEAL-RES-${reservation.id}-${reservation.date}`}
+                              </p>
+                            </div>
+                          </div>
                           <p className="text-xs text-slate-400 mt-2 text-center">
                             Bu QR kodu kafeteryada göstererek yemeğinizi alabilirsiniz
                           </p>
