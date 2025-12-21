@@ -1,13 +1,16 @@
 import { useState, useEffect } from 'react';
-import { FiCalendar, FiShare2 } from 'react-icons/fi';
+import { FiCalendar, FiShare2, FiDollarSign } from 'react-icons/fi';
 import { FaUtensils, FaTint, FaSeedling } from 'react-icons/fa';
 import toast from 'react-hot-toast';
 import mealService from '../../services/mealService';
+import walletService from '../../services/walletService';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import Button from '../../components/common/Button';
 import Calendar from '../../components/common/Calendar';
+import { useNavigate } from 'react-router-dom';
 
 const MenuPage = () => {
+  const navigate = useNavigate();
   const [menus, setMenus] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
@@ -19,10 +22,12 @@ const MenuPage = () => {
   const [transferringReservation, setTransferringReservation] = useState(null);
   const [studentNumber, setStudentNumber] = useState('');
   const [transferring, setTransferring] = useState(false);
+  const [walletBalance, setWalletBalance] = useState(null);
 
   useEffect(() => {
     fetchMenus();
     fetchMyReservations();
+    fetchWalletBalance();
   }, [selectedDate]);
 
   const fetchMenus = async () => {
@@ -51,7 +56,23 @@ const MenuPage = () => {
     }
   };
 
+  const fetchWalletBalance = async () => {
+    try {
+      const response = await walletService.getBalance();
+      if (response.success) {
+        setWalletBalance(response.data.balance);
+      }
+    } catch (error) {
+      console.error('Bakiye yüklenirken hata:', error);
+    }
+  };
+
   const handleReserve = (menu) => {
+    // Check wallet balance if meal is paid
+    if (menu.price > 0 && walletBalance !== null && walletBalance < menu.price) {
+      toast.error(`Yetersiz bakiye. Yemek ücreti: ${menu.price} TRY, Mevcut bakiye: ${walletBalance.toFixed(2)} TRY`);
+      return;
+    }
     setSelectedMenu(menu);
     setShowReservationModal(true);
   };
@@ -74,6 +95,7 @@ const MenuPage = () => {
         setSelectedMenu(null);
         fetchMenus();
         fetchMyReservations();
+        fetchWalletBalance(); // Refresh wallet balance after payment
       }
     } catch (error) {
       toast.error(error.response?.data?.message || 'Rezervasyon oluşturulurken hata oluştu');
@@ -284,12 +306,43 @@ const MenuPage = () => {
                 <span className="ml-2 font-semibold">{selectedMenu.cafeteria?.name}</span>
               </div>
               {selectedMenu.price > 0 && (
-                <div>
-                  <span className="text-slate-400">Tutar:</span>
-                  <span className="ml-2 font-semibold text-green-400">
-                    {selectedMenu.price} TRY
-                  </span>
-                </div>
+                <>
+                  <div>
+                    <span className="text-slate-400">Tutar:</span>
+                    <span className="ml-2 font-semibold text-green-400">
+                      {selectedMenu.price} TRY
+                    </span>
+                  </div>
+                  {walletBalance !== null && (
+                    <div className="p-3 bg-slate-700/50 rounded-lg">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <FiDollarSign className="text-slate-400" />
+                          <span className="text-sm text-slate-400">Cüzdan Bakiyeniz:</span>
+                          <span className={`font-bold ${walletBalance >= selectedMenu.price ? 'text-green-400' : 'text-red-400'}`}>
+                            {walletBalance.toFixed(2)} TRY
+                          </span>
+                        </div>
+                        {walletBalance < selectedMenu.price && (
+                          <button
+                            onClick={() => {
+                              setShowReservationModal(false);
+                              navigate('/wallet');
+                            }}
+                            className="text-sm text-blue-400 hover:text-blue-300 underline"
+                          >
+                            Para Yükle
+                          </button>
+                        )}
+                      </div>
+                      {walletBalance < selectedMenu.price && (
+                        <p className="text-xs text-red-400 mt-2">
+                          Yetersiz bakiye. Lütfen cüzdanınıza para yükleyin.
+                        </p>
+                      )}
+                    </div>
+                  )}
+                </>
               )}
             </div>
             <div className="flex gap-3">
@@ -306,6 +359,7 @@ const MenuPage = () => {
               <Button
                 onClick={confirmReservation}
                 loading={reserving === selectedMenu.id}
+                disabled={selectedMenu.price > 0 && walletBalance !== null && walletBalance < selectedMenu.price}
                 className="flex-1"
               >
                 Onayla

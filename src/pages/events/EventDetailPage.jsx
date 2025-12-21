@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { FiCalendar, FiClock, FiMapPin, FiUsers, FiTag, FiArrowLeft } from 'react-icons/fi';
+import { FiCalendar, FiClock, FiMapPin, FiUsers, FiTag, FiArrowLeft, FiDollarSign } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import eventService from '../../services/eventService';
+import walletService from '../../services/walletService';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import Button from '../../components/common/Button';
 
@@ -13,10 +14,14 @@ const EventDetailPage = () => {
   const [loading, setLoading] = useState(true);
   const [registering, setRegistering] = useState(false);
   const [customFields, setCustomFields] = useState({});
+  const [walletBalance, setWalletBalance] = useState(null);
 
   useEffect(() => {
     fetchEvent();
-  }, [id]);
+    if (event?.is_paid && event?.price > 0) {
+      fetchWalletBalance();
+    }
+  }, [id, event?.is_paid, event?.price]);
 
   const fetchEvent = async () => {
     try {
@@ -24,12 +29,27 @@ const EventDetailPage = () => {
       const response = await eventService.getEventById(id);
       if (response.success) {
         setEvent(response.data);
+        // If paid event, fetch wallet balance
+        if (response.data.is_paid && response.data.price > 0) {
+          fetchWalletBalance();
+        }
       }
     } catch (error) {
       toast.error('Etkinlik yüklenirken hata oluştu');
       console.error(error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchWalletBalance = async () => {
+    try {
+      const response = await walletService.getBalance();
+      if (response.success) {
+        setWalletBalance(response.data.balance);
+      }
+    } catch (error) {
+      console.error('Bakiye yüklenirken hata:', error);
     }
   };
 
@@ -63,7 +83,9 @@ const EventDetailPage = () => {
 
   const remainingSpots = event ? event.capacity - event.registered_count : 0;
   const isFull = remainingSpots <= 0;
-  const canRegister = event && event.status === 'published' && !isFull;
+  const isPaidEvent = event?.is_paid && event?.price > 0;
+  const hasSufficientBalance = walletBalance !== null && walletBalance >= (event?.price || 0);
+  const canRegister = event && event.status === 'published' && !isFull && (!isPaidEvent || hasSufficientBalance);
   const registrationDeadline = event?.registration_deadline
     ? new Date(event.registration_deadline)
     : null;
@@ -163,6 +185,33 @@ const EventDetailPage = () => {
           </div>
         )}
 
+        {isPaidEvent && walletBalance !== null && (
+          <div className="mb-6 p-4 bg-slate-700/50 rounded-lg">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <FiDollarSign className="text-slate-400" />
+                <span className="text-sm text-slate-400">Cüzdan Bakiyeniz:</span>
+                <span className={`font-bold ${hasSufficientBalance ? 'text-green-400' : 'text-red-400'}`}>
+                  {walletBalance.toFixed(2)} TRY
+                </span>
+              </div>
+              {!hasSufficientBalance && (
+                <button
+                  onClick={() => navigate('/wallet')}
+                  className="text-sm text-blue-400 hover:text-blue-300 underline"
+                >
+                  Para Yükle
+                </button>
+              )}
+            </div>
+            {!hasSufficientBalance && (
+              <p className="text-xs text-red-400 mt-2">
+                Yetersiz bakiye. Etkinlik ücreti: {event.price} TRY
+              </p>
+            )}
+          </div>
+        )}
+
         {canRegister && !isDeadlinePassed && (
           <div className="border-t border-slate-700/50 pt-6">
             <Button
@@ -170,9 +219,18 @@ const EventDetailPage = () => {
               loading={registering}
               fullWidth
               size="lg"
+              disabled={isPaidEvent && !hasSufficientBalance}
             >
-              Etkinliğe Kayıt Ol
+              {isPaidEvent ? `Etkinliğe Kayıt Ol (${event.price} TRY)` : 'Etkinliğe Kayıt Ol'}
             </Button>
+          </div>
+        )}
+
+        {isPaidEvent && !hasSufficientBalance && !isDeadlinePassed && !isFull && (
+          <div className="border-t border-slate-700/50 pt-6">
+            <div className="p-4 bg-red-500/20 border border-red-500/30 rounded-lg text-center">
+              <p className="text-red-400 font-semibold">Yetersiz bakiye. Lütfen cüzdanınıza para yükleyin.</p>
+            </div>
           </div>
         )}
 
