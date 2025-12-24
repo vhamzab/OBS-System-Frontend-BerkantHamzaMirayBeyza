@@ -1,0 +1,58 @@
+﻿
+> university-obs-frontend@1.0.0 test
+> jest --coverage --passWithNoTests --watchAll=false
+
+------------------|---------|----------|---------|---------|-------------------
+File              | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+------------------|---------|----------|---------|---------|-------------------
+All files         |    6.55 |        0 |       0 |    6.55 |                   
+ LoginPage.jsx    |    5.26 |        0 |       0 |    5.26 | 21-85             
+ RegisterPage.jsx |    8.69 |        0 |       0 |    8.69 | 37-47,54-104      
+------------------|---------|----------|---------|---------|-------------------
+node.exe : Jest: 
+"global" coverage 
+threshold for 
+statements (75%) not 
+met: 6.55%
+At line:1 char:1
++ & "C:\Program Files
+\nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo 
+...
++ ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~
+    + CategoryInfo   
+           : NotSpe  
+  cified: (Jest: "   
+ global" ... not     
+met: 6.55%:Strin    
+g) [], RemoteExc    
+eption
+    + FullyQualified 
+   ErrorId : Native  
+  CommandError
+ 
+Jest: "global" 
+coverage threshold 
+for branches (75%) 
+not met: 0%
+Jest: "global" 
+coverage threshold 
+for lines (75%) not 
+met: 6.55%
+Jest: "global" 
+coverage threshold 
+for functions (75%) 
+not met: 0%
+
+Test Suites: 8 
+skipped, 0 of 8 total
+Tests:       134 
+skipped, 134 total
+Snapshots:   0 total
+Time:        3.64 s, 
+estimated 9 s
+Ran all test suites.

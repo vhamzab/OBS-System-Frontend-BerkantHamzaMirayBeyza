@@ -1,0 +1,361 @@
+﻿
+> university-obs-frontend@1.0.0 test
+> jest --coverage --passWithNoTests --watchAll=false
+
+node.exe : FAIL src/_
+_tests__/EnrollmentFl
+ow.integration.test.j
+sx
+At line:1 char:1
++ & "C:\Program Files
+\nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo 
+...
++ ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~
+    + CategoryInfo   
+           : NotSpe  
+  cified: (FAIL sr   
+ c/__test...ratio    
+n.test.jsx:Strin    
+g) [], RemoteExc    
+eption
+    + FullyQualified 
+   ErrorId : Native  
+  CommandError
+ 
+  ÔùÅ Test suite 
+failed to run
+
+    Jest encountered 
+an unexpected token
+
+    Jest failed to 
+parse a file. This 
+happens e.g. when 
+your code or its 
+dependencies use 
+non-standard 
+JavaScript syntax, 
+or when Jest is not 
+configured to 
+support such syntax.
+
+    Out of the box 
+Jest supports Babel, 
+which will be used 
+to transform your 
+files into valid JS 
+based on your Babel 
+configuration.
+
+    By default 
+"node_modules" 
+folder is ignored by 
+transformers.
+
+    Here's what you 
+can do:
+     ÔÇó If you are 
+trying to use 
+ECMAScript Modules, 
+see https://jestjs.io
+/docs/ecmascript-modu
+les for how to 
+enable it.
+     ÔÇó If you are 
+trying to use 
+TypeScript, see https
+://jestjs.io/docs/get
+ting-started#using-ty
+pescript
+     ÔÇó To have 
+some of your 
+"node_modules" files 
+transformed, you can 
+specify a custom "tra
+nsformIgnorePatterns"
+ in your config.
+     ÔÇó If you need 
+a custom 
+transformation, 
+specify a 
+"transform" option 
+in your config.
+     ÔÇó If you 
+simply want to mock 
+your non-JS modules 
+(e.g. binary assets) 
+you can stub them 
+out with the 
+"moduleNameMapper" 
+config option.
+
+    You'll find more 
+details and examples 
+of these config 
+options in the docs:
+    https://jestjs.io
+/docs/configuration
+    For information 
+about custom 
+transformations, see:
+    https://jestjs.io
+/docs/code-transforma
+tion
+
+    Details:
+
+    C:\Users\Hamza 
+Baran\Desktop\OBS WEB
+\OBS-System-Frontend-
+BerkantHamzaMirayBeyz
+a\src\pages\courses\C
+ourseCatalogPage.jsx:
+86
+          if (!import
+.meta.env.DEV) {
+                     
+ ^^^^
+
+    SyntaxError: 
+Cannot use 
+'import.meta' 
+outside a module
+
+    [0m [90m 1 
+|[39m 
+[36mimport[39m { 
+render[33m,[39m 
+screen[33m,[39m 
+fireEvent[33m,[39m 
+waitFor } 
+[36mfrom[39m [32m'
+@testing-library/reac
+t'[39m[33m;[39m
+     [90m 2 |[39m 
+[36mimport[39m { [
+33mMemoryRouter[39m
+[33m,[39m [33mRoute
+[39m[33m,[39m 
+[33mRoutes[39m } 
+[36mfrom[39m [32m'
+react-router-dom'[39
+m[33m;[39m
+    [31m[1m>[22m[
+39m[90m 3 |[39m 
+[36mimport[39m [33
+mCourseCatalogPage[3
+9m [36mfrom[39m [3
+2m'../pages/courses/C
+ourseCatalogPage'[39
+m[33m;[39m
+     [90m   |[39m 
+[31m[1m^[22m[39m
+     [90m 4 |[39m 
+[36mimport[39m [33
+mCourseDetailPage[39
+m [36mfrom[39m [32
+m'../pages/courses/Co
+urseDetailPage'[39m
+[33m;[39m
+     [90m 5 |[39m
+     [90m 6 |[39m 
+[90m// Mock 
+toast[39m[0m
+
+      at Runtime.crea
+teScriptFromCode (nod
+e_modules/jest-runtim
+e/build/index.js:1318
+:40)
+      at 
+Object.require (src/_
+_tests__/EnrollmentFl
+ow.integration.test.j
+sx:3:1)
+
+FAIL src/__tests__/Co
+urseList.test.jsx
+  ÔùÅ Test suite 
+failed to run
+
+    Jest encountered 
+an unexpected token
+
+    Jest failed to 
+parse a file. This 
+happens e.g. when 
+your code or its 
+dependencies use 
+non-standard 
+JavaScript syntax, 
+or when Jest is not 
+configured to 
+support such syntax.
+
+    Out of the box 
+Jest supports Babel, 
+which will be used 
+to transform your 
+files into valid JS 
+based on your Babel 
+configuration.
+
+    By default 
+"node_modules" 
+folder is ignored by 
+transformers.
+
+    Here's what you 
+can do:
+     ÔÇó If you are 
+trying to use 
+ECMAScript Modules, 
+see https://jestjs.io
+/docs/ecmascript-modu
+les for how to 
+enable it.
+     ÔÇó If you are 
+trying to use 
+TypeScript, see https
+://jestjs.io/docs/get
+ting-started#using-ty
+pescript
+     ÔÇó To have 
+some of your 
+"node_modules" files 
+transformed, you can 
+specify a custom "tra
+nsformIgnorePatterns"
+ in your config.
+     ÔÇó If you need 
+a custom 
+transformation, 
+specify a 
+"transform" option 
+in your config.
+     ÔÇó If you 
+simply want to mock 
+your non-JS modules 
+(e.g. binary assets) 
+you can stub them 
+out with the 
+"moduleNameMapper" 
+config option.
+
+    You'll find more 
+details and examples 
+of these config 
+options in the docs:
+    https://jestjs.io
+/docs/configuration
+    For information 
+about custom 
+transformations, see:
+    https://jestjs.io
+/docs/code-transforma
+tion
+
+    Details:
+
+    C:\Users\Hamza 
+Baran\Desktop\OBS WEB
+\OBS-System-Frontend-
+BerkantHamzaMirayBeyz
+a\src\pages\courses\C
+ourseCatalogPage.jsx:
+86
+          if (!import
+.meta.env.DEV) {
+                     
+ ^^^^
+
+    SyntaxError: 
+Cannot use 
+'import.meta' 
+outside a module
+
+    [0m [90m 1 
+|[39m 
+[36mimport[39m { 
+render[33m,[39m 
+screen[33m,[39m 
+fireEvent[33m,[39m 
+waitFor } 
+[36mfrom[39m [32m'
+@testing-library/reac
+t'[39m[33m;[39m
+     [90m 2 |[39m 
+[36mimport[39m { [
+33mMemoryRouter[39m 
+} [36mfrom[39m [32
+m'react-router-dom'[
+39m[33m;[39m
+    [31m[1m>[22m[
+39m[90m 3 |[39m 
+[36mimport[39m [33
+mCourseCatalogPage[3
+9m [36mfrom[39m [3
+2m'../pages/courses/C
+ourseCatalogPage'[39
+m[33m;[39m
+     [90m   |[39m 
+[31m[1m^[22m[39m
+     [90m 4 |[39m
+     [90m 5 |[39m 
+[90m// Mock toast 
+to avoid 
+side-effects[39m
+     [90m 6 |[39m j
+est[33m.[39mmock([
+32m'react-hot-toast'
+[39m[33m,[39m () 
+[33m=>[39m ({[0m
+
+      at Runtime.crea
+teScriptFromCode (nod
+e_modules/jest-runtim
+e/build/index.js:1318
+:40)
+      at 
+Object.require (src/_
+_tests__/CourseList.t
+est.jsx:3:1)
+
+------------------|---------|----------|---------|---------|-------------------
+File              | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+------------------|---------|----------|---------|---------|-------------------
+All files         |    6.55 |        0 |       0 |    6.55 |                   
+ LoginPage.jsx    |    5.26 |        0 |       0 |    5.26 | 21-85             
+ RegisterPage.jsx |    8.69 |        0 |       0 |    8.69 | 37-47,54-104      
+------------------|---------|----------|---------|---------|-------------------
+Jest: "global" 
+coverage threshold 
+for statements (75%) 
+not met: 6.55%
+Jest: "global" 
+coverage threshold 
+for branches (75%) 
+not met: 0%
+Jest: "global" 
+coverage threshold 
+for lines (75%) not 
+met: 6.55%
+Jest: "global" 
+coverage threshold 
+for functions (75%) 
+not met: 0%
+
+Test Suites: 2 
+failed, 8 skipped, 2 
+of 10 total
+Tests:       134 
+skipped, 134 total
+Snapshots:   0 total
+Time:        4.06 s, 
+estimated 9 s
+Ran all test suites.
