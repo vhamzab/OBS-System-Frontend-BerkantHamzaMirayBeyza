@@ -38,7 +38,7 @@ const PaymentForm = ({ onSubmit, onCancel, minAmount = 50, loading = false }) =>
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
             min={minAmount}
-            step="0.01"
+            step="1"
             placeholder={`Minimum ${minAmount} ₺`}
             className="w-full pl-12 pr-4 py-4 bg-white dark:bg-gray-800/90 backdrop-blur-sm border-2 border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 font-medium focus:outline-none focus:ring-4 focus:ring-primary-500/20 focus:border-primary-500 transition-all shadow-sm hover:border-gray-300 dark:border-gray-600"
             required
