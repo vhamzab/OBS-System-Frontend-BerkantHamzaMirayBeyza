@@ -10,7 +10,9 @@ import courseService from '../../services/courseService';
 import attendanceService from '../../services/attendanceService';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 
+import { useTranslation } from 'react-i18next';
 const StartAttendancePage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [sections, setSections] = useState([]);
   const [selectedSection, setSelectedSection] = useState('');
@@ -190,8 +192,8 @@ const StartAttendancePage = () => {
   return (
     <div className="p-6 lg:p-8 max-w-4xl mx-auto">
       <div className="mb-8">
-        <h1 className="font-display text-3xl font-bold mb-2">Yoklama Başlat</h1>
-        <p className="text-slate-400">GPS tabanlı yoklama oturumu oluşturun</p>
+        <h1 className="font-display text-3xl font-bold mb-2">{t('attendance.startAttendance')}</h1>
+        <p className="text-gray-600 dark:text-gray-300">GPS tabanlı yoklama oturumu oluşturun</p>
       </div>
 
       {activeSession ? (
@@ -200,9 +202,9 @@ const StartAttendancePage = () => {
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
               <div className="w-3 h-3 rounded-full bg-green-400 animate-pulse" />
-              <span className="font-semibold text-green-400">Aktif Oturum</span>
+              <span className="font-semibold text-green-400">{t('attendance.activeSession')}</span>
             </div>
-            <button onClick={handleCloseSession} className="btn bg-red-500 hover:bg-red-600 text-white font-medium shadow-md hover:shadow-lg transition-all rounded-2xl border-2 border-red-600 hover:border-red-700">
+            <button onClick={handleCloseSession} className="btn bg-red-500 hover:bg-red-600 text-gray-800 dark:text-gray-100 font-medium shadow-md hover:shadow-lg transition-all rounded-2xl border-2 border-red-600 hover:border-red-700">
               <FiStopCircle className="w-4 h-4 mr-2" />
               Yoklamayı Kapat
             </button>
@@ -213,7 +215,7 @@ const StartAttendancePage = () => {
               <h3 className="text-lg font-semibold mb-4">
                 {activeSession.course?.code} - {activeSession.course?.name}
               </h3>
-              <div className="space-y-3 text-sm text-slate-600 dark:text-slate-300">
+              <div className="space-y-3 text-sm text-gray-700 dark:text-gray-500 dark:text-gray-400 dark:text-gray-500">
                 <div className="flex items-center gap-2">
                   <FiBook className="w-4 h-4 text-primary-500" />
                   Section {activeSession.sectionNumber}
@@ -233,7 +235,7 @@ const StartAttendancePage = () => {
               <div className="text-5xl font-bold text-primary-600 dark:text-primary-400 mb-2">
                 {attendanceCount}
               </div>
-              <div className="text-slate-700 dark:text-slate-300 font-medium">Yoklama Veren</div>
+              <div className="text-gray-700 dark:text-gray-500 dark:text-gray-400 dark:text-gray-500 font-medium">Yoklama Veren</div>
               <button
                 onClick={fetchSessionStatus}
                 className="mt-4 text-sm text-primary-600 dark:text-primary-400 flex items-center gap-1 hover:text-primary-700 dark:hover:text-primary-300 font-medium transition-colors"
@@ -245,34 +247,34 @@ const StartAttendancePage = () => {
           </div>
 
           {/* QR Code */}
-          <div className="p-6 rounded-xl bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 border border-slate-300 dark:border-slate-700 text-center">
+          <div className="p-6 rounded-xl bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 border border-gray-300 dark:border-gray-200 dark:border-gray-700 text-center">
             <div className="flex items-center justify-center gap-2 mb-4">
-              <h4 className="font-semibold text-slate-800 dark:text-slate-100">Yoklama QR Kodu</h4>
-              <span className="px-3 py-1 text-xs rounded-full bg-primary-500 text-white font-medium shadow-sm">
+              <h4 className="font-semibold text-gray-800 dark:text-slate-100">Yoklama QR Kodu</h4>
+              <span className="px-3 py-1 text-xs rounded-full bg-primary-500 text-gray-800 dark:text-gray-100 font-medium shadow-sm">
                 Otomatik Yenileme
               </span>
             </div>
             <div className="inline-flex flex-col items-center gap-3">
-              <div className={`p-3 bg-white rounded-xl shadow-lg transition-opacity ${qrRefreshing ? 'opacity-50' : 'opacity-100'}`}>
+              <div className={`p-3 bg-white dark:bg-gray-800 rounded-xl shadow-lg transition-opacity ${qrRefreshing ? 'opacity-50' : 'opacity-100'}`}>
                 <QRCodeCanvas value={qrCode || activeSession.qrCode || 'QR not ready'} size={180} includeMargin />
               </div>
-              <div className="font-mono text-xs text-slate-700 dark:text-slate-200 bg-white/80 dark:bg-slate-800/80 px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-600">
+              <div className="font-mono text-xs text-gray-700 dark:text-gray-400 dark:text-gray-500 bg-white dark:bg-gray-800/80 dark:bg-gray-100 dark:bg-gray-800/80 px-3 py-1.5 rounded-lg border border-gray-300 dark:border-gray-200 dark:border-gray-700">
                 {qrCode || activeSession.qrCode}
               </div>
             </div>
             <div className="mt-4 flex items-center justify-center gap-3">
-              <div className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-200 font-medium">
+              <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-400 dark:text-gray-500 font-medium">
                 <FiRefreshCw className={`w-4 h-4 ${qrRefreshing ? 'animate-spin' : ''}`} />
                 <span>Yeni kod: {qrCountdown}s</span>
               </div>
-              <div className="w-20 h-2.5 bg-slate-300 dark:bg-slate-700 rounded-full overflow-hidden shadow-inner">
+              <div className="w-20 h-2.5 bg-gray-300 dark:bg-primary-50 rounded-full overflow-hidden shadow-inner">
                 <div
                   className="h-full bg-gradient-to-r from-primary-500 to-primary-600 transition-all duration-1000 shadow-sm"
                   style={{ width: `${Math.min((qrCountdown / 15) * 100, 100)}%` }}
                 />
               </div>
             </div>
-            <p className="text-sm text-slate-600 dark:text-slate-300 mt-3 font-medium">
+            <p className="text-sm text-gray-700 dark:text-gray-500 dark:text-gray-400 dark:text-gray-500 mt-3 font-medium">
               QR kod her 15 saniyede otomatik yenilenir. Öğrenciler güncel kodu taramalıdır.
             </p>
           </div>
@@ -285,11 +287,11 @@ const StartAttendancePage = () => {
           <div className="space-y-6">
             {/* Section Selection */}
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">
+              <label className="block text-sm font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 mb-2">
                 Ders Seçin
               </label>
               {sections.length === 0 ? (
-                <div className="text-slate-400 text-sm">
+                <div className="text-gray-600 dark:text-gray-300 text-sm">
                   Size atanmış ders bulunmuyor.
                 </div>
               ) : (
@@ -309,17 +311,17 @@ const StartAttendancePage = () => {
 
             {/* Section Info */}
             {selectedSectionData && (
-              <div className="p-4 rounded-xl bg-slate-100 dark:bg-slate-800/30 border border-slate-200 dark:border-slate-700 space-y-2">
+              <div className="p-4 rounded-xl bg-gray-100 dark:bg-gray-100 dark:bg-gray-800/30 border border-gray-200 dark:border-gray-200 dark:border-gray-700 space-y-2">
                 <div className="flex items-center gap-2 text-sm">
                   <FiUsers className="w-4 h-4 text-primary-600 dark:text-primary-400" />
-                  <span className="text-slate-700 dark:text-slate-300 font-medium">Kayıtlı Öğrenci:</span>
-                  <span className="font-semibold text-slate-900 dark:text-slate-100">{selectedSectionData.enrolledCount}</span>
+                  <span className="text-gray-700 dark:text-gray-500 dark:text-gray-400 dark:text-gray-500 font-medium">Kayıtlı Öğrenci:</span>
+                  <span className="font-semibold text-gray-900 dark:text-slate-100">{selectedSectionData.enrolledCount}</span>
                 </div>
                 {selectedSectionData.classroom && (
                   <div className="flex items-center gap-2 text-sm">
                     <FiMapPin className="w-4 h-4 text-primary-600 dark:text-primary-400" />
-                    <span className="text-slate-700 dark:text-slate-300 font-medium">Derslik:</span>
-                    <span className="font-semibold text-slate-900 dark:text-slate-100">{selectedSectionData.classroom}</span>
+                    <span className="text-gray-700 dark:text-gray-500 dark:text-gray-400 dark:text-gray-500 font-medium">Derslik:</span>
+                    <span className="font-semibold text-gray-900 dark:text-slate-100">{selectedSectionData.classroom}</span>
                   </div>
                 )}
               </div>
@@ -327,7 +329,7 @@ const StartAttendancePage = () => {
 
             {/* Duration */}
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">
+              <label className="block text-sm font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 mb-2">
                 Oturum Süresi (dakika)
               </label>
               <div className="flex gap-2">
@@ -337,8 +339,8 @@ const StartAttendancePage = () => {
                     type="button"
                     onClick={() => setDuration(d)}
                     className={`px-4 py-2 rounded-lg transition-colors ${duration === d
-                      ? 'bg-primary-500 text-white'
-                      : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
+                      ? 'bg-primary-500 text-gray-800 dark:text-gray-100'
+                      : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-primary-50'
                       }`}
                   >
                     {d} dk
@@ -349,7 +351,7 @@ const StartAttendancePage = () => {
 
             {/* Geofence Radius */}
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">
+              <label className="block text-sm font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 mb-2">
                 GPS Tolerans Yarıçapı (metre)
               </label>
               <div className="flex items-center gap-4">
@@ -362,11 +364,11 @@ const StartAttendancePage = () => {
                   onChange={(e) => setRadius(parseInt(e.target.value))}
                   className="flex-1"
                 />
-                <span className="w-16 text-center font-mono bg-slate-800 px-3 py-1 rounded">
+                <span className="w-16 text-center font-mono bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded">
                   {radius}m
                 </span>
               </div>
-              <p className="text-xs text-slate-500 mt-1">
+              <p className="text-xs text-gray-700 dark:text-gray-200 mt-1">
                 Öğrencilerin dersliğe bu mesafe içinde olması gerekir
               </p>
             </div>

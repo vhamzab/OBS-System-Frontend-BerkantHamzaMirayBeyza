@@ -8,7 +8,9 @@ import Button from '../../components/common/Button';
 import Input from '../../components/common/Input';
 import Select from '../../components/common/Select';
 
+import { useTranslation } from 'react-i18next';
 const AcademicCalendarPage = () => {
+  const { t } = useTranslation();
     const { user } = useAuth();
     const isAdmin = user?.role === 'admin';
 
@@ -154,8 +156,8 @@ const AcademicCalendarPage = () => {
                         <FiCalendar className="w-6 h-6 text-accent-400" />
                     </div>
                     <div>
-                        <h1 className="font-display text-3xl font-bold">Akademik Takvim</h1>
-                        <p className="text-slate-400">Dönem içi önemli tarihler</p>
+                        <h1 className="font-display text-3xl font-bold">{t('nav.calendar')}</h1>
+                        <p className="text-gray-600 dark:text-gray-300">Dönem içi önemli tarihler</p>
                     </div>
                 </div>
 
@@ -165,7 +167,7 @@ const AcademicCalendarPage = () => {
                         onChange={(e) => setFilterType(e.target.value)}
                         className="input py-2 px-4 w-full sm:w-40"
                     >
-                        <option value="all">Tümü</option>
+                        <option value="all">{t('common.all')}</option>
                         <option value="academic">Akademik</option>
                         <option value="exam">Sınavlar</option>
                         <option value="registration">Kayıt Dönemi</option>
@@ -186,9 +188,9 @@ const AcademicCalendarPage = () => {
 
             {filteredEvents.length === 0 ? (
                 <div className="card text-center py-12">
-                    <FiCalendar className="w-12 h-12 text-slate-500 mx-auto mb-4" />
+                    <FiCalendar className="w-12 h-12 text-gray-700 dark:text-gray-200 mx-auto mb-4" />
                     <h3 className="text-lg font-medium mb-2">Etkinlik Yok</h3>
-                    <p className="text-slate-400">Görüntülenecek etkinlik bulunamadı.</p>
+                    <p className="text-gray-600 dark:text-gray-300">Görüntülenecek etkinlik bulunamadı.</p>
                 </div>
             ) : (
                 <div className="grid gap-4">
@@ -199,12 +201,10 @@ const AcademicCalendarPage = () => {
                         >
                             <div className="flex flex-col md:flex-row md:items-center gap-4">
                                 {/* Date Box */}
-                                <div className="flex-shrink-0 w-full md:w-48 p-3 rounded-lg bg-slate-800 border border-slate-700 text-center">
-                                    <div className="text-sm text-slate-400 mb-1 flex items-center justify-center gap-2">
-                                        <FiClock className="w-4 h-4" />
-                                        Tarih
-                                    </div>
-                                    <div className="font-semibold text-white">
+                                <div className="flex-shrink-0 w-full md:w-48 p-3 rounded-lg bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-center">
+                                    <div className="text-sm text-gray-600 dark:text-gray-300 mb-1 flex items-center justify-center gap-2">
+                                        <FiClock className="w-4 h-4" />{t('common.date')}</div>
+                                    <div className="font-semibold text-gray-800 dark:text-gray-100">
                                         {formatDateRange(event.start_date, event.end_date)}
                                     </div>
                                 </div>
@@ -218,7 +218,7 @@ const AcademicCalendarPage = () => {
                                     </div>
                                     <h3 className="font-semibold text-lg mb-1">{event.title}</h3>
                                     {event.description && (
-                                        <p className="text-slate-400 text-sm">{event.description}</p>
+                                        <p className="text-gray-600 dark:text-gray-300 text-sm">{event.description}</p>
                                     )}
                                 </div>
                             </div>
@@ -226,8 +226,8 @@ const AcademicCalendarPage = () => {
                             {isAdmin && (
                                 <button
                                     onClick={() => handleDelete(event.id)}
-                                    className="absolute top-4 right-4 p-2 rounded-lg bg-slate-800 text-red-400 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-slate-700"
-                                    title="Sil"
+                                    className="absolute top-4 right-4 p-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-red-400 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-primary-50"
+                                    title={t('common.delete')}
                                 >
                                     <FiTrash2 className="w-4 h-4" />
                                 </button>
@@ -240,15 +240,15 @@ const AcademicCalendarPage = () => {
             {/* Create Event Modal */}
             {showModal && (
                 <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-                    <div className="card w-full max-w-lg shadow-xl border border-slate-700">
-                        <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-700/50">
+                    <div className="card w-full max-w-lg shadow-xl border border-gray-200 dark:border-gray-700">
+                        <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-200 dark:border-gray-700/50">
                             <h3 className="font-display text-xl font-semibold flex items-center gap-2">
                                 <FiPlus className="w-5 h-5 text-primary-400" />
                                 Yeni Etkinlik
                             </h3>
                             <button
                                 onClick={() => setShowModal(false)}
-                                className="p-2 rounded-lg hover:bg-slate-700 transition-colors text-slate-400 hover:text-white"
+                                className="p-2 rounded-lg hover:bg-primary-50 transition-colors text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 dark:text-gray-100"
                             >
                                 <FiX className="w-5 h-5" />
                             </button>
@@ -264,7 +264,7 @@ const AcademicCalendarPage = () => {
                             />
 
                             <div>
-                                <label className="block text-sm font-medium mb-2 text-slate-300">Açıklama</label>
+                                <label className="block text-sm font-medium mb-2 text-gray-500 dark:text-gray-400 dark:text-gray-500">{t('courses.description')}</label>
                                 <textarea
                                     value={formData.description}
                                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
@@ -303,24 +303,20 @@ const AcademicCalendarPage = () => {
                                 />
                             </div>
 
-                            <div className="flex gap-3 pt-6 border-t border-slate-700/50 mt-6">
+                            <div className="flex gap-3 pt-6 border-t border-gray-200 dark:border-gray-700/50 mt-6">
                                 <Button
                                     type="button"
                                     variant="outline"
                                     onClick={() => setShowModal(false)}
                                     className="flex-1"
                                     disabled={saving}
-                                >
-                                    İptal
-                                </Button>
+                                >{t('common.cancel')}</Button>
                                 <Button
                                     type="submit"
                                     loading={saving}
                                     className="flex-1"
                                 >
-                                    <FiSave className="w-4 h-4 mr-2" />
-                                    Kaydet
-                                </Button>
+                                    <FiSave className="w-4 h-4 mr-2" />{t('common.save')}</Button>
                             </div>
                         </form>
                     </div>

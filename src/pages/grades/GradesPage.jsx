@@ -4,7 +4,9 @@ import toast from 'react-hot-toast';
 import gradeService from '../../services/gradeService';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 
+import { useTranslation } from 'react-i18next';
 const GradesPage = () => {
+  const { t } = useTranslation();
   const [grades, setGrades] = useState([]);
   const [summary, setSummary] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -70,7 +72,7 @@ const GradesPage = () => {
   };
 
   const getGradeColor = (letterGrade) => {
-    if (!letterGrade) return 'text-slate-400';
+    if (!letterGrade) return 'text-gray-600 dark:text-gray-300';
     const grade = letterGrade.toUpperCase();
     if (['AA', 'BA'].includes(grade)) return 'text-green-400';
     if (['BB', 'CB'].includes(grade)) return 'text-emerald-400';
@@ -80,7 +82,7 @@ const GradesPage = () => {
   };
 
   const getGradeBg = (letterGrade) => {
-    if (!letterGrade) return 'bg-slate-700/50';
+    if (!letterGrade) return 'bg-primary-50/50';
     const grade = letterGrade.toUpperCase();
     if (['AA', 'BA'].includes(grade)) return 'bg-green-500/20';
     if (['BB', 'CB'].includes(grade)) return 'bg-emerald-500/20';
@@ -108,8 +110,8 @@ const GradesPage = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="font-display text-3xl font-bold mb-2">Notlarım</h1>
-          <p className="text-slate-400">Akademik performansınızı görüntüleyin</p>
+          <h1 className="font-display text-3xl font-bold mb-2">{t('grades.myGrades')}</h1>
+          <p className="text-gray-600 dark:text-gray-300">Akademik performansınızı görüntüleyin</p>
         </div>
         <button
           onClick={handleDownloadTranscript}
@@ -135,11 +137,11 @@ const GradesPage = () => {
           </div>
           <div className="flex-1">
             <h3 className="font-semibold text-primary-400 mb-1">Otomatik Hesaplama Sistemi</h3>
-            <p className="text-sm text-slate-300">
+            <p className="text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500">
               Sistem, notlarınız girildiğinde otomatik olarak <strong>ortalama not</strong>, <strong>harf notu</strong>, 
               <strong> not puanı</strong>, <strong>dönem GPA</strong> ve <strong>genel CGPA</strong> değerlerinizi hesaplar.
             </p>
-            <div className="mt-2 flex flex-wrap gap-2 text-xs text-slate-400">
+            <div className="mt-2 flex flex-wrap gap-2 text-xs text-gray-600 dark:text-gray-300">
               <span>• Ortalama: Vize (30%) + Final (50%) + Ödev (20%)</span>
               <span>• Harf Notu: Ortalama notuna göre otomatik belirlenir</span>
               <span>• CGPA: Tüm dönemlerin ağırlıklı ortalaması</span>
@@ -160,8 +162,8 @@ const GradesPage = () => {
                 <div className="text-3xl font-bold text-primary-400 mb-1">
                   {summary.cgpa?.toFixed(2) || '0.00'}
                 </div>
-                <div className="text-sm text-slate-400">Genel Not Ortalaması (CGPA)</div>
-                <div className="text-xs text-slate-500 mt-1">Otomatik hesaplanır</div>
+                <div className="text-sm text-gray-600 dark:text-gray-300">Genel Not Ortalaması (CGPA)</div>
+                <div className="text-xs text-gray-700 dark:text-gray-200 mt-1">Otomatik hesaplanır</div>
               </div>
             </div>
           </div>
@@ -175,8 +177,8 @@ const GradesPage = () => {
                 <div className="text-3xl font-bold text-emerald-400 mb-1">
                   {summary.totalCredits || 0}
                 </div>
-                <div className="text-sm text-slate-400">Toplam Kredi</div>
-                <div className="text-xs text-slate-500 mt-1">Tamamlanan dersler</div>
+                <div className="text-sm text-gray-600 dark:text-gray-300">Toplam Kredi</div>
+                <div className="text-xs text-gray-700 dark:text-gray-200 mt-1">Tamamlanan dersler</div>
               </div>
             </div>
           </div>
@@ -190,8 +192,8 @@ const GradesPage = () => {
                 <div className="text-3xl font-bold text-amber-400 mb-1">
                   {grades.length}
                 </div>
-                <div className="text-sm text-slate-400">Toplam Ders</div>
-                <div className="text-xs text-slate-500 mt-1">Tüm dönemler</div>
+                <div className="text-sm text-gray-600 dark:text-gray-300">{t('dashboard.totalCourses')}</div>
+                <div className="text-xs text-gray-700 dark:text-gray-200 mt-1">Tüm dönemler</div>
               </div>
             </div>
           </div>
@@ -206,7 +208,7 @@ const GradesPage = () => {
               <FiBarChart2 className="w-5 h-5 text-primary-400" />
               Dönem Bazlı GPA (Otomatik Hesaplanır)
             </h2>
-            <span className="text-xs text-slate-500">Her dönem için ayrı hesaplanır</span>
+            <span className="text-xs text-gray-700 dark:text-gray-200">Her dönem için ayrı hesaplanır</span>
           </div>
           <div className="flex items-end gap-4 h-32 overflow-x-auto pb-2">
             {summary.semesters.map((sem, idx) => (
@@ -216,10 +218,10 @@ const GradesPage = () => {
                   style={{ height: `${(sem.gpa / 4) * 100}%` }}
                 />
                 <div className="text-sm font-bold mt-2">{sem.gpa.toFixed(2)}</div>
-                <div className="text-xs text-slate-400">
+                <div className="text-xs text-gray-600 dark:text-gray-300">
                   {semesterNames[sem.semester]} {sem.year}
                 </div>
-                <div className="text-xs text-slate-500 mt-1">{sem.credits} kredi</div>
+                <div className="text-xs text-gray-700 dark:text-gray-200 mt-1">{sem.credits} kredi</div>
               </div>
             ))}
           </div>
@@ -228,7 +230,7 @@ const GradesPage = () => {
 
       {/* Filter */}
       <div className="flex items-center gap-4 mb-6">
-        <label className="text-sm text-slate-400">Dönem:</label>
+        <label className="text-sm text-gray-600 dark:text-gray-300">Dönem:</label>
         <select
           value={selectedSemester}
           onChange={(e) => setSelectedSemester(e.target.value)}
@@ -249,39 +251,39 @@ const GradesPage = () => {
       {/* Grades Table */}
       {filteredGrades.length === 0 ? (
         <div className="card text-center py-16">
-          <FiBook className="w-16 h-16 mx-auto text-slate-600 mb-4" />
+          <FiBook className="w-16 h-16 mx-auto text-gray-700 dark:text-gray-200 mb-4" />
           <h2 className="text-xl font-semibold mb-2">Not Bulunamadı</h2>
-          <p className="text-slate-400">Seçili dönem için not kaydı bulunmuyor.</p>
+          <p className="text-gray-600 dark:text-gray-300">Seçili dönem için not kaydı bulunmuyor.</p>
         </div>
       ) : (
         <div className="card overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-slate-700/50">
-                  <th className="text-left py-4 px-4 text-sm font-medium text-slate-400">Ders</th>
-                  <th className="text-center py-4 px-4 text-sm font-medium text-slate-400">Kredi</th>
-                  <th className="text-center py-4 px-4 text-sm font-medium text-slate-400">Vize</th>
-                  <th className="text-center py-4 px-4 text-sm font-medium text-slate-400">Final</th>
-                  <th className="text-center py-4 px-4 text-sm font-medium text-slate-400">Ortalama</th>
-                  <th className="text-center py-4 px-4 text-sm font-medium text-slate-400">Harf</th>
-                  <th className="text-center py-4 px-4 text-sm font-medium text-slate-400">Puan</th>
+                <tr className="border-b border-gray-200 dark:border-gray-700/50">
+                  <th className="text-left py-4 px-4 text-sm font-medium text-gray-600 dark:text-gray-300">Ders</th>
+                  <th className="text-center py-4 px-4 text-sm font-medium text-gray-600 dark:text-gray-300">{t('courses.credits')}</th>
+                  <th className="text-center py-4 px-4 text-sm font-medium text-gray-600 dark:text-gray-300">{t('grades.midterm')}</th>
+                  <th className="text-center py-4 px-4 text-sm font-medium text-gray-600 dark:text-gray-300">{t('grades.final')}</th>
+                  <th className="text-center py-4 px-4 text-sm font-medium text-gray-600 dark:text-gray-300">{t('grades.average')}</th>
+                  <th className="text-center py-4 px-4 text-sm font-medium text-gray-600 dark:text-gray-300">Harf</th>
+                  <th className="text-center py-4 px-4 text-sm font-medium text-gray-600 dark:text-gray-300">{t('grades.score')}</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredGrades.map((grade, idx) => (
                   <tr 
                     key={idx}
-                    className="border-b border-slate-700/30 hover:bg-slate-800/30 transition-colors"
+                    className="border-b border-gray-200 dark:border-gray-700/30 hover:bg-gray-100 dark:hover:bg-gray-700 dark:bg-gray-800/30 transition-colors"
                   >
                     <td className="py-4 px-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center shrink-0">
+                        <div className="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center shrink-0">
                           <FiBook className="w-5 h-5 text-primary-400" />
                         </div>
                         <div>
                           <div className="font-medium">{grade.course?.name}</div>
-                          <div className="text-xs text-slate-400">{grade.course?.code}</div>
+                          <div className="text-xs text-gray-600 dark:text-gray-300">{grade.course?.code}</div>
                         </div>
                       </div>
                     </td>

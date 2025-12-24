@@ -5,7 +5,9 @@ import eventService from '../../services/eventService';
 import QRScanner from '../../components/common/QRScanner';
 import Button from '../../components/common/Button';
 
+import { useTranslation } from 'react-i18next';
 const CheckInPage = () => {
+  const { t } = useTranslation();
   const [showScanner, setShowScanner] = useState(false);
   const [checkingIn, setCheckingIn] = useState(false);
   const [registration, setRegistration] = useState(null);
@@ -58,7 +60,7 @@ const CheckInPage = () => {
     <div className="p-6 lg:p-8 max-w-4xl mx-auto">
       <div className="mb-8">
         <h1 className="font-display text-3xl font-bold mb-2">Etkinlik Girişi</h1>
-        <p className="text-slate-400">Etkinlik kayıt QR kodunu tarayın</p>
+        <p className="text-gray-600 dark:text-gray-300">Etkinlik kayıt QR kodunu tarayın</p>
       </div>
 
       {!registration ? (
@@ -68,7 +70,7 @@ const CheckInPage = () => {
               <FiCamera className="w-12 h-12 text-blue-400" />
             </div>
             <h2 className="text-xl font-bold mb-2">QR Kodu Tara</h2>
-            <p className="text-slate-400 mb-6">
+            <p className="text-gray-600 dark:text-gray-300 mb-6">
               Etkinlik kayıt QR kodunu taramak için kamerayı başlatın
             </p>
             <Button onClick={() => setShowScanner(true)} size="lg">
@@ -88,19 +90,19 @@ const CheckInPage = () => {
           <h2 className="text-xl font-bold text-center mb-6">Kayıt Bilgileri</h2>
 
           <div className="space-y-4 mb-6">
-            <div className="p-4 bg-slate-700/50 rounded-lg">
-              <div className="text-sm text-slate-400 mb-1">Etkinlik</div>
+            <div className="p-4 bg-primary-50/50 rounded-lg">
+              <div className="text-sm text-gray-600 dark:text-gray-300 mb-1">Etkinlik</div>
               <div className="font-semibold text-lg">{event?.title}</div>
             </div>
 
-            <div className="flex items-center gap-3 p-4 bg-slate-700/50 rounded-lg">
-              <FiUser className="text-slate-400" />
+            <div className="flex items-center gap-3 p-4 bg-primary-50/50 rounded-lg">
+              <FiUser className="text-gray-600 dark:text-gray-300" />
               <div>
-                <div className="text-sm text-slate-400">Katılımcı</div>
+                <div className="text-sm text-gray-600 dark:text-gray-300">Katılımcı</div>
                 <div className="font-semibold">
                   {registration.user?.first_name} {registration.user?.last_name}
                 </div>
-                <div className="text-sm text-slate-400">{registration.user?.email}</div>
+                <div className="text-sm text-gray-600 dark:text-gray-300">{registration.user?.email}</div>
               </div>
             </div>
 
@@ -128,9 +130,7 @@ const CheckInPage = () => {
                 setEvent(null);
               }}
               className="flex-1"
-            >
-              İptal
-            </Button>
+            >{t('common.cancel')}</Button>
             <Button
               onClick={handleCheckIn}
               loading={checkingIn}

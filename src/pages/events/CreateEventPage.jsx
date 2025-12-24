@@ -6,7 +6,9 @@ import eventService from '../../services/eventService';
 import Button from '../../components/common/Button';
 import { useAuth } from '../../context/AuthContext';
 
+import { useTranslation } from 'react-i18next';
 const CreateEventPage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
@@ -103,7 +105,7 @@ const CreateEventPage = () => {
     <div className="p-6 lg:p-8 max-w-4xl mx-auto">
       <button
         onClick={() => navigate(-1)}
-        className="flex items-center gap-2 text-slate-400 hover:text-slate-200 mb-6"
+        className="flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:text-gray-400 dark:text-gray-500 mb-6"
       >
         <FiArrowLeft />
         Geri Dön
@@ -111,7 +113,7 @@ const CreateEventPage = () => {
 
       <div className="mb-8">
         <h1 className="font-display text-3xl font-bold mb-2">Yeni Etkinlik Oluştur</h1>
-        <p className="text-slate-400">Etkinlik bilgilerini doldurun</p>
+        <p className="text-gray-600 dark:text-gray-300">Etkinlik bilgilerini doldurun</p>
       </div>
 
       <form onSubmit={handleSubmit} className="card space-y-6">
@@ -133,8 +135,7 @@ const CreateEventPage = () => {
 
         {/* Description */}
         <div>
-          <label className="block text-sm font-medium mb-2">
-            Açıklama <span className="text-red-400">*</span>
+          <label className="block text-sm font-medium mb-2">{t('courses.description')}<span className="text-red-400">*</span>
           </label>
           <textarea
             name="description"
@@ -149,8 +150,7 @@ const CreateEventPage = () => {
         {/* Category and Status */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium mb-2">
-              Kategori <span className="text-red-400">*</span>
+            <label className="block text-sm font-medium mb-2">{t('events.category')}<span className="text-red-400">*</span>
             </label>
             <select
               name="category"
@@ -168,8 +168,7 @@ const CreateEventPage = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2">
-              Durum <span className="text-red-400">*</span>
+            <label className="block text-sm font-medium mb-2">{t('common.status')}<span className="text-red-400">*</span>
             </label>
             <select
               name="status"
@@ -191,8 +190,7 @@ const CreateEventPage = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
             <label className="block text-sm font-medium mb-2">
-              <FiCalendar className="inline mr-1" />
-              Tarih <span className="text-red-400">*</span>
+              <FiCalendar className="inline mr-1" />{t('common.date')}<span className="text-red-400">*</span>
             </label>
             <input
               type="date"
@@ -240,8 +238,7 @@ const CreateEventPage = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium mb-2">
-              <FiMapPin className="inline mr-1" />
-              Konum <span className="text-red-400">*</span>
+              <FiMapPin className="inline mr-1" />{t('events.location')}<span className="text-red-400">*</span>
             </label>
             <input
               type="text"
@@ -256,8 +253,7 @@ const CreateEventPage = () => {
 
           <div>
             <label className="block text-sm font-medium mb-2">
-              <FiUsers className="inline mr-1" />
-              Kapasite <span className="text-red-400">*</span>
+              <FiUsers className="inline mr-1" />{t('courses.capacity')}<span className="text-red-400">*</span>
             </label>
             <input
               type="number"
@@ -289,7 +285,7 @@ const CreateEventPage = () => {
         </div>
 
         {/* Paid Event */}
-        <div className="border-t border-slate-700/50 pt-4">
+        <div className="border-t border-gray-200 dark:border-gray-700/50 pt-4">
           <div className="flex items-center gap-3 mb-4">
             <input
               type="checkbox"
@@ -297,7 +293,7 @@ const CreateEventPage = () => {
               id="is_paid"
               checked={formData.is_paid}
               onChange={handleChange}
-              className="w-5 h-5 rounded border-slate-600 bg-slate-700 text-blue-600 focus:ring-blue-500"
+              className="w-5 h-5 rounded border-gray-200 dark:border-gray-700 bg-primary-50 text-blue-600 focus:ring-blue-500"
             />
             <label htmlFor="is_paid" className="text-sm font-medium cursor-pointer">
               Ücretli Etkinlik
@@ -326,22 +322,18 @@ const CreateEventPage = () => {
         </div>
 
         {/* Submit Buttons */}
-        <div className="flex gap-4 pt-4 border-t border-slate-700/50">
+        <div className="flex gap-4 pt-4 border-t border-gray-200 dark:border-gray-700/50">
           <Button
             type="button"
             variant="ghost"
             onClick={() => navigate(-1)}
             className="flex-1"
-          >
-            İptal
-          </Button>
+          >{t('common.cancel')}</Button>
           <Button
             type="submit"
             loading={loading}
             className="flex-1"
-          >
-            Etkinlik Oluştur
-          </Button>
+          >{t('events.createEvent')}</Button>
         </div>
       </form>
     </div>

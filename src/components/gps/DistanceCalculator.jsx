@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { Navigation, CheckCircle, XCircle, AlertTriangle } from 'lucide-react';
 
+import { useTranslation } from 'react-i18next';
 /**
  * Distance Calculator Component
  * Shows distance from classroom and whether student is within geofence
@@ -11,6 +12,7 @@ const DistanceCalculator = ({
   geofenceRadius = 15,
   className = '',
 }) => {
+  const { t } = useTranslation();
   // Calculate distance using Haversine formula
   const { distance, isWithin, allowedDistance } = useMemo(() => {
     if (!userLocation || !classroomLocation) {
@@ -49,8 +51,8 @@ const DistanceCalculator = ({
 
   if (!userLocation || !classroomLocation) {
     return (
-      <div className={`rounded-lg border border-gray-200 p-4 bg-gray-50 ${className}`}>
-        <div className="flex items-center gap-3 text-gray-500">
+      <div className={`rounded-lg border border-gray-200 dark:border-gray-700 p-4 bg-gray-50 dark:bg-gray-900 ${className}`}>
+        <div className="flex items-center gap-3 text-gray-500 dark:text-gray-400 dark:text-gray-500">
           <Navigation className="h-5 w-5" />
           <span className="text-sm">Mesafe hesaplamak için konum bilgisi gerekli</span>
         </div>
@@ -75,15 +77,15 @@ const DistanceCalculator = ({
             <p className={`font-medium ${isWithin ? 'text-green-700' : 'text-red-700'}`}>
               {isWithin ? 'Geofence İçindesiniz' : 'Geofence Dışındasınız'}
             </p>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-gray-600 dark:text-gray-300">
               Derslikten <span className="font-semibold">{distance}m</span> uzaklıktasınız
             </p>
           </div>
         </div>
 
         <div className="text-right">
-          <p className="text-xs text-gray-500">İzin verilen mesafe</p>
-          <p className="font-semibold text-gray-700">{allowedDistance}m</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500">İzin verilen mesafe</p>
+          <p className="font-semibold text-gray-700 dark:text-gray-200">{allowedDistance}m</p>
         </div>
       </div>
 
@@ -106,12 +108,12 @@ const DistanceCalculator = ({
 
       {/* Distance visualization */}
       <div className="mt-4">
-        <div className="flex items-center justify-between text-xs text-gray-500 mb-1">
+        <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500 mb-1">
           <span>0m</span>
           <span>Derslik</span>
           <span>{Math.max(distance, allowedDistance) + 10}m</span>
         </div>
-        <div className="relative h-4 bg-gray-200 rounded-full overflow-hidden">
+        <div className="relative h-4 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
           {/* Geofence area */}
           <div
             className="absolute h-full bg-green-200"
@@ -136,11 +138,11 @@ const DistanceCalculator = ({
         <div className="flex items-center justify-between mt-2">
           <div className="flex items-center gap-2 text-xs">
             <div className="w-3 h-3 bg-green-200 rounded" />
-            <span className="text-gray-600">Geofence ({allowedDistance}m)</span>
+            <span className="text-gray-600 dark:text-gray-300">Geofence ({allowedDistance}m)</span>
           </div>
           <div className="flex items-center gap-2 text-xs">
             <div className={`w-3 h-3 rounded ${isWithin ? 'bg-green-600' : 'bg-red-600'}`} />
-            <span className="text-gray-600">Konumunuz ({distance}m)</span>
+            <span className="text-gray-600 dark:text-gray-300">Konumunuz ({distance}m)</span>
           </div>
         </div>
       </div>

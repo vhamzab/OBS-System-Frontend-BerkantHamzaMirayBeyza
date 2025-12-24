@@ -9,6 +9,7 @@ import { getFileUrl } from '../../services/api';
 import Input from '../../components/common/Input';
 import Button from '../../components/common/Button';
 
+import { useTranslation } from 'react-i18next';
 const profileSchema = Yup.object({
   firstName: Yup.string()
     .min(2, 'Ad en az 2 karakter olmalıdır')
@@ -37,6 +38,7 @@ const passwordSchema = Yup.object({
 
 // Student Department Section Component
 const StudentDepartmentSection = ({ studentNumber, currentDepartment, onDepartmentUpdate }) => {
+  const { t } = useTranslation();
   const [departments, setDepartments] = useState([]);
   const [selectedDept, setSelectedDept] = useState(currentDepartment?.id || '');
   const [loading, setLoading] = useState(false);
@@ -82,7 +84,7 @@ const StudentDepartmentSection = ({ studentNumber, currentDepartment, onDepartme
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
       <Input
-        label="Öğrenci Numarası"
+        label={t('profile.studentNumber')}
         name="studentNumber"
         icon={FiHash}
         value={studentNumber || '-'}
@@ -96,7 +98,7 @@ const StudentDepartmentSection = ({ studentNumber, currentDepartment, onDepartme
           )}
         </label>
         <div className="relative">
-          <FiBookOpen className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
+          <FiBookOpen className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600 dark:text-gray-300 w-5 h-5" />
           <select
             value={selectedDept}
             onChange={(e) => handleDepartmentChange(e.target.value)}
@@ -117,7 +119,7 @@ const StudentDepartmentSection = ({ studentNumber, currentDepartment, onDepartme
           )}
         </div>
         {currentDepartment && (
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs text-gray-700 dark:text-gray-200 mt-1">
             Mevcut: {currentDepartment.name}
           </p>
         )}
@@ -188,7 +190,7 @@ const FacultyDepartmentSection = ({ employeeNumber, currentDepartment, onDepartm
           )}
         </label>
         <div className="relative">
-          <FiBookOpen className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
+          <FiBookOpen className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600 dark:text-gray-300 w-5 h-5" />
           <select
             value={selectedDept}
             onChange={(e) => handleDepartmentChange(e.target.value)}
@@ -209,7 +211,7 @@ const FacultyDepartmentSection = ({ employeeNumber, currentDepartment, onDepartm
           )}
         </div>
         {currentDepartment && (
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs text-gray-700 dark:text-gray-200 mt-1">
             Mevcut: {currentDepartment.name}
           </p>
         )}
@@ -221,6 +223,7 @@ const FacultyDepartmentSection = ({ employeeNumber, currentDepartment, onDepartm
 
 const ProfilePage = () => {
   const { user, updateUser } = useAuth();
+  const { t } = useTranslation();
   const [profileLoading, setProfileLoading] = useState(false);
   const [passwordLoading, setPasswordLoading] = useState(false);
   const [uploadLoading, setUploadLoading] = useState(false);
@@ -229,9 +232,9 @@ const ProfilePage = () => {
 
   const getRoleLabel = (role) => {
     const roles = {
-      student: 'Öğrenci',
-      faculty: 'Öğretim Üyesi',
-      admin: 'Yönetici',
+      student: t('roles.student'),
+      faculty: t('roles.faculty'),
+      admin: t('roles.admin'),
     };
     return roles[role] || role;
   };
@@ -372,7 +375,7 @@ const ProfilePage = () => {
           <div className="flex flex-col sm:flex-row items-center gap-6">
             {/* Profile Picture */}
             <div className="relative group">
-              <div className="w-36 h-36 sm:w-48 sm:h-48 rounded-2xl bg-gradient-to-br from-primary-500 via-primary-400 to-accent-500 flex items-center justify-center overflow-hidden border-2 border-slate-700/50 shadow-2xl relative">
+              <div className="w-36 h-36 sm:w-48 sm:h-48 rounded-2xl bg-gradient-to-br from-primary-500 via-primary-400 to-accent-500 flex items-center justify-center overflow-hidden border-2 border-gray-200 dark:border-gray-700/50 shadow-2xl relative">
                 {getProfilePictureUrl() ? (
                   <img
                     src={getProfilePictureUrl()}
@@ -390,7 +393,7 @@ const ProfilePage = () => {
                   />
                 ) : null}
                 <span
-                  className={`profile-initials text-white font-bold text-5xl sm:text-6xl ${getProfilePictureUrl() ? 'hidden' : 'flex'} items-center justify-center absolute inset-0`}
+                  className={`profile-initials text-gray-800 dark:text-gray-100 font-bold text-5xl sm:text-6xl ${getProfilePictureUrl() ? 'hidden' : 'flex'} items-center justify-center absolute inset-0`}
                 >
                   {user?.first_name?.[0]?.toUpperCase() || ''}{user?.last_name?.[0]?.toUpperCase() || ''}
                 </span>
@@ -404,7 +407,7 @@ const ProfilePage = () => {
                 {uploadLoading ? (
                   <div className="spinner" />
                 ) : (
-                  <FiCamera className="w-8 h-8 text-white" />
+                  <FiCamera className="w-8 h-8 text-gray-800 dark:text-gray-100" />
                 )}
               </button>
               <input
@@ -421,7 +424,7 @@ const ProfilePage = () => {
               <h2 className="text-2xl font-bold mb-1">
                 {user?.first_name} {user?.last_name}
               </h2>
-              <p className="text-slate-400 mb-3">{user?.email}</p>
+              <p className="text-gray-600 dark:text-gray-300 mb-3">{user?.email}</p>
               <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-500/20 text-primary-400 text-sm font-medium">
                 {getRoleLabel(user?.role)}
               </span>
@@ -436,14 +439,14 @@ const ProfilePage = () => {
               <h3 className="font-display text-xl font-bold">Belgelerim</h3>
               <FiFileText className="w-5 h-5 text-primary-400" />
             </div>
-            <div className="bg-slate-100 rounded-xl p-4 flex items-center justify-between">
+            <div className="bg-gray-100 dark:bg-gray-800 rounded-xl p-4 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-lg bg-red-500/20 text-red-500 flex items-center justify-center">
                   <span className="font-bold text-xs">PDF</span>
                 </div>
                 <div>
-                  <h4 className="font-medium text-slate-800">Öğrenci Belgesi</h4>
-                  <p className="text-xs text-slate-500">Resmi, barkodlu öğrenci belgesi</p>
+                  <h4 className="font-medium text-gray-800 dark:text-gray-100">Öğrenci Belgesi</h4>
+                  <p className="text-xs text-gray-700 dark:text-gray-200">Resmi, barkodlu öğrenci belgesi</p>
                 </div>
               </div>
               <Button
@@ -452,9 +455,7 @@ const ProfilePage = () => {
                 onClick={handleDownloadCertificate}
                 loading={certificateLoading}
               >
-                <FiDownload className="w-4 h-4 mr-2" />
-                İndir
-              </Button>
+                <FiDownload className="w-4 h-4 mr-2" />{t('common.download')}</Button>
             </div>
           </div>
         )}
@@ -465,7 +466,7 @@ const ProfilePage = () => {
           <form onSubmit={profileFormik.handleSubmit} className="space-y-5">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <Input
-                label="Ad"
+                label={t('auth.firstName')}
                 name="firstName"
                 icon={FiUser}
                 value={profileFormik.values.firstName}
@@ -476,7 +477,7 @@ const ProfilePage = () => {
                 required
               />
               <Input
-                label="Soyad"
+                label={t('auth.lastName')}
                 name="lastName"
                 icon={FiUser}
                 value={profileFormik.values.lastName}
@@ -489,7 +490,7 @@ const ProfilePage = () => {
             </div>
 
             <Input
-              label="E-posta"
+              label={t('auth.email')}
               name="email"
               type="email"
               icon={FiMail}
@@ -498,7 +499,7 @@ const ProfilePage = () => {
             />
 
             <Input
-              label="Telefon"
+              label={t('auth.phone')}
               name="phone"
               icon={FiPhone}
               placeholder="+90 5XX XXX XX XX"
@@ -551,7 +552,7 @@ const ProfilePage = () => {
 
         {/* Password Change Form */}
         <div className="card">
-          <h3 className="font-display text-xl font-bold mb-6">Şifre Değiştir</h3>
+          <h3 className="font-display text-xl font-bold mb-6">{t('profile.changePassword')}</h3>
           <form onSubmit={passwordFormik.handleSubmit} className="space-y-5">
             <Input
               label="Mevcut Şifre"

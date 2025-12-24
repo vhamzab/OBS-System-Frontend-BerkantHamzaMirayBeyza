@@ -2,9 +2,11 @@ import { createContext, useContext, useState, useEffect } from 'react';
 import authService from '../services/authService';
 import userService from '../services/userService';
 
+import { useTranslation } from 'react-i18next';
 const AuthContext = createContext(null);
 
 export const useAuth = () => {
+  const { t } = useTranslation();
   const context = useContext(AuthContext);
   if (!context) {
     throw new Error('useAuth must be used within an AuthProvider');

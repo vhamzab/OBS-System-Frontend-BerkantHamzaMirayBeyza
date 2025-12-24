@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { TrendingUp, TrendingDown, Minus, Award } from 'lucide-react';
 
+import { useTranslation } from 'react-i18next';
 /**
  * GPA Trend Chart Component
  * Displays GPA trend over semesters
@@ -11,6 +12,7 @@ const GPATrendChart = ({
   title = 'GPA Trend',
   className = '',
 }) => {
+  const { t } = useTranslation();
   // Semester name mapping
   const semesterNames = {
     fall: 'Güz',
@@ -36,7 +38,7 @@ const GPATrendChart = ({
   }, [semesters]);
 
   const TrendIcon = trend === 'up' ? TrendingUp : trend === 'down' ? TrendingDown : Minus;
-  const trendColor = trend === 'up' ? 'text-green-500' : trend === 'down' ? 'text-red-500' : 'text-gray-500';
+  const trendColor = trend === 'up' ? 'text-green-500' : trend === 'down' ? 'text-red-500' : 'text-gray-500 dark:text-gray-400 dark:text-gray-500';
   const trendText = trend === 'up' ? 'Yükseliyor' : trend === 'down' ? 'Düşüyor' : 'Stabil';
 
   // GPA color based on value
@@ -69,9 +71,9 @@ const GPATrendChart = ({
   const maxGPA = 4.0;
 
   return (
-    <div className={`bg-white rounded-lg border border-gray-200 p-6 ${className}`}>
+    <div className={`bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 ${className}`}>
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-semibold text-gray-800">{title}</h3>
+        <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">{title}</h3>
         <div className={`flex items-center gap-1 ${trendColor}`}>
           <TrendIcon className="h-4 w-4" />
           <span className="text-sm">{trendText}</span>
@@ -86,7 +88,7 @@ const GPATrendChart = ({
             {cgpa.toFixed(2)}
           </span>
         </div>
-        <p className="text-sm text-gray-600">Genel Not Ortalaması (CGPA)</p>
+        <p className="text-sm text-gray-600 dark:text-gray-300">Genel Not Ortalaması (CGPA)</p>
         <span className={`inline-block mt-2 px-3 py-1 rounded-full text-sm font-medium ${honorStatus.bg} ${honorStatus.color}`}>
           {honorStatus.label}
         </span>
@@ -95,7 +97,7 @@ const GPATrendChart = ({
       {/* Semester GPA Chart */}
       {semesters && semesters.length > 0 && (
         <>
-          <p className="text-sm font-medium text-gray-700 mb-4">Dönemlik GPA</p>
+          <p className="text-sm font-medium text-gray-700 dark:text-gray-200 mb-4">Dönemlik GPA</p>
           
           {/* Visual chart */}
           <div className="relative h-40 mb-4">
@@ -103,8 +105,8 @@ const GPATrendChart = ({
             <div className="absolute inset-0 flex flex-col justify-between">
               {[4.0, 3.0, 2.0, 1.0, 0].map((val) => (
                 <div key={val} className="flex items-center">
-                  <span className="text-xs text-gray-400 w-8">{val.toFixed(1)}</span>
-                  <div className="flex-1 border-t border-gray-100" />
+                  <span className="text-xs text-gray-400 dark:text-gray-500 w-8">{val.toFixed(1)}</span>
+                  <div className="flex-1 border-t border-gray-100 dark:border-gray-700" />
                 </div>
               ))}
             </div>
@@ -125,7 +127,7 @@ const GPATrendChart = ({
                       }`}
                       style={{ height: `${Math.max(height, 5)}%` }}
                     />
-                    <span className="text-xs text-gray-500 text-center">
+                    <span className="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500 text-center">
                       {semesterNames[semester.semester] || semester.semester}
                       <br />
                       {semester.year}
@@ -139,12 +141,12 @@ const GPATrendChart = ({
           {/* Semester details */}
           <div className="space-y-2 mt-6">
             {semesters.slice(-4).reverse().map((semester, index) => (
-              <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded">
-                <span className="text-sm text-gray-600">
+              <div key={index} className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-900 rounded">
+                <span className="text-sm text-gray-600 dark:text-gray-300">
                   {semester.year} {semesterNames[semester.semester] || semester.semester}
                 </span>
                 <div className="flex items-center gap-4">
-                  <span className="text-sm text-gray-500">
+                  <span className="text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500">
                     {semester.totalCredits || semester.credits} kredi
                   </span>
                   <span className={`text-sm font-medium ${getGPAColor(semester.gpa)}`}>
@@ -158,8 +160,8 @@ const GPATrendChart = ({
       )}
 
       {/* GPA Scale legend */}
-      <div className="mt-6 pt-4 border-t border-gray-100">
-        <div className="flex items-center justify-between text-xs text-gray-500">
+      <div className="mt-6 pt-4 border-t border-gray-100 dark:border-gray-700">
+        <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500">
           <span className="flex items-center gap-1">
             <span className="w-2 h-2 bg-green-500 rounded-full"></span>
             3.0+ Başarılı

@@ -1,5 +1,6 @@
 import { FiChevronDown } from 'react-icons/fi';
 
+import { useTranslation } from 'react-i18next';
 const Select = ({
   label,
   name,
@@ -15,6 +16,7 @@ const Select = ({
   className = '',
   ...props
 }) => {
+  const { t } = useTranslation();
   const hasError = touched && error;
 
   return (
@@ -36,7 +38,7 @@ const Select = ({
           className={`
             input-field appearance-none pr-10 cursor-pointer
             ${hasError ? 'input-error' : ''}
-            ${!value ? 'text-gray-400' : ''}
+            ${!value ? 'text-gray-400 dark:text-gray-500' : ''}
           `}
           {...props}
         >
@@ -49,7 +51,7 @@ const Select = ({
             </option>
           ))}
         </select>
-        <FiChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5 pointer-events-none" />
+        <FiChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 w-5 h-5 pointer-events-none" />
       </div>
       {hasError && <p className="error-text">{error}</p>}
     </div>

@@ -6,7 +6,9 @@ import mealService from '../../services/mealService';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import Button from '../../components/common/Button';
 
+import { useTranslation } from 'react-i18next';
 const AdminMenuPage = () => {
+  const { t } = useTranslation();
   const [menus, setMenus] = useState([]);
   const [cafeterias, setCafeterias] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -47,7 +49,7 @@ const AdminMenuPage = () => {
       }
       if (cafeteriasRes.success) {
         const cafeteriasData = cafeteriasRes.data || [];
-        
+
         // Eğer kafeterya yoksa otomatik olarak seed yap
         if (Array.isArray(cafeteriasData) && cafeteriasData.length === 0) {
           try {
@@ -264,7 +266,7 @@ const AdminMenuPage = () => {
       <div className="mb-8 flex items-center justify-between">
         <div>
           <h1 className="font-display text-3xl font-bold mb-2">Menü Yönetimi</h1>
-          <p className="text-slate-400">Yemek menülerini oluşturun ve yönetin</p>
+          <p className="text-gray-600 dark:text-gray-300">Yemek menülerini oluşturun ve yönetin</p>
         </div>
         <Button onClick={() => handleOpenModal()}>
           <FiPlus className="w-4 h-4 mr-2" />
@@ -279,7 +281,7 @@ const AdminMenuPage = () => {
           type="date"
           value={selectedDate}
           onChange={(e) => setSelectedDate(e.target.value)}
-          className="px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+          className="px-4 py-2 bg-primary-50 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
         />
       </div>
 
@@ -289,8 +291,8 @@ const AdminMenuPage = () => {
         <div className="space-y-4">
           {menus.length === 0 ? (
             <div className="card text-center py-12">
-              <FaUtensils className="w-16 h-16 text-slate-400 mx-auto mb-4" />
-              <p className="text-slate-400">Seçilen tarih için menü bulunamadı</p>
+              <FaUtensils className="w-16 h-16 text-gray-600 dark:text-gray-300 mx-auto mb-4" />
+              <p className="text-gray-600 dark:text-gray-300">Seçilen tarih için menü bulunamadı</p>
             </div>
           ) : (
             menus.map((menu) => (
@@ -313,18 +315,18 @@ const AdminMenuPage = () => {
                         </span>
                       )}
                     </div>
-                    <p className="text-sm text-slate-400 mb-3">{menu.cafeteria?.location}</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">{menu.cafeteria?.location}</p>
                     {menu.items_json && Array.isArray(menu.items_json) && menu.items_json.length > 0 && (
                       <ul className="space-y-1 mb-3">
                         {menu.items_json.map((item, idx) => (
-                          <li key={idx} className="text-sm text-slate-300">
-                            • {item}
+                          <li key={idx} className="text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500">
+                            • {typeof item === 'string' ? item : item.name || item.description || JSON.stringify(item)}
                           </li>
                         ))}
                       </ul>
                     )}
                     {menu.price > 0 && (
-                      <p className="text-sm text-slate-400">
+                      <p className="text-sm text-gray-600 dark:text-gray-300">
                         Fiyat: <span className="font-semibold text-green-400">{menu.price} TRY</span>
                       </p>
                     )}
@@ -355,14 +357,14 @@ const AdminMenuPage = () => {
       {/* Create/Edit Modal */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 p-4">
-          <div className="bg-slate-800 rounded-2xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-bold text-white">
+              <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100">
                 {editingMenu ? 'Menü Düzenle' : 'Yeni Menü Oluştur'}
               </h3>
               <button
                 onClick={handleCloseModal}
-                className="text-slate-400 hover:text-white"
+                className="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 dark:text-gray-100"
               >
                 <FiX className="w-6 h-6" />
               </button>
@@ -371,7 +373,7 @@ const AdminMenuPage = () => {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium mb-2 text-white">Kafeterya *</label>
+                  <label className="block text-sm font-medium mb-2 text-gray-800 dark:text-gray-100">Kafeterya *</label>
                   <select
                     value={formData.cafeteria_id}
                     onChange={(e) => {
@@ -386,7 +388,7 @@ const AdminMenuPage = () => {
                         toast.error('Geçersiz kafeterya seçimi');
                       }
                     }}
-                    className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-white"
+                    className="w-full px-4 py-2 bg-primary-50 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-800 dark:text-gray-100"
                     required
                     disabled={!Array.isArray(cafeterias) || cafeterias.length === 0}
                   >
@@ -416,12 +418,12 @@ const AdminMenuPage = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2 text-white">Tarih *</label>
+                  <label className="block text-sm font-medium mb-2 text-gray-800 dark:text-gray-100">Tarih *</label>
                   <input
                     type="date"
                     value={formData.date}
                     onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                    className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-white"
+                    className="w-full px-4 py-2 bg-primary-50 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-800 dark:text-gray-100"
                     required
                   />
                 </div>
@@ -429,11 +431,11 @@ const AdminMenuPage = () => {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium mb-2 text-white">Ne Zaman *</label>
+                  <label className="block text-sm font-medium mb-2 text-gray-800 dark:text-gray-100">Ne Zaman *</label>
                   <select
                     value={formData.meal_type === 'lunch' ? 'lunch' : formData.meal_type === 'dinner' ? 'dinner' : 'lunch'}
                     onChange={(e) => setFormData({ ...formData, meal_type: e.target.value })}
-                    className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-white"
+                    className="w-full px-4 py-2 bg-primary-50 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-800 dark:text-gray-100"
                     required
                   >
                     <option value="lunch">Öğle</option>
@@ -442,20 +444,20 @@ const AdminMenuPage = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2 text-white">Fiyat (₺)</label>
+                  <label className="block text-sm font-medium mb-2 text-gray-800 dark:text-gray-100">Fiyat (₺)</label>
                   <input
                     type="number"
                     step="0.01"
                     min="0"
                     value={formData.price}
                     onChange={(e) => setFormData({ ...formData, price: parseFloat(e.target.value) || 0 })}
-                    className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-white"
+                    className="w-full px-4 py-2 bg-primary-50 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-800 dark:text-gray-100"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2 text-white">Yemekler</label>
+                <label className="block text-sm font-medium mb-2 text-gray-800 dark:text-gray-100">Yemekler</label>
                 <div className="flex gap-2 mb-2">
                   <input
                     type="text"
@@ -468,7 +470,7 @@ const AdminMenuPage = () => {
                       }
                     }}
                     placeholder="Yemek adı ekleyin"
-                    className="flex-1 px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-white placeholder-slate-400"
+                    className="flex-1 px-4 py-2 bg-primary-50 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
                   />
                   <Button type="button" onClick={handleAddItem}>
                     Ekle
@@ -478,9 +480,9 @@ const AdminMenuPage = () => {
                   {formData.items_json.map((item, index) => (
                     <div
                       key={index}
-                      className="flex items-center justify-between px-3 py-2 bg-slate-700 rounded-lg"
+                      className="flex items-center justify-between px-3 py-2 bg-primary-50 rounded-lg"
                     >
-                      <span className="text-sm text-white">{item}</span>
+                      <span className="text-sm text-gray-800 dark:text-gray-100">{typeof item === 'string' ? item : item.name || item.description || JSON.stringify(item)}</span>
                       <button
                         type="button"
                         onClick={() => handleRemoveItem(index)}
@@ -495,7 +497,7 @@ const AdminMenuPage = () => {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium mb-2 text-white">Kalori (kcal)</label>
+                  <label className="block text-sm font-medium mb-2 text-gray-800 dark:text-gray-100">Kalori (kcal)</label>
                   <input
                     type="number"
                     value={formData.nutrition_json.calories}
@@ -505,11 +507,11 @@ const AdminMenuPage = () => {
                         nutrition_json: { ...formData.nutrition_json, calories: e.target.value },
                       })
                     }
-                    className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-white"
+                    className="w-full px-4 py-2 bg-primary-50 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-800 dark:text-gray-100"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-2 text-white">Protein (g)</label>
+                  <label className="block text-sm font-medium mb-2 text-gray-800 dark:text-gray-100">Protein (g)</label>
                   <input
                     type="number"
                     value={formData.nutrition_json.protein}
@@ -519,7 +521,7 @@ const AdminMenuPage = () => {
                         nutrition_json: { ...formData.nutrition_json, protein: e.target.value },
                       })
                     }
-                    className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-white"
+                    className="w-full px-4 py-2 bg-primary-50 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-800 dark:text-gray-100"
                   />
                 </div>
               </div>
@@ -530,9 +532,9 @@ const AdminMenuPage = () => {
                   id="is_published"
                   checked={formData.is_published}
                   onChange={(e) => setFormData({ ...formData, is_published: e.target.checked })}
-                  className="w-4 h-4 text-primary-500 bg-slate-700 border-slate-600 rounded focus:ring-primary-500"
+                  className="w-4 h-4 text-primary-500 bg-primary-50 border-gray-200 dark:border-gray-700 rounded focus:ring-primary-500"
                 />
-                <label htmlFor="is_published" className="text-sm text-white">
+                <label htmlFor="is_published" className="text-sm text-gray-800 dark:text-gray-100">
                   Hemen yayınla
                 </label>
               </div>
@@ -543,12 +545,10 @@ const AdminMenuPage = () => {
                   variant="ghost"
                   onClick={handleCloseModal}
                   className="flex-1"
-                >
-                  İptal
-                </Button>
+                >{t('common.cancel')}</Button>
                 <Button type="submit" loading={saving} className="flex-1">
                   <FiSave className="w-4 h-4 mr-2" />
-                  {editingMenu ? 'Güncelle' : 'Oluştur'}
+                  {editingMenu ? t('common.update') : 'Oluştur'}
                 </Button>
               </div>
             </form>

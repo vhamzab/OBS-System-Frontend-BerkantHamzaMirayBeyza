@@ -7,7 +7,9 @@ import enrollmentService from '../../services/enrollmentService';
 import gradeService from '../../services/gradeService';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 
+import { useTranslation } from 'react-i18next';
 const GradebookPage = () => {
+  const { t } = useTranslation();
   const { sectionId } = useParams();
   const [section, setSection] = useState(null);
   const [students, setStudents] = useState([]);
@@ -22,7 +24,7 @@ const GradebookPage = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      
+
       // Fetch section details
       const sectionRes = await courseService.getSectionById(sectionId);
       if (sectionRes.success) {
@@ -60,10 +62,10 @@ const GradebookPage = () => {
 
   const calculateLetterGrade = (midterm, final, homework) => {
     if (midterm === null || final === null) return '-';
-    
+
     const hwGrade = homework !== null ? homework : 0;
     const avg = (midterm * 0.3) + (final * 0.5) + (hwGrade * 0.2);
-    
+
     if (avg >= 90) return 'AA';
     if (avg >= 85) return 'BA';
     if (avg >= 80) return 'BB';
@@ -76,7 +78,7 @@ const GradebookPage = () => {
   };
 
   const handleSaveGrades = async () => {
-    const changedEntries = Object.entries(changes).filter(([_, grades]) => 
+    const changedEntries = Object.entries(changes).filter(([_, grades]) =>
       Object.values(grades).some(v => v !== undefined)
     );
 
@@ -87,7 +89,7 @@ const GradebookPage = () => {
 
     try {
       setSaving(true);
-      
+
       const gradesPayload = changedEntries.map(([enrollmentId, grades]) => ({
         enrollment_id: enrollmentId,
         midterm: grades.midterm,
@@ -96,14 +98,14 @@ const GradebookPage = () => {
       }));
 
       const response = await gradeService.bulkEnterGrades(sectionId, gradesPayload);
-      
+
       if (response.success) {
         toast.success(`${response.data.results.length} öğrencinin notu güncellendi`);
-        
+
         if (response.data.errors.length > 0) {
           toast.error(`${response.data.errors.length} hata oluştu`);
         }
-        
+
         setChanges({});
         fetchData(); // Refresh data
       }
@@ -116,7 +118,8 @@ const GradebookPage = () => {
   };
 
   const exportToCSV = () => {
-    const headers = ['Öğrenci No', 'Ad', 'Soyad', 'Vize', 'Final', 'Ödev', 'Ortalama', 'Harf Notu'];
+    const headers = ['No', t('auth.firstName'), t('auth.lastName'), t('grades.midterm'), t('grades.final'), t('grades.assignment'), t('grades.average'), t('grades.letterGrade')];
+
     const rows = students.map((s) => [
       s.student.studentNumber,
       s.student.firstName,
@@ -149,7 +152,7 @@ const GradebookPage = () => {
   return (
     <div className="p-6 lg:p-8 max-w-7xl mx-auto">
       {/* Back Button */}
-      <Link to="/faculty/sections" className="inline-flex items-center text-slate-400 hover:text-white mb-6 transition-colors">
+      <Link to="/faculty/sections" className="inline-flex items-center text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 dark:text-gray-100 mb-6 transition-colors">
         <FiArrowLeft className="w-4 h-4 mr-2" />
         Derslerime Dön
       </Link>
@@ -161,13 +164,13 @@ const GradebookPage = () => {
             <span className="px-3 py-1 rounded-full bg-primary-500/20 text-primary-400 text-sm font-medium">
               {section?.course?.code}
             </span>
-            <span className="text-slate-400">Section {section?.sectionNumber}</span>
+            <span className="text-gray-600 dark:text-gray-300">Section {section?.sectionNumber}</span>
           </div>
           <h1 className="font-display text-2xl font-bold">
             {section?.course?.name} - Not Defteri
           </h1>
         </div>
-        
+
         <div className="flex gap-3">
           <button onClick={exportToCSV} className="btn btn-secondary">
             <FiDownload className="w-4 h-4 mr-2" />
@@ -182,9 +185,7 @@ const GradebookPage = () => {
               <LoadingSpinner size="sm" />
             ) : (
               <>
-                <FiSave className="w-4 h-4 mr-2" />
-                Kaydet
-              </>
+                <FiSave className="w-4 h-4 mr-2" />{t('common.save')}</>
             )}
           </button>
         </div>
@@ -198,8 +199,8 @@ const GradebookPage = () => {
           </div>
           <div className="flex-1">
             <h3 className="font-semibold text-primary-400 mb-1">Otomatik Hesaplama Sistemi</h3>
-            <p className="text-sm text-slate-300">
-              Notlar kaydedildiğinde sistem otomatik olarak <strong>ortalama not</strong> (Vize %30 + Final %50 + Ödev %20), 
+            <p className="text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500">
+              Notlar kaydedildiğinde sistem otomatik olarak <strong>ortalama not</strong> (Vize %30 + Final %50 + Ödev %20),
               <strong> harf notu</strong> ve <strong>not puanı</strong> hesaplar. Ayrıca öğrencilerin <strong>CGPA</strong> değerleri de güncellenir.
             </p>
           </div>
@@ -219,22 +220,22 @@ const GradebookPage = () => {
       {/* Gradebook Table */}
       {students.length === 0 ? (
         <div className="card text-center py-16">
-          <FiUser className="w-16 h-16 mx-auto text-slate-600 mb-4" />
+          <FiUser className="w-16 h-16 mx-auto text-gray-700 dark:text-gray-200 mb-4" />
           <h2 className="text-xl font-semibold mb-2">Öğrenci Bulunamadı</h2>
-          <p className="text-slate-400">Bu derse kayıtlı öğrenci bulunmuyor.</p>
+          <p className="text-gray-600 dark:text-gray-300">Bu derse kayıtlı öğrenci bulunmuyor.</p>
         </div>
       ) : (
         <div className="card overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-slate-700/50 bg-slate-800/50">
-                  <th className="text-left py-4 px-4 text-sm font-medium text-slate-400">Öğrenci</th>
-                  <th className="text-center py-4 px-3 text-sm font-medium text-slate-400 w-24">Vize (30%)</th>
-                  <th className="text-center py-4 px-3 text-sm font-medium text-slate-400 w-24">Final (50%)</th>
-                  <th className="text-center py-4 px-3 text-sm font-medium text-slate-400 w-24">Ödev (20%)</th>
-                  <th className="text-center py-4 px-3 text-sm font-medium text-slate-400 w-20">Ortalama</th>
-                  <th className="text-center py-4 px-3 text-sm font-medium text-slate-400 w-20">Harf</th>
+                <tr className="border-b border-gray-200 dark:border-gray-700/50 bg-gray-100 dark:bg-gray-800/50">
+                  <th className="text-left py-4 px-4 text-sm font-medium text-gray-600 dark:text-gray-300">{t('roles.student')}</th>
+                  <th className="text-center py-4 px-3 text-sm font-medium text-gray-600 dark:text-gray-300 w-24">Vize (30%)</th>
+                  <th className="text-center py-4 px-3 text-sm font-medium text-gray-600 dark:text-gray-300 w-24">Final (50%)</th>
+                  <th className="text-center py-4 px-3 text-sm font-medium text-gray-600 dark:text-gray-300 w-24">Ödev (20%)</th>
+                  <th className="text-center py-4 px-3 text-sm font-medium text-gray-600 dark:text-gray-300 w-20">{t('grades.average')}</th>
+                  <th className="text-center py-4 px-3 text-sm font-medium text-gray-600 dark:text-gray-300 w-20">Harf</th>
                 </tr>
               </thead>
               <tbody>
@@ -244,19 +245,19 @@ const GradebookPage = () => {
                     final: changes[student.enrollmentId]?.final ?? student.grades?.final,
                     homework: changes[student.enrollmentId]?.homework ?? student.grades?.homework,
                   };
-                  
+
                   const previewLetter = calculateLetterGrade(
                     currentGrades.midterm,
                     currentGrades.final,
                     currentGrades.homework
                   );
-                  
+
                   const hasChange = changes[student.enrollmentId];
-                  
+
                   return (
-                    <tr 
+                    <tr
                       key={student.enrollmentId}
-                      className={`border-b border-slate-700/30 ${hasChange ? 'bg-primary-500/5' : 'hover:bg-slate-800/30'} transition-colors`}
+                      className={`border-b border-gray-200 dark:border-gray-700/30 ${hasChange ? 'bg-primary-500/5' : 'hover:bg-gray-100 dark:hover:bg-gray-700 dark:bg-gray-800/30'} transition-colors`}
                     >
                       <td className="py-3 px-4">
                         <div className="flex items-center gap-3">
@@ -267,7 +268,7 @@ const GradebookPage = () => {
                             <div className="font-medium">
                               {student.student.firstName} {student.student.lastName}
                             </div>
-                            <div className="text-xs text-slate-400">{student.student.studentNumber}</div>
+                            <div className="text-xs text-gray-600 dark:text-gray-300">{student.student.studentNumber}</div>
                           </div>
                           {hasChange && (
                             <span className="ml-2 text-amber-400">
@@ -322,14 +323,13 @@ const GradebookPage = () => {
                         )}
                       </td>
                       <td className="py-3 px-3 text-center">
-                        <span className={`px-3 py-1 rounded-full text-sm font-bold ${
-                          previewLetter === '-' ? 'bg-slate-700 text-slate-400' :
+                        <span className={`px-3 py-1 rounded-full text-sm font-bold ${previewLetter === '-' ? 'bg-primary-50 text-gray-600 dark:text-gray-300' :
                           ['AA', 'BA'].includes(previewLetter) ? 'bg-green-500/20 text-green-400' :
-                          ['BB', 'CB'].includes(previewLetter) ? 'bg-emerald-500/20 text-emerald-400' :
-                          ['CC', 'DC'].includes(previewLetter) ? 'bg-amber-500/20 text-amber-400' :
-                          ['DD', 'FD'].includes(previewLetter) ? 'bg-orange-500/20 text-orange-400' :
-                          'bg-red-500/20 text-red-400'
-                        }`}>
+                            ['BB', 'CB'].includes(previewLetter) ? 'bg-emerald-500/20 text-emerald-400' :
+                              ['CC', 'DC'].includes(previewLetter) ? 'bg-amber-500/20 text-amber-400' :
+                                ['DD', 'FD'].includes(previewLetter) ? 'bg-orange-500/20 text-orange-400' :
+                                  'bg-red-500/20 text-red-400'
+                          }`}>
                           {previewLetter}
                         </span>
                       </td>
@@ -360,13 +360,13 @@ const GradebookPage = () => {
             { grade: 'FD', range: '50-59', point: '0.50', color: 'orange' },
             { grade: 'FF', range: '0-49', point: '0.00', color: 'red' },
           ].map((item) => (
-            <div 
+            <div
               key={item.grade}
               className={`p-3 rounded-xl bg-${item.color}-500/10 border border-${item.color}-500/30`}
             >
               <div className={`text-lg font-bold text-${item.color}-400`}>{item.grade}</div>
-              <div className="text-xs text-slate-400">{item.range}</div>
-              <div className="text-xs text-slate-500">{item.point}</div>
+              <div className="text-xs text-gray-600 dark:text-gray-300">{item.range}</div>
+              <div className="text-xs text-gray-700 dark:text-gray-200">{item.point}</div>
             </div>
           ))}
         </div>

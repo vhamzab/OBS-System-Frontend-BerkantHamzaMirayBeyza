@@ -8,7 +8,9 @@ import toast from 'react-hot-toast';
 import courseService from '../../services/courseService';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 
+import { useTranslation } from 'react-i18next';
 const FacultySectionsPage = () => {
+  const { t } = useTranslation();
   const [sections, setSections] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedSemester, setSelectedSemester] = useState('');
@@ -89,26 +91,26 @@ const FacultySectionsPage = () => {
     <div className="p-6 lg:p-8 max-w-6xl mx-auto">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="font-display text-3xl font-bold mb-2">Derslerim</h1>
-          <p className="text-slate-400">Verdiğiniz dersleri yönetin</p>
+          <h1 className="font-display text-3xl font-bold mb-2">{t('courses.myCourses')}</h1>
+          <p className="text-gray-600 dark:text-gray-300">Verdiğiniz dersleri yönetin</p>
         </div>
         
         <select
           value={selectedSemester}
           onChange={(e) => setSelectedSemester(e.target.value)}
-          className="px-4 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-primary-500 min-w-[280px] cursor-pointer"
+          className="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 min-w-[280px] cursor-pointer"
         >
-          <option value="" disabled style={{ color: '#94a3b8' }}>Lütfen dönem seçmek için tıklayın</option>
-          <option value="current">Mevcut Dönem</option>
+          <option value="" disabled style={{ color: '#94a3b8' }}>{t('courses.selectSemester')}</option>
+          <option value="current">{t('profile.currentSemester')}</option>
           <option value="all">Tüm Dönemler</option>
         </select>
       </div>
 
       {sections.length === 0 ? (
         <div className="card text-center py-16">
-          <FiBook className="w-16 h-16 mx-auto text-slate-600 mb-4" />
+          <FiBook className="w-16 h-16 mx-auto text-gray-700 dark:text-gray-200 mb-4" />
           <h2 className="text-xl font-semibold mb-2">Ders Bulunamadı</h2>
-          <p className="text-slate-400">Bu dönemde size atanmış ders bulunmuyor.</p>
+          <p className="text-gray-600 dark:text-gray-300">Bu dönemde size atanmış ders bulunmuyor.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -124,15 +126,15 @@ const FacultySectionsPage = () => {
                   
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="px-2 py-0.5 rounded bg-slate-700 text-xs font-medium">
+                      <span className="px-2 py-0.5 rounded bg-primary-50 text-xs font-medium">
                         {section.course?.code}
                       </span>
-                      <span className="text-xs text-slate-500">
+                      <span className="text-xs text-gray-700 dark:text-gray-200">
                         Section {section.sectionNumber}
                       </span>
                     </div>
                     <h3 className="font-sans text-lg font-semibold">{section.course?.name}</h3>
-                    <div className="text-sm text-slate-400">
+                    <div className="text-sm text-gray-600 dark:text-gray-300">
                       {semesterNames[section.semester]} {section.year}
                     </div>
                   </div>
@@ -141,16 +143,16 @@ const FacultySectionsPage = () => {
                 {/* Stats */}
                 <div className="grid grid-cols-3 gap-3 mb-4">
                   <div className="p-3 rounded-xl bg-primary-100 border-2 border-primary-300 shadow-md hover:scale-105 transition-all duration-300 text-center">
-                    <div className="text-lg font-bold text-primary-700">{section.enrolledCount}</div>
-                    <div className="text-xs text-primary-600 font-medium">Öğrenci</div>
+                    <div className="text-lg font-bold text-primary-700 dark:text-primary-300">{section.enrolledCount}</div>
+                    <div className="text-xs text-primary-600 font-medium">{t('roles.student')}</div>
                   </div>
                   <div className="p-3 rounded-xl bg-emerald-100 border-2 border-emerald-300 shadow-md hover:scale-105 transition-all duration-300 text-center">
                     <div className="text-lg font-bold text-emerald-700">{section.course?.credits}</div>
-                    <div className="text-xs text-emerald-600 font-medium">Kredi</div>
+                    <div className="text-xs text-emerald-600 font-medium">{t('courses.credits')}</div>
                   </div>
                   <div className="p-3 rounded-xl bg-blue-100 border-2 border-blue-300 shadow-md hover:scale-105 transition-all duration-300 text-center">
                     <div className="text-lg font-bold text-blue-700">{section.capacity}</div>
-                    <div className="text-xs text-blue-600 font-medium">Kapasite</div>
+                    <div className="text-xs text-blue-600 font-medium">{t('courses.capacity')}</div>
                   </div>
                 </div>
 
@@ -158,45 +160,39 @@ const FacultySectionsPage = () => {
                 {scheduleItems.length > 0 && (
                   <div className="flex flex-wrap gap-2 mb-4">
                     {scheduleItems.map((item, idx) => (
-                      <div key={idx} className="flex items-center gap-1 px-2 py-1 rounded bg-slate-800/50 text-xs">
+                      <div key={idx} className="flex items-center gap-1 px-2 py-1 rounded bg-gray-100 dark:bg-gray-800/50 text-xs">
                         <FiClock className="w-3 h-3 text-primary-400" />
                         <span className="font-medium">{item.day}</span>
-                        <span className="text-slate-400">{item.time}</span>
+                        <span className="text-gray-600 dark:text-gray-300">{item.time}</span>
                       </div>
                     ))}
                   </div>
                 )}
 
                 {section.classroom && (
-                  <div className="flex items-center gap-2 text-sm text-slate-400 mb-4">
+                  <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300 mb-4">
                     <FiMapPin className="w-4 h-4" />
                     {section.classroom}
                   </div>
                 )}
 
                 {/* Actions */}
-                <div className="flex flex-wrap gap-2 pt-4 border-t border-slate-700/50">
+                <div className="flex flex-wrap gap-2 pt-4 border-t border-gray-200 dark:border-gray-700/50">
                   <Link
                     to={`/gradebook/${section.id}`}
                     className="btn btn-secondary flex-1 min-w-[140px]"
                   >
-                    <FiClipboard className="w-4 h-4 mr-2" />
-                    Not Defteri
-                  </Link>
+                    <FiClipboard className="w-4 h-4 mr-2" />{t('grades.gradebook')}</Link>
                   <Link
                     to={`/attendance/report/${section.id}`}
                     className="btn btn-secondary flex-1 min-w-[140px]"
                   >
-                    <FiBarChart2 className="w-4 h-4 mr-2" />
-                    Yoklama Raporu
-                  </Link>
+                    <FiBarChart2 className="w-4 h-4 mr-2" />{t('attendance.attendanceReport')}</Link>
                   <Link
                     to={`/attendance/start?section=${section.id}`}
                     className="btn btn-primary flex-1 min-w-[140px]"
                   >
-                    <FiPlay className="w-4 h-4 mr-2" />
-                    Yoklama Aç
-                  </Link>
+                    <FiPlay className="w-4 h-4 mr-2" />{t('nav.startAttendance')}</Link>
                 </div>
               </div>
             );

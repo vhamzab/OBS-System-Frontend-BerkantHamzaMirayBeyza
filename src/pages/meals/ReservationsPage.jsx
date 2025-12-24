@@ -7,7 +7,9 @@ import LoadingSpinner from '../../components/common/LoadingSpinner';
 import Button from '../../components/common/Button';
 import QRCodeDisplay from '../../components/common/QRCodeDisplay';
 
+import { useTranslation } from 'react-i18next';
 const ReservationsPage = () => {
+  const { t } = useTranslation();
   const [reservations, setReservations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [cancelling, setCancelling] = useState(null);
@@ -137,7 +139,7 @@ const ReservationsPage = () => {
     <div className="p-6 lg:p-8 max-w-7xl mx-auto">
       <div className="mb-8">
         <h1 className="font-display text-3xl font-bold mb-2">Yemek Rezervasyonlarım</h1>
-        <p className="text-slate-400">Rezervasyonlarınızı görüntüleyin ve yönetin</p>
+        <p className="text-gray-600 dark:text-gray-300">Rezervasyonlarınızı görüntüleyin ve yönetin</p>
       </div>
 
       {loading ? (
@@ -154,7 +156,7 @@ const ReservationsPage = () => {
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
-                          <FiCalendar className="text-slate-400" />
+                          <FiCalendar className="text-gray-600 dark:text-gray-300" />
                           <span className="font-semibold">
                             {new Date(transfer.date).toLocaleDateString('tr-TR', {
                               weekday: 'long',
@@ -165,18 +167,18 @@ const ReservationsPage = () => {
                           </span>
                         </div>
                         <div className="flex items-center gap-2 mb-2">
-                          <FaUtensils className="text-slate-400" />
+                          <FaUtensils className="text-gray-600 dark:text-gray-300" />
                           <span>{getMealTypeLabel(transfer.meal_type)}</span>
                         </div>
-                        <div className="text-sm text-slate-400 mb-3">
+                        <div className="text-sm text-gray-600 dark:text-gray-300 mb-3">
                           {transfer.cafeteria?.name} - {transfer.cafeteria?.location}
                         </div>
-                        <div className="flex items-center gap-2 text-sm text-slate-300">
-                          <FiUser className="text-slate-400" />
+                        <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500">
+                          <FiUser className="text-gray-600 dark:text-gray-300" />
                           <span>
                             {transfer.user?.first_name} {transfer.user?.last_name}
                             {transfer.user?.student?.student_number && (
-                              <span className="text-slate-400 ml-1">
+                              <span className="text-gray-600 dark:text-gray-300 ml-1">
                                 ({transfer.user.student.student_number})
                               </span>
                             )}
@@ -187,7 +189,7 @@ const ReservationsPage = () => {
                         </span>
                       </div>
                     </div>
-                    <div className="border-t border-slate-700/50 pt-4 mt-4">
+                    <div className="border-t border-gray-200 dark:border-gray-700/50 pt-4 mt-4">
                       <Button
                         onClick={() => handleAcceptTransfer(transfer.id)}
                         loading={accepting === transfer.id}
@@ -213,7 +215,7 @@ const ReservationsPage = () => {
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
-                          <FiCalendar className="text-slate-400" />
+                          <FiCalendar className="text-gray-600 dark:text-gray-300" />
                           <span className="font-semibold">
                             {new Date(reservation.date).toLocaleDateString('tr-TR', {
                               weekday: 'long',
@@ -224,10 +226,10 @@ const ReservationsPage = () => {
                           </span>
                         </div>
                         <div className="flex items-center gap-2 mb-2">
-                          <FaUtensils className="text-slate-400" />
+                          <FaUtensils className="text-gray-600 dark:text-gray-300" />
                           <span>{getMealTypeLabel(reservation.meal_type)}</span>
                         </div>
-                        <div className="text-sm text-slate-400 mb-3">
+                        <div className="text-sm text-gray-600 dark:text-gray-300 mb-3">
                           {reservation.cafeteria?.name} - {reservation.cafeteria?.location}
                         </div>
                         {getStatusBadge(reservation.status)}
@@ -235,15 +237,15 @@ const ReservationsPage = () => {
                     </div>
 
                     {reservation.status === 'reserved' && (
-                      <div className="border-t border-slate-700/50 pt-4 mt-4">
+                      <div className="border-t border-gray-200 dark:border-gray-700/50 pt-4 mt-4">
                         <div className="mb-4 flex flex-col items-center">
-                          <h3 className="text-sm font-semibold mb-3 text-slate-300">Yemek Rezervasyon QR Kodu</h3>
+                          <h3 className="text-sm font-semibold mb-3 text-gray-500 dark:text-gray-400 dark:text-gray-500">Yemek Rezervasyon QR Kodu</h3>
                           <QRCodeDisplay 
                             qrCode={reservation.qr_code || `MEAL-RES-${reservation.id}-${reservation.date}`} 
                             title="Yemek QR Kodu" 
                             size={250} 
                           />
-                          <p className="text-xs text-slate-400 mt-2 text-center">
+                          <p className="text-xs text-gray-600 dark:text-gray-300 mt-2 text-center">
                             Bu QR kodu kafeteryada göstererek yemeğinizi alabilirsiniz
                           </p>
                         </div>
@@ -259,7 +261,7 @@ const ReservationsPage = () => {
                           </Button>
                         )}
                         {!canCancel(reservation) && reservation.status === 'reserved' && (
-                          <p className="text-xs text-slate-400 text-center">
+                          <p className="text-xs text-gray-600 dark:text-gray-300 text-center">
                             Rezervasyonu iptal etmek için en az 2 saat önceden iptal etmeniz gerekir
                           </p>
                         )}
@@ -279,7 +281,7 @@ const ReservationsPage = () => {
                 {pastReservations.map((reservation) => (
                   <div 
                     key={reservation.id} 
-                    className="card cursor-pointer hover:bg-slate-700/70 transition-colors"
+                    className="card cursor-pointer hover:bg-primary-50/70 transition-colors"
                     onClick={() => setSelectedReservation(reservation)}
                   >
                     <div className="flex items-center justify-between mb-4">
@@ -288,14 +290,14 @@ const ReservationsPage = () => {
                           <div className="font-semibold">
                             {new Date(reservation.date).toLocaleDateString('tr-TR')}
                           </div>
-                          <div className="text-sm text-slate-400">
+                          <div className="text-sm text-gray-600 dark:text-gray-300">
                             {getMealTypeLabel(reservation.meal_type)} - {reservation.cafeteria?.name}
                           </div>
                         </div>
                         {getStatusBadge(reservation.status)}
                       </div>
                       {reservation.amount > 0 && (
-                        <div className="text-sm text-slate-400">
+                        <div className="text-sm text-gray-600 dark:text-gray-300">
                           {reservation.amount} TRY
                         </div>
                       )}
@@ -308,8 +310,8 @@ const ReservationsPage = () => {
 
           {reservations.length === 0 && pendingTransfers.length === 0 && (
             <div className="card text-center py-12">
-              <FaUtensils className="w-16 h-16 text-slate-400 mx-auto mb-4" />
-              <p className="text-slate-400">Henüz rezervasyonunuz yok</p>
+              <FaUtensils className="w-16 h-16 text-gray-600 dark:text-gray-300 mx-auto mb-4" />
+              <p className="text-gray-600 dark:text-gray-300">Henüz rezervasyonunuz yok</p>
             </div>
           )}
         </div>
@@ -327,20 +329,20 @@ const ReservationsPage = () => {
           >
             <div className="flex items-center justify-between mb-6">
               <div>
-                <h3 className="text-2xl font-bold text-gray-900">Rezervasyon QR Kodu</h3>
-                <p className="text-sm text-gray-600">
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Rezervasyon QR Kodu</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-300">
                   {new Date(selectedReservation.date).toLocaleDateString('tr-TR')} - {getMealTypeLabel(selectedReservation.meal_type)}
                 </p>
               </div>
               <button
                 onClick={() => setSelectedReservation(null)}
-                className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 dark:bg-gray-800 rounded-lg transition-colors"
               >
-                <FiX className="w-5 h-5 text-gray-600" />
+                <FiX className="w-5 h-5 text-gray-600 dark:text-gray-300" />
               </button>
             </div>
             <div className="flex flex-col items-center gap-6">
-              <div className="p-6 bg-white rounded-xl shadow-lg">
+              <div className="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg">
                 <QRCodeDisplay 
                   qrCode={selectedReservation.qr_code || `MEAL-RES-${selectedReservation.id}-${selectedReservation.date}`} 
                   title="Yemek QR Kodu" 
@@ -349,14 +351,14 @@ const ReservationsPage = () => {
                 />
               </div>
               <div className="w-full">
-                <p className="text-xs text-gray-600 mb-2 text-center">QR Kod Barkodu:</p>
-                <div className="bg-slate-800 p-3 rounded-lg border border-slate-700">
-                  <p className="font-mono text-sm text-white text-center break-all">
+                <p className="text-xs text-gray-600 dark:text-gray-300 mb-2 text-center">QR Kod Barkodu:</p>
+                <div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-700">
+                  <p className="font-mono text-sm text-gray-800 dark:text-gray-100 text-center break-all">
                     {selectedReservation.qr_code || `MEAL-RES-${selectedReservation.id}-${selectedReservation.date}`}
                   </p>
                 </div>
               </div>
-              <p className="text-xs text-gray-600 text-center">
+              <p className="text-xs text-gray-600 dark:text-gray-300 text-center">
                 Bu QR kodu kafeteryada göstererek yemeğinizi alabilirsiniz
               </p>
             </div>

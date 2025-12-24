@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { 
-  FiBook, FiClock, FiUser, FiMapPin, FiCalendar, 
+import {
+  FiBook, FiClock, FiUser, FiMapPin, FiCalendar,
   FiAlertTriangle, FiCheckCircle, FiXCircle, FiTrash2,
   FiLoader, FiInfo
 } from 'react-icons/fi';
@@ -9,7 +9,9 @@ import toast from 'react-hot-toast';
 import enrollmentService from '../../services/enrollmentService';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 
+import { useTranslation } from 'react-i18next';
 const MyCoursesPage = () => {
+  const { t } = useTranslation();
   const [enrollments, setEnrollments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [dropping, setDropping] = useState(null);
@@ -36,11 +38,11 @@ const MyCoursesPage = () => {
       // Fetch all enrollments (pending, enrolled, rejected) - not just enrolled
       const response = await enrollmentService.getMyCourses({});
       console.log('✅ MyCoursesPage: Enrollments fetched:', response);
-      
+
       if (response.success) {
-        // Filter to show pending, enrolled and rejected (not dropped, completed, failed, withdrawn)
+        // Filter to show pending, enrolled, rejected and completed (not dropped, failed, withdrawn)
         const activeEnrollments = (response.data || []).filter(
-          (e) => ['pending', 'enrolled', 'rejected'].includes(e.status)
+          (e) => ['pending', 'enrolled', 'rejected', 'completed'].includes(e.status)
         );
         setEnrollments(activeEnrollments);
         console.log(`✅ MyCoursesPage: ${activeEnrollments.length} active enrollments loaded`);
@@ -55,7 +57,7 @@ const MyCoursesPage = () => {
         response: error.response?.data,
         status: error.response?.status,
       });
-      
+
       // Daha açıklayıcı hata mesajları
       let errorMessage = 'Dersler yüklenirken hata oluştu';
       if (error.response?.status === 403) {
@@ -65,7 +67,7 @@ const MyCoursesPage = () => {
       } else if (!error.response) {
         errorMessage = 'Sunucuya bağlanılamadı. İnternet bağlantınızı kontrol edin.';
       }
-      
+
       toast.error(errorMessage);
     } finally {
       setLoading(false);
@@ -78,7 +80,7 @@ const MyCoursesPage = () => {
       console.log('🗑️ MyCoursesPage: Dropping enrollment:', enrollmentId);
       const response = await enrollmentService.dropCourse(enrollmentId);
       console.log('✅ MyCoursesPage: Drop response:', response);
-      
+
       if (response.success) {
         toast.success(response.message || 'Ders başarıyla bırakıldı');
         setEnrollments((prev) => prev.filter((e) => e.id !== enrollmentId));
@@ -111,8 +113,8 @@ const MyCoursesPage = () => {
   };
 
   const getAttendanceStatus = (attendance) => {
-    if (!attendance) return { color: 'text-slate-400', bg: 'bg-slate-700', label: 'Bilinmiyor' };
-    
+    if (!attendance) return { color: 'text-gray-600 dark:text-gray-300', bg: 'bg-primary-50', label: 'Bilinmiyor' };
+
     if (attendance.status === 'critical') {
       return { color: 'text-red-400', bg: 'bg-red-500/20', label: 'Kritik', icon: FiXCircle };
     } else if (attendance.status === 'warning') {
@@ -150,11 +152,20 @@ const MyCoursesPage = () => {
           icon: FiXCircle,
           description: 'Kayıt talebiniz reddedildi',
         };
+      case 'completed':
+        return {
+          color: 'text-blue-400',
+          bg: 'bg-blue-500/20',
+          border: 'border-blue-500/30',
+          label: 'Tamamlandı',
+          icon: FiCheckCircle,
+          description: 'Ders tamamlandı',
+        };
       default:
         return {
-          color: 'text-slate-400',
-          bg: 'bg-slate-700',
-          border: 'border-slate-600',
+          color: 'text-gray-600 dark:text-gray-300',
+          bg: 'bg-primary-50',
+          border: 'border-gray-200 dark:border-gray-700',
           label: status,
           icon: FiInfo,
           description: '',
@@ -175,21 +186,19 @@ const MyCoursesPage = () => {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="font-display text-3xl font-bold mb-2">Derslerim</h1>
-          <p className="text-slate-400">Kayıtlı olduğunuz dersler</p>
+          <h1 className="font-display text-3xl font-bold mb-2">{t('courses.myCourses')}</h1>
+          <p className="text-gray-600 dark:text-gray-300">Kayıtlı olduğunuz dersler</p>
         </div>
         <Link to="/courses" className="btn btn-primary">
-          <FiBook className="w-4 h-4 mr-2" />
-          Ders Ekle
-        </Link>
+          <FiBook className="w-4 h-4 mr-2" />{t('admin.addCourse')}</Link>
       </div>
 
       {/* Enrollments */}
       {enrollments.length === 0 ? (
         <div className="card text-center py-16">
-          <FiBook className="w-16 h-16 mx-auto text-slate-600 mb-4" />
+          <FiBook className="w-16 h-16 mx-auto text-gray-700 dark:text-gray-200 mb-4" />
           <h2 className="text-xl font-semibold mb-2">Henüz Ders Kaydınız Yok</h2>
-          <p className="text-slate-400 mb-4">Ders kataloğundan ders ekleyebilirsiniz.</p>
+          <p className="text-gray-600 dark:text-gray-300 mb-4">Ders kataloğundan ders ekleyebilirsiniz.</p>
           <Link to="/courses" className="btn btn-primary">
             Ders Kataloğuna Git
           </Link>
@@ -199,7 +208,7 @@ const MyCoursesPage = () => {
           {enrollments.map((enrollment) => {
             const attendanceStatus = getAttendanceStatus(enrollment.attendance);
             const scheduleItems = formatSchedule(enrollment.section?.schedule);
-            
+
             return (
               <div key={enrollment.id} className="card">
                 <div className="flex flex-col lg:flex-row lg:items-center gap-6">
@@ -209,25 +218,25 @@ const MyCoursesPage = () => {
                       <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary-500/20 to-accent-500/20 flex items-center justify-center shrink-0">
                         <FiBook className="w-7 h-7 text-primary-400" />
                       </div>
-                      
+
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
-                          <span className="px-2 py-0.5 rounded bg-slate-700 text-xs font-medium">
+                          <span className="px-2 py-0.5 rounded bg-primary-50 text-xs font-medium">
                             {enrollment.course?.code}
                           </span>
-                          <span className="text-xs text-slate-500">
+                          <span className="text-xs text-gray-700 dark:text-gray-200">
                             Section {enrollment.section?.sectionNumber}
                           </span>
                         </div>
-                        
-                        <Link 
+
+                        <Link
                           to={`/courses/${enrollment.course?.id}`}
                           className="font-sans text-lg font-semibold hover:text-primary-600 transition-colors"
                         >
                           {enrollment.course?.name}
                         </Link>
-                        
-                        <div className="flex flex-wrap gap-4 mt-2 text-sm text-slate-400">
+
+                        <div className="flex flex-wrap gap-4 mt-2 text-sm text-gray-600 dark:text-gray-300">
                           {enrollment.section?.instructor && (
                             <span className="flex items-center gap-1">
                               <FiUser className="w-4 h-4" />
@@ -262,40 +271,36 @@ const MyCoursesPage = () => {
 
                   {/* Attendance */}
                   <div className="flex items-center gap-4">
-                    <div className={`px-4 py-2 rounded-xl border-2 shadow-md hover:scale-105 transition-all duration-300 ${
-                      attendanceStatus.color === 'text-red-400' 
-                        ? 'bg-red-100 border-red-300' 
-                        : attendanceStatus.color === 'text-amber-400'
+                    <div className={`px-4 py-2 rounded-xl border-2 shadow-md hover:scale-105 transition-all duration-300 ${attendanceStatus.color === 'text-red-400'
+                      ? 'bg-red-100 border-red-300'
+                      : attendanceStatus.color === 'text-amber-400'
                         ? 'bg-amber-100 border-amber-300'
                         : 'bg-green-100 border-green-300'
-                    }`}>
+                      }`}>
                       <div className="flex items-center gap-2">
                         {attendanceStatus.icon && (
-                          <attendanceStatus.icon className={`w-4 h-4 ${
-                            attendanceStatus.color === 'text-red-400' 
-                              ? 'text-red-700' 
-                              : attendanceStatus.color === 'text-amber-400'
+                          <attendanceStatus.icon className={`w-4 h-4 ${attendanceStatus.color === 'text-red-400'
+                            ? 'text-red-700'
+                            : attendanceStatus.color === 'text-amber-400'
                               ? 'text-amber-700'
                               : 'text-green-700'
-                          }`} />
+                            }`} />
                         )}
-                        <span className={`text-lg font-bold ${
-                          attendanceStatus.color === 'text-red-400' 
-                            ? 'text-red-700' 
-                            : attendanceStatus.color === 'text-amber-400'
+                        <span className={`text-lg font-bold ${attendanceStatus.color === 'text-red-400'
+                          ? 'text-red-700'
+                          : attendanceStatus.color === 'text-amber-400'
                             ? 'text-amber-700'
                             : 'text-green-700'
-                        }`}>
+                          }`}>
                           %{enrollment.attendance?.attendancePercentage || 100}
                         </span>
                       </div>
-                      <div className={`text-xs font-medium mt-1 ${
-                        attendanceStatus.color === 'text-red-400' 
-                          ? 'text-red-600' 
-                          : attendanceStatus.color === 'text-amber-400'
+                      <div className={`text-xs font-medium mt-1 ${attendanceStatus.color === 'text-red-400'
+                        ? 'text-red-600'
+                        : attendanceStatus.color === 'text-amber-400'
                           ? 'text-amber-600'
                           : 'text-green-600'
-                      }`}>Devam</div>
+                        }`}>Devam</div>
                     </div>
 
                     {/* Actions */}
@@ -311,18 +316,18 @@ const MyCoursesPage = () => {
 
                 {/* Grades Preview */}
                 {(enrollment.grades?.midterm || enrollment.grades?.final) && (
-                  <div className="mt-4 pt-4 border-t border-slate-700/50">
+                  <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700/50">
                     <div className="flex items-center gap-6 text-sm">
-                      <span className="text-slate-400">Notlar:</span>
+                      <span className="text-gray-600 dark:text-gray-300">Notlar:</span>
                       {enrollment.grades?.midterm && (
                         <span>
-                          <span className="text-slate-400">Vize:</span>{' '}
+                          <span className="text-gray-600 dark:text-gray-300">Vize:</span>{' '}
                           <span className="font-medium">{enrollment.grades.midterm}</span>
                         </span>
                       )}
                       {enrollment.grades?.final && (
                         <span>
-                          <span className="text-slate-400">Final:</span>{' '}
+                          <span className="text-gray-600 dark:text-gray-300">Final:</span>{' '}
                           <span className="font-medium">{enrollment.grades.final}</span>
                         </span>
                       )}
@@ -345,7 +350,7 @@ const MyCoursesPage = () => {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="card max-w-md mx-4">
             <h3 className="font-display text-xl font-semibold mb-4">Dersi Bırak</h3>
-            <p className="text-slate-400 mb-6">
+            <p className="text-gray-600 dark:text-gray-300 mb-6">
               Bu dersi bırakmak istediğinizden emin misiniz? Bu işlem geri alınamaz.
             </p>
             <div className="flex gap-3 justify-end">
@@ -353,12 +358,10 @@ const MyCoursesPage = () => {
                 onClick={() => setShowDropModal(null)}
                 className="btn btn-secondary"
                 disabled={dropping}
-              >
-                İptal
-              </button>
+              >{t('common.cancel')}</button>
               <button
                 onClick={() => handleDrop(showDropModal)}
-                className="btn bg-red-500 hover:bg-red-600 text-white"
+                className="btn bg-red-500 hover:bg-red-600 text-gray-800 dark:text-gray-100"
                 disabled={dropping}
               >
                 {dropping ? <LoadingSpinner size="sm" /> : 'Dersi Bırak'}

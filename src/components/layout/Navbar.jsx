@@ -1,15 +1,28 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FiUser, FiLogOut, FiSettings, FiMenu, FiX } from 'react-icons/fi';
+import { FiUser, FiLogOut, FiSettings, FiMenu, FiX, FiSun, FiMoon, FiGlobe } from 'react-icons/fi';
 import { useAuth } from '../../context/AuthContext';
+import { useTheme } from '../../context/ThemeContext';
+import { useTranslation } from 'react-i18next';
 import { getFileUrl } from '../../services/api';
 
-const Navbar = () => {
+const Navbar = ({ onMenuClick }) => {
   const { user, logout, isAuthenticated } = useAuth();
+  const { theme, toggleTheme, isDark } = useTheme();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const langDropdownRef = useRef(null);
+
+  const currentLang = i18n.language;
+
+  const changeLanguage = (lang) => {
+    i18n.changeLanguage(lang);
+    setIsLangDropdownOpen(false);
+  };
+
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -43,17 +56,21 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="glass sticky top-0 z-50 border-b border-gray-200">
+    <nav
+      className="glass sticky top-0 z-50 border-b border-gray-200 dark:border-gray-700 dark:bg-gray-800/80"
+      role="navigation"
+      aria-label="Ana Navigasyon"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 py-2">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3">
-            <img 
-              src="/logo2.png" 
-              alt="Doğu Karadeniz Üniversitesi Logo" 
+            <img
+              src="/logo2.png"
+              alt="Doğu Karadeniz Üniversitesi Logo"
               className="w-12 h-12 object-contain rounded-lg shadow-md"
             />
-            <span className="font-sans font-normal text-xl hidden sm:block text-gray-800">
+            <span className="font-sans font-normal text-xl hidden sm:block text-gray-800 dark:text-gray-100">
               DKÜ Doğu Karadeniz Üniversitesi
             </span>
           </Link>
@@ -61,24 +78,78 @@ const Navbar = () => {
           {/* Desktop Navigation */}
           {isAuthenticated && (
             <div className="hidden md:flex items-center gap-6">
-              <Link to="/dashboard" className="btn-ghost">
-                Dashboard
-              </Link>
+              <Link to="/dashboard" className="btn-ghost">{t('nav.dashboard')}</Link>
               {user?.role === 'admin' && (
-                <Link to="/admin/users" className="btn-ghost">
-                  Kullanıcılar
-                </Link>
+                <Link to="/admin/users" className="btn-ghost">{t('nav.users')}</Link>
               )}
             </div>
           )}
 
           {/* Right side */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            {/* Language Switcher */}
+            <div className="relative" ref={langDropdownRef}>
+              <button
+                onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)}
+                className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-300 text-gray-600 dark:text-gray-300 flex items-center gap-1"
+                title={t('language.selectLanguage')}
+                aria-label={t('language.selectLanguage')}
+                aria-expanded={isLangDropdownOpen}
+                aria-haspopup="true"
+              >
+                <FiGlobe className="w-5 h-5" />
+                <span className="text-xs font-medium uppercase">{currentLang.substring(0, 2)}</span>
+              </button>
+
+              {isLangDropdownOpen && (
+                <div className="absolute right-0 mt-2 w-40 card p-2 animate-slide-down z-50 dark:bg-gray-800 dark:border-gray-700">
+                  <button
+                    onClick={() => changeLanguage('tr')}
+                    className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${currentLang.startsWith('tr')
+                      ? 'bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-300'
+                      : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300'
+                      }`}
+                  >
+                    <span className="text-lg">🇹🇷</span>
+                    <span>Türkçe</span>
+                  </button>
+                  <button
+                    onClick={() => changeLanguage('en')}
+                    className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${currentLang.startsWith('en')
+                      ? 'bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-300'
+                      : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300'
+                      }`}
+                  >
+                    <span className="text-lg">🇬🇧</span>
+                    <span>English</span>
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Dark Mode Toggle */}
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-300 text-gray-600 dark:text-gray-300"
+              title={isDark ? t('theme.light') : t('theme.dark')}
+              aria-label={isDark ? t('theme.light') : t('theme.dark')}
+              aria-pressed={isDark}
+            >
+              {isDark ? (
+                <FiSun className="w-5 h-5 text-amber-400" />
+              ) : (
+                <FiMoon className="w-5 h-5 text-primary-600" />
+              )}
+            </button>
+
             {isAuthenticated ? (
               <div className="relative" ref={dropdownRef}>
                 <button
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  className="flex items-center gap-3 p-2 rounded-xl hover:bg-gray-100 transition-colors"
+                  className="flex items-center gap-3 p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 dark:bg-gray-800 transition-colors"
+                  aria-label="Kullanıcı menüsü"
+                  aria-expanded={isDropdownOpen}
+                  aria-haspopup="true"
                 >
                   <div className="w-9 h-9 bg-gradient-to-br from-primary-500 to-primary-700 rounded-full flex items-center justify-center overflow-hidden relative">
                     {getProfilePictureUrl() ? (
@@ -97,17 +168,17 @@ const Navbar = () => {
                         }}
                       />
                     ) : null}
-                    <span 
-                      className={`navbar-initials text-white font-semibold text-sm ${getProfilePictureUrl() ? 'hidden' : 'flex'} items-center justify-center absolute inset-0`}
+                    <span
+                      className={`navbar-initials text-gray-800 dark:text-gray-100 font-semibold text-sm ${getProfilePictureUrl() ? 'hidden' : 'flex'} items-center justify-center absolute inset-0`}
                     >
                       {user?.first_name?.[0]?.toUpperCase() || ''}{user?.last_name?.[0]?.toUpperCase() || ''}
                     </span>
                   </div>
                   <div className="hidden sm:block text-left">
-                    <p className="text-sm font-medium text-gray-800">
+                    <p className="text-sm font-medium text-gray-800 dark:text-gray-100">
                       {user?.first_name} {user?.last_name}
                     </p>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500">
                       {getRoleLabel(user?.role)}
                     </p>
                   </div>
@@ -115,88 +186,57 @@ const Navbar = () => {
 
                 {/* Dropdown */}
                 {isDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-56 card p-2 animate-slide-down">
-                    <div className="px-3 py-2 border-b border-gray-200 mb-2 sm:hidden">
-                      <p className="font-medium text-gray-800">
+                  <div className="absolute right-0 mt-2 w-56 card p-2 animate-slide-down" role="menu" aria-orientation="vertical">
+                    <div className="px-3 py-2 border-b border-gray-200 dark:border-gray-700 mb-2 sm:hidden">
+                      <p className="font-medium text-gray-800 dark:text-gray-100">
                         {user?.first_name} {user?.last_name}
                       </p>
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500">
                         {getRoleLabel(user?.role)}
                       </p>
                     </div>
                     <Link
                       to="/profile"
-                      className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors text-gray-600 hover:text-gray-900"
+                      className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 dark:bg-gray-800 transition-colors text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 dark:text-gray-100"
                       onClick={() => setIsDropdownOpen(false)}
                     >
-                      <FiUser className="w-4 h-4" />
-                      Profil
-                    </Link>
+                      <FiUser className="w-4 h-4" />{t('nav.profile')}</Link>
                     <Link
                       to="/settings"
-                      className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors text-gray-600 hover:text-gray-900"
+                      className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 dark:bg-gray-800 transition-colors text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 dark:text-gray-100"
                       onClick={() => setIsDropdownOpen(false)}
                     >
-                      <FiSettings className="w-4 h-4" />
-                      Ayarlar
-                    </Link>
-                    <hr className="border-gray-200 my-2" />
+                      <FiSettings className="w-4 h-4" />{t('nav.settings')}</Link>
+                    <hr className="border-gray-200 dark:border-gray-700 my-2" />
                     <button
                       onClick={handleLogout}
                       className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-red-50 transition-colors text-red-500 hover:text-red-600"
                     >
-                      <FiLogOut className="w-4 h-4" />
-                      Çıkış Yap
-                    </button>
+                      <FiLogOut className="w-4 h-4" />{t('nav.logout')}</button>
                   </div>
                 )}
               </div>
             ) : (
               <div className="flex items-center gap-3">
-                <Link to="/login" className="btn-ghost">
-                  Giriş Yap
-                </Link>
-                <Link to="/register" className="btn-primary py-2 px-4">
-                  Kayıt Ol
-                </Link>
+                <Link to="/login" className="btn-ghost">{t('common.login')}</Link>
+                <Link to="/register" className="btn-primary py-2 px-4">{t('common.register')}</Link>
               </div>
             )}
 
-            {/* Mobile menu button */}
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors text-gray-600"
-            >
-              {isMenuOpen ? (
-                <FiX className="w-6 h-6" />
-              ) : (
-                <FiMenu className="w-6 h-6" />
-              )}
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile menu */}
-        {isMenuOpen && isAuthenticated && (
-          <div className="md:hidden py-4 border-t border-gray-200 animate-slide-down">
-            <Link
-              to="/dashboard"
-              className="block py-2 text-gray-600 hover:text-gray-900 transition-colors"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Dashboard
-            </Link>
-            {user?.role === 'admin' && (
-              <Link
-                to="/admin/users"
-                className="block py-2 text-gray-600 hover:text-gray-900 transition-colors"
-                onClick={() => setIsMenuOpen(false)}
+            {/* Mobile menu button - toggles sidebar */}
+            {isAuthenticated && (
+              <button
+                onClick={onMenuClick}
+                className="lg:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 dark:bg-gray-800 transition-colors text-gray-600 dark:text-gray-300"
+                aria-label="Menüyü aç/kapat"
+                aria-controls="mobile-sidebar"
               >
-                Kullanıcılar
-              </Link>
+                <FiMenu className="w-6 h-6" />
+              </button>
             )}
           </div>
-        )}
+        </div>
+        {/* Mobile navigation is now handled by Sidebar component */}
       </div>
     </nav>
   );

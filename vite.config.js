@@ -14,6 +14,11 @@ export default defineConfig({
         secure: false,
         ws: true, // WebSocket support
       },
+      '/uploads': {
+        target: 'http://localhost:5000',
+        changeOrigin: true,
+        secure: false,
+      },
     },
   },
 })

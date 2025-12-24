@@ -7,7 +7,9 @@ import LoadingSpinner from '../../components/common/LoadingSpinner';
 import Button from '../../components/common/Button';
 import Calendar from '../../components/common/Calendar';
 
+import { useTranslation } from 'react-i18next';
 const ReservationsPage = () => {
+  const { t } = useTranslation();
   const [reservations, setReservations] = useState([]);
   const [classrooms, setClassrooms] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -133,7 +135,7 @@ const ReservationsPage = () => {
       <div className="mb-8 flex items-center justify-between">
         <div>
           <h1 className="font-display text-3xl font-bold mb-2">Derslik Rezervasyonları</h1>
-          <p className="text-slate-400">Derslik rezervasyonu yapın ve yönetin</p>
+          <p className="text-gray-600 dark:text-gray-300">Derslik rezervasyonu yapın ve yönetin</p>
         </div>
         <Button onClick={() => setShowReservationModal(true)}>
           Yeni Rezervasyon
@@ -167,25 +169,25 @@ const ReservationsPage = () => {
 
               {reservations.length === 0 ? (
                 <div className="text-center py-12">
-                  <FiCalendar className="w-16 h-16 text-slate-400 mx-auto mb-4" />
-                  <p className="text-slate-400">Bu tarih için rezervasyon yok</p>
+                  <FiCalendar className="w-16 h-16 text-gray-600 dark:text-gray-300 mx-auto mb-4" />
+                  <p className="text-gray-600 dark:text-gray-300">Bu tarih için rezervasyon yok</p>
                 </div>
               ) : (
                 <div className="space-y-3">
                   {reservations.map((reservation) => (
-                    <div key={reservation.id} className="p-4 bg-slate-700/50 rounded-lg">
+                    <div key={reservation.id} className="p-4 bg-primary-50/50 rounded-lg">
                       <div className="flex items-center justify-between mb-2">
                         <div>
                           <div className="font-semibold">
                             {reservation.classroom?.building} {reservation.classroom?.room_number}
                           </div>
-                          <div className="text-sm text-slate-400">
+                          <div className="text-sm text-gray-600 dark:text-gray-300">
                             {reservation.start_time} - {reservation.end_time}
                           </div>
                         </div>
                         {getStatusBadge(reservation.status)}
                       </div>
-                      <div className="text-sm text-slate-400">
+                      <div className="text-sm text-gray-600 dark:text-gray-300">
                         {reservation.purpose} - {reservation.user?.first_name}{' '}
                         {reservation.user?.last_name}
                       </div>
@@ -201,7 +203,7 @@ const ReservationsPage = () => {
       {/* Reservation Modal */}
       {showReservationModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 p-4">
-          <div className="bg-slate-800 rounded-2xl p-6 max-w-md w-full">
+          <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-6 max-w-md w-full">
             <h3 className="text-xl font-bold mb-4">Yeni Rezervasyon</h3>
             <div className="space-y-4">
               <div>
@@ -273,9 +275,7 @@ const ReservationsPage = () => {
                     setPurpose('');
                   }}
                   className="flex-1"
-                >
-                  İptal
-                </Button>
+                >{t('common.cancel')}</Button>
                 <Button
                   onClick={handleCreateReservation}
                   loading={creating}

@@ -11,7 +11,9 @@ import enrollmentService from '../../services/enrollmentService';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import { useAuth } from '../../context/AuthContext';
 
+import { useTranslation } from 'react-i18next';
 const CourseDetailPage = () => {
+  const { t } = useTranslation();
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -131,7 +133,7 @@ const CourseDetailPage = () => {
         <div className="card text-center py-16">
           <FiAlertCircle className="w-16 h-16 mx-auto text-red-400 mb-4" />
           <h2 className="text-xl font-semibold mb-2">Ders Bulunamadı</h2>
-          <p className="text-slate-400 mb-4">Aradığınız ders mevcut değil veya silinmiş olabilir.</p>
+          <p className="text-gray-600 dark:text-gray-300 mb-4">Aradığınız ders mevcut değil veya silinmiş olabilir.</p>
           <Link to="/courses" className="btn btn-primary">
             <FiArrowLeft className="w-4 h-4 mr-2" />
             Ders Kataloğuna Dön
@@ -144,7 +146,7 @@ const CourseDetailPage = () => {
   return (
     <div className="p-6 lg:p-8 max-w-6xl mx-auto">
       {/* Back Button */}
-      <Link to="/courses" className="inline-flex items-center text-slate-400 hover:text-white mb-6 transition-colors">
+      <Link to="/courses" className="inline-flex items-center text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 dark:text-gray-100 mb-6 transition-colors">
         <FiArrowLeft className="w-4 h-4 mr-2" />
         Ders Kataloğuna Dön
       </Link>
@@ -166,20 +168,20 @@ const CourseDetailPage = () => {
               </div>
               <div className="flex gap-4 text-center">
                 <div className="px-4 py-2 rounded-xl bg-primary-600 border-2 border-primary-700 shadow-lg hover:scale-105 transition-all duration-300">
-                  <div className="text-2xl font-bold text-white">{course.credits}</div>
-                  <div className="text-xs text-primary-100 font-medium">Kredi</div>
+                  <div className="text-2xl font-bold text-gray-800 dark:text-gray-100">{course.credits}</div>
+                  <div className="text-xs text-primary-100 font-medium">{t('courses.credits')}</div>
                 </div>
                 <div className="px-4 py-2 rounded-xl bg-accent-600 border-2 border-accent-700 shadow-lg hover:scale-105 transition-all duration-300">
-                  <div className="text-2xl font-bold text-white">{course.ects}</div>
+                  <div className="text-2xl font-bold text-gray-800 dark:text-gray-100">{course.ects}</div>
                   <div className="text-xs text-accent-100 font-medium">AKTS</div>
                 </div>
               </div>
             </div>
             
-            <p className="text-slate-300 mb-4">{course.description || 'Açıklama bulunmuyor.'}</p>
+            <p className="text-gray-500 dark:text-gray-400 dark:text-gray-500 mb-4">{course.description || 'Açıklama bulunmuyor.'}</p>
             
             {course.department && (
-              <div className="text-sm text-slate-400">
+              <div className="text-sm text-gray-600 dark:text-gray-300">
                 <span className="font-medium">Bölüm:</span> {course.department.name}
               </div>
             )}
@@ -206,7 +208,7 @@ const CourseDetailPage = () => {
             <h2 className="font-sans text-lg font-semibold mb-4">Önkoşullar</h2>
             
             {prerequisites.length === 0 ? (
-              <p className="text-slate-400 text-sm">Bu ders için önkoşul bulunmuyor.</p>
+              <p className="text-gray-600 dark:text-gray-300 text-sm">Bu ders için önkoşul bulunmuyor.</p>
             ) : (
               <ul className="space-y-3">
                 {prerequisites.map((prereq) => {
@@ -224,7 +226,7 @@ const CourseDetailPage = () => {
                             ? 'bg-green-500/10 border border-green-500/20 hover:bg-green-500/20'
                             : isIncomplete
                             ? 'bg-red-500/10 border border-red-500/20 hover:bg-red-500/20'
-                            : 'bg-slate-800/50 hover:bg-slate-700/50'
+                            : 'bg-gray-100 dark:bg-gray-800/50 hover:bg-primary-50/50'
                         }`}
                       >
                         <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${
@@ -256,7 +258,7 @@ const CourseDetailPage = () => {
                               </span>
                             )}
                           </div>
-                          <div className="text-xs text-slate-400 truncate">{prereq.name}</div>
+                          <div className="text-xs text-gray-600 dark:text-gray-300 truncate">{prereq.name}</div>
                           <div className={`text-xs mt-1 ${
                             isCompleted ? 'text-green-400' : isIncomplete ? 'text-red-400' : 'text-amber-400'
                           }`}>
@@ -278,7 +280,7 @@ const CourseDetailPage = () => {
             <h2 className="font-sans text-lg font-semibold mb-4">Mevcut Sectionlar</h2>
             
             {sections.length === 0 ? (
-              <p className="text-slate-400 text-sm">Bu ders için aktif section bulunmuyor.</p>
+              <p className="text-gray-600 dark:text-gray-300 text-sm">Bu ders için aktif section bulunmuyor.</p>
             ) : (
               <div className="space-y-4">
                 {sections.map((section) => {
@@ -288,18 +290,18 @@ const CourseDetailPage = () => {
                   return (
                     <div
                       key={section.id}
-                      className="p-4 rounded-xl bg-white border-2 border-gray-200 shadow-md"
+                      className="p-4 rounded-xl bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 shadow-md"
                     >
                       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-2">
-                            <span className="font-semibold text-gray-800">Section {section.sectionNumber}</span>
+                            <span className="font-semibold text-gray-800 dark:text-gray-100">Section {section.sectionNumber}</span>
                             <span className="px-2 py-0.5 rounded bg-blue-100 border border-blue-300 text-blue-700 text-xs font-medium">
                               {section.semester === 'fall' ? 'Güz' : section.semester === 'spring' ? 'Bahar' : 'Yaz'} {section.year}
                             </span>
                           </div>
                           
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-700">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-700 dark:text-gray-200">
                             {section.instructor && (
                               <div className="flex items-center gap-2">
                                 <FiUser className="w-4 h-4" />
@@ -360,15 +362,15 @@ const CourseDetailPage = () => {
                                     </div>
                                   )}
                                   {elig.details && (
-                                    <details className="text-xs text-gray-700 mt-2">
-                                      <summary className="cursor-pointer hover:text-gray-900 font-medium flex items-center gap-1">
+                                    <details className="text-xs text-gray-700 dark:text-gray-200 mt-2">
+                                      <summary className="cursor-pointer hover:text-gray-900 dark:hover:text-gray-100 dark:text-gray-100 font-medium flex items-center gap-1">
                                         <FiInfo className="w-3 h-3" />
                                         Detaylı Bilgi
                                       </summary>
                                       <div className="mt-2 space-y-1 pl-4">
                                         {elig.details.prerequisites && (
                                           <div>
-                                            <span className="font-medium text-gray-800">Önkoşullar: </span>
+                                            <span className="font-medium text-gray-800 dark:text-gray-100">Önkoşullar: </span>
                                             {elig.details.prerequisites.satisfied ? (
                                               <span className="text-green-700 font-medium">✓ Tamamlandı</span>
                                             ) : (
@@ -380,7 +382,7 @@ const CourseDetailPage = () => {
                                         )}
                                         {elig.details.scheduleConflict && (
                                           <div>
-                                            <span className="font-medium text-gray-800">Çakışma: </span>
+                                            <span className="font-medium text-gray-800 dark:text-gray-100">Çakışma: </span>
                                             {elig.details.scheduleConflict.hasConflict ? (
                                               <span className="text-red-700 font-medium">✗ Var</span>
                                             ) : (
@@ -390,7 +392,7 @@ const CourseDetailPage = () => {
                                         )}
                                         {elig.details.hasCapacity !== undefined && (
                                           <div>
-                                            <span className="font-medium text-gray-800">Kapasite: </span>
+                                            <span className="font-medium text-gray-800 dark:text-gray-100">Kapasite: </span>
                                             {elig.details.hasCapacity ? (
                                               <span className="text-green-700 font-medium">✓ Yer var</span>
                                             ) : (
@@ -409,7 +411,7 @@ const CourseDetailPage = () => {
                                 className={`btn w-full ${
                                   canEnroll
                                     ? 'btn-primary'
-                                    : 'bg-gray-100 text-gray-800 cursor-not-allowed border-2 border-gray-300 shadow-sm font-medium'
+                                    : 'bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-100 cursor-not-allowed border-2 border-gray-300 dark:border-gray-600 shadow-sm font-medium'
                                 }`}
                               >
                                 {enrolling === section.id ? (
@@ -419,9 +421,7 @@ const CourseDetailPage = () => {
                                   </>
                                 ) : canEnroll ? (
                                   <>
-                                    <FiCheckCircle className="w-4 h-4 mr-2" />
-                                    Kayıt Ol
-                                  </>
+                                    <FiCheckCircle className="w-4 h-4 mr-2" />{t('common.register')}</>
                                 ) : (
                                   <>
                                     <FiXCircle className="w-4 h-4 mr-2" />

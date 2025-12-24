@@ -8,7 +8,9 @@ import courseService from '../../services/courseService';
 import userService from '../../services/userService';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 
+import { useTranslation } from 'react-i18next';
 const AdminSectionsPage = () => {
+  const { t } = useTranslation();
     const [sections, setSections] = useState([]);
     const [courses, setCourses] = useState([]);
     const [classrooms, setClassrooms] = useState([]);
@@ -169,7 +171,7 @@ const AdminSectionsPage = () => {
             <div className="flex items-center justify-between mb-8">
                 <div>
                     <h1 className="font-display text-3xl font-bold mb-2">Section Yönetimi</h1>
-                    <p className="text-slate-400">Derslere öğretim üyesi atayın ve section'ları yönetin</p>
+                    <p className="text-gray-600 dark:text-gray-300">Derslere öğretim üyesi atayın ve section'ları yönetin</p>
                 </div>
                 <button
                     onClick={handleOpenCreateModal}
@@ -184,8 +186,8 @@ const AdminSectionsPage = () => {
             <div className="card mb-6">
                 <div className="flex flex-wrap items-center gap-4">
                     <div className="flex items-center gap-2">
-                        <FiFilter className="w-4 h-4 text-slate-400" />
-                        <span className="text-sm text-slate-400">Filtreler:</span>
+                        <FiFilter className="w-4 h-4 text-gray-600 dark:text-gray-300" />
+                        <span className="text-sm text-gray-600 dark:text-gray-300">Filtreler:</span>
                     </div>
 
                     <select
@@ -211,7 +213,7 @@ const AdminSectionsPage = () => {
 
                     <div className="flex-1 max-w-md">
                         <div className="relative">
-                            <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                            <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600 dark:text-gray-300" />
                             <input
                                 type="text"
                                 placeholder="Ders kodu, adı veya öğretim üyesi ara..."
@@ -229,27 +231,27 @@ const AdminSectionsPage = () => {
                 <div className="overflow-x-auto">
                     <table className="w-full">
                         <thead>
-                            <tr className="border-b border-slate-700/50">
-                                <th className="text-left p-4 font-medium text-slate-400">Ders</th>
-                                <th className="text-left p-4 font-medium text-slate-400">Section</th>
-                                <th className="text-left p-4 font-medium text-slate-400">Dönem</th>
-                                <th className="text-left p-4 font-medium text-slate-400">Öğretim Üyesi</th>
-                                <th className="text-left p-4 font-medium text-slate-400">Derslik</th>
-                                <th className="text-left p-4 font-medium text-slate-400">Kapasite</th>
-                                <th className="text-left p-4 font-medium text-slate-400">Durum</th>
-                                <th className="text-right p-4 font-medium text-slate-400">İşlemler</th>
+                            <tr className="border-b border-gray-200 dark:border-gray-700/50">
+                                <th className="text-left p-4 font-medium text-gray-600 dark:text-gray-300">Ders</th>
+                                <th className="text-left p-4 font-medium text-gray-600 dark:text-gray-300">Section</th>
+                                <th className="text-left p-4 font-medium text-gray-600 dark:text-gray-300">{t('courses.semester')}</th>
+                                <th className="text-left p-4 font-medium text-gray-600 dark:text-gray-300">{t('roles.faculty')}</th>
+                                <th className="text-left p-4 font-medium text-gray-600 dark:text-gray-300">Derslik</th>
+                                <th className="text-left p-4 font-medium text-gray-600 dark:text-gray-300">{t('courses.capacity')}</th>
+                                <th className="text-left p-4 font-medium text-gray-600 dark:text-gray-300">{t('common.status')}</th>
+                                <th className="text-right p-4 font-medium text-gray-600 dark:text-gray-300">{t('wallet.transactions')}</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-slate-800">
+                        <tbody className="divide-y divide-gray-200 dark:divide-gray-700 dark:divide-gray-700">
                             {filteredSections.length === 0 ? (
                                 <tr>
-                                    <td colSpan="8" className="p-8 text-center text-slate-400">
+                                    <td colSpan="8" className="p-8 text-center text-gray-600 dark:text-gray-300">
                                         Hiç section bulunamadı
                                     </td>
                                 </tr>
                             ) : (
                                 filteredSections.map((section) => (
-                                    <tr key={section.id} className="hover:bg-slate-800/30 transition-colors">
+                                    <tr key={section.id} className="hover:bg-gray-100 dark:hover:bg-gray-700 dark:bg-gray-800/30 transition-colors">
                                         <td className="p-4">
                                             <div className="flex items-center gap-3">
                                                 <div className="w-10 h-10 rounded-lg bg-primary-500/20 flex items-center justify-center">
@@ -257,20 +259,20 @@ const AdminSectionsPage = () => {
                                                 </div>
                                                 <div>
                                                     <div className="font-medium">{section.course?.code}</div>
-                                                    <div className="text-sm text-slate-400 truncate max-w-[200px]">
+                                                    <div className="text-sm text-gray-600 dark:text-gray-300 truncate max-w-[200px]">
                                                         {section.course?.name}
                                                     </div>
                                                 </div>
                                             </div>
                                         </td>
                                         <td className="p-4">
-                                            <span className="px-2 py-1 rounded bg-slate-700 text-sm">
+                                            <span className="px-2 py-1 rounded bg-primary-50 text-sm">
                                                 Section {section.sectionNumber}
                                             </span>
                                         </td>
                                         <td className="p-4">
                                             <div className="flex items-center gap-2 text-sm">
-                                                <FiCalendar className="w-4 h-4 text-slate-400" />
+                                                <FiCalendar className="w-4 h-4 text-gray-600 dark:text-gray-300" />
                                                 <span>
                                                     {section.year} {section.semester === 'fall' ? 'Güz' : section.semester === 'spring' ? 'Bahar' : 'Yaz'}
                                                 </span>
@@ -294,16 +296,16 @@ const AdminSectionsPage = () => {
                                         <td className="p-4">
                                             {section.classroom ? (
                                                 <div className="flex items-center gap-1 text-sm">
-                                                    <FiMapPin className="w-4 h-4 text-slate-400" />
+                                                    <FiMapPin className="w-4 h-4 text-gray-600 dark:text-gray-300" />
                                                     {section.classroom.location}
                                                 </div>
                                             ) : (
-                                                <span className="text-slate-500 text-sm">-</span>
+                                                <span className="text-gray-700 dark:text-gray-200 text-sm">-</span>
                                             )}
                                         </td>
                                         <td className="p-4">
                                             <div className="flex items-center gap-1 text-sm">
-                                                <FiUsers className="w-4 h-4 text-slate-400" />
+                                                <FiUsers className="w-4 h-4 text-gray-600 dark:text-gray-300" />
                                                 <span>{section.enrolledCount}/{section.capacity}</span>
                                             </div>
                                         </td>
@@ -312,7 +314,7 @@ const AdminSectionsPage = () => {
                                                     ? 'bg-green-500/20 text-green-400'
                                                     : 'bg-red-500/20 text-red-400'
                                                 }`}>
-                                                {section.isActive ? 'Aktif' : 'Pasif'}
+                                                {section.isActive ? t('common.active') : t('common.inactive')}
                                             </span>
                                         </td>
                                         <td className="p-4 text-right">
@@ -342,7 +344,7 @@ const AdminSectionsPage = () => {
                             </h3>
                             <button
                                 onClick={() => setShowCreateModal(false)}
-                                className="p-2 rounded-lg hover:bg-slate-700 transition-colors"
+                                className="p-2 rounded-lg hover:bg-primary-50 transition-colors"
                             >
                                 <FiX className="w-5 h-5" />
                             </button>
@@ -380,7 +382,7 @@ const AdminSectionsPage = () => {
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium mb-2">Kapasite</label>
+                                    <label className="block text-sm font-medium mb-2">{t('courses.capacity')}</label>
                                     <input
                                         type="number"
                                         min="1"
@@ -394,7 +396,7 @@ const AdminSectionsPage = () => {
                             {/* Semester & Year */}
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-sm font-medium mb-2">Dönem</label>
+                                    <label className="block text-sm font-medium mb-2">{t('courses.semester')}</label>
                                     <select
                                         value={newSectionData.semester}
                                         onChange={(e) => setNewSectionData({ ...newSectionData, semester: e.target.value })}
@@ -406,7 +408,7 @@ const AdminSectionsPage = () => {
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium mb-2">Yıl</label>
+                                    <label className="block text-sm font-medium mb-2">{t('courses.year')}</label>
                                     <select
                                         value={newSectionData.year}
                                         onChange={(e) => setNewSectionData({ ...newSectionData, year: parseInt(e.target.value) })}
@@ -421,7 +423,7 @@ const AdminSectionsPage = () => {
 
                             {/* Instructor */}
                             <div>
-                                <label className="block text-sm font-medium mb-2">Öğretim Üyesi</label>
+                                <label className="block text-sm font-medium mb-2">{t('roles.faculty')}</label>
                                 <select
                                     value={newSectionData.instructor_id}
                                     onChange={(e) => setNewSectionData({ ...newSectionData, instructor_id: e.target.value })}
@@ -460,9 +462,7 @@ const AdminSectionsPage = () => {
                                     onClick={() => setShowCreateModal(false)}
                                     className="btn btn-secondary flex-1"
                                     disabled={saving}
-                                >
-                                    İptal
-                                </button>
+                                >{t('common.cancel')}</button>
                                 <button
                                     type="submit"
                                     className="btn btn-primary flex-1"
@@ -489,14 +489,14 @@ const AdminSectionsPage = () => {
                             Öğretim Üyesi Ata
                         </h3>
 
-                        <div className="mb-4 p-3 rounded-lg bg-slate-800/50">
+                        <div className="mb-4 p-3 rounded-lg bg-gray-100 dark:bg-gray-800/50">
                             <div className="font-medium">{selectedSection.course?.code}</div>
-                            <div className="text-sm text-slate-400">{selectedSection.course?.name}</div>
-                            <div className="text-sm text-slate-400">Section {selectedSection.sectionNumber}</div>
+                            <div className="text-sm text-gray-600 dark:text-gray-300">{selectedSection.course?.name}</div>
+                            <div className="text-sm text-gray-600 dark:text-gray-300">Section {selectedSection.sectionNumber}</div>
                         </div>
 
                         <div className="mb-6">
-                            <label className="block text-sm font-medium text-slate-300 mb-2">
+                            <label className="block text-sm font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 mb-2">
                                 Öğretim Üyesi Seçin
                             </label>
                             <select
@@ -518,15 +518,13 @@ const AdminSectionsPage = () => {
                                 onClick={() => setShowAssignModal(false)}
                                 className="btn btn-secondary flex-1"
                                 disabled={saving}
-                            >
-                                İptal
-                            </button>
+                            >{t('common.cancel')}</button>
                             <button
                                 onClick={handleSaveAssignment}
                                 className="btn btn-primary flex-1"
                                 disabled={saving}
                             >
-                                {saving ? <LoadingSpinner size="sm" /> : 'Kaydet'}
+                                {saving ? <LoadingSpinner size="sm" /> : t('common.save')}
                             </button>
                         </div>
                     </div>

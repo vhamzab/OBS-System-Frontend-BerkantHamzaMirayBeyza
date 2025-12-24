@@ -7,13 +7,19 @@ const LoadingSpinner = ({ size = 'md', className = '' }) => {
   };
 
   return (
-    <div className={`flex items-center justify-center ${className}`}>
+    <div
+      className={`flex items-center justify-center ${className}`}
+      role="status"
+      aria-busy="true"
+      aria-label="Yükleniyor"
+    >
       <div
         className={`${sizes[size]} border-primary-500/30 border-t-primary-500 rounded-full animate-spin`}
+        aria-hidden="true"
       />
+      <span className="sr-only">Yükleniyor...</span>
     </div>
   );
 };
 
 export default LoadingSpinner;
-

@@ -5,7 +5,9 @@ import toast from 'react-hot-toast';
 import userService from '../../services/userService';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 
+import { useTranslation } from 'react-i18next';
 const DepartmentSelectionPage = () => {
+  const { t } = useTranslation();
     const navigate = useNavigate();
     const [departments, setDepartments] = useState([]);
     const [selectedDepartment, setSelectedDepartment] = useState('');
@@ -64,7 +66,7 @@ const DepartmentSelectionPage = () => {
     }
 
     return (
-        <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4">
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center p-4">
             <div className="max-w-lg w-full">
                 <div className="card p-8">
                     <div className="text-center mb-8">
@@ -72,7 +74,7 @@ const DepartmentSelectionPage = () => {
                             <FiBookOpen className="w-8 h-8 text-primary-400" />
                         </div>
                         <h1 className="text-2xl font-bold mb-2">Bölüm Seçimi</h1>
-                        <p className="text-slate-400">
+                        <p className="text-gray-600 dark:text-gray-300">
                             Ders kaydı yapabilmek için önce bölümünüzü seçmeniz gerekmektedir.
                         </p>
                     </div>
@@ -84,13 +86,13 @@ const DepartmentSelectionPage = () => {
                                 onClick={() => setSelectedDepartment(dept.id)}
                                 className={`w-full p-4 rounded-xl border-2 text-left transition-all ${selectedDepartment === dept.id
                                         ? 'border-primary-500 bg-primary-500/10'
-                                        : 'border-slate-700 hover:border-slate-600 bg-slate-800/50'
+                                        : 'border-gray-200 dark:border-gray-700 hover:border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800/50'
                                     }`}
                             >
                                 <div className="flex items-center justify-between">
                                     <div>
                                         <div className="font-semibold">{dept.name}</div>
-                                        <div className="text-sm text-slate-400">{dept.faculty}</div>
+                                        <div className="text-sm text-gray-600 dark:text-gray-300">{dept.faculty}</div>
                                     </div>
                                     {selectedDepartment === dept.id && (
                                         <FiCheck className="w-5 h-5 text-primary-400" />

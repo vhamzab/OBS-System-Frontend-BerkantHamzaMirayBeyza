@@ -5,7 +5,9 @@ import schedulingService from '../../services/schedulingService';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import Button from '../../components/common/Button';
 
+import { useTranslation } from 'react-i18next';
 const MySchedulePage = () => {
+  const { t } = useTranslation();
   const [schedule, setSchedule] = useState({});
   const [loading, setLoading] = useState(true);
   const [exporting, setExporting] = useState(false);
@@ -77,7 +79,7 @@ const MySchedulePage = () => {
       <div className="mb-8 flex items-center justify-between">
         <div>
           <h1 className="font-display text-3xl font-bold mb-2">Ders Programım</h1>
-          <p className="text-slate-400">Haftalık ders programınızı görüntüleyin</p>
+          <p className="text-gray-600 dark:text-gray-300">Haftalık ders programınızı görüntüleyin</p>
         </div>
         {hasSchedule && (
           <Button onClick={handleExportICal} loading={exporting}>
@@ -89,8 +91,8 @@ const MySchedulePage = () => {
 
       {!hasSchedule ? (
         <div className="card text-center py-12">
-          <FiCalendar className="w-16 h-16 text-slate-400 mx-auto mb-4" />
-          <p className="text-slate-400">Henüz ders programınız oluşturulmamış</p>
+          <FiCalendar className="w-16 h-16 text-gray-600 dark:text-gray-300 mx-auto mb-4" />
+          <p className="text-gray-600 dark:text-gray-300">Henüz ders programınız oluşturulmamış</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-7 gap-4">
@@ -100,25 +102,25 @@ const MySchedulePage = () => {
               <div key={day} className="card">
                 <h3 className="font-bold text-lg mb-4 text-center">{dayNames[day]}</h3>
                 {daySchedule.length === 0 ? (
-                  <div className="text-center py-8 text-slate-400 text-sm">Boş</div>
+                  <div className="text-center py-8 text-gray-600 dark:text-gray-300 text-sm">Boş</div>
                 ) : (
                   <div className="space-y-3">
                     {daySchedule.map((item) => (
                       <div
                         key={item.id}
-                        className="p-3 bg-slate-700/50 rounded-lg border-l-4 border-blue-500"
+                        className="p-3 bg-primary-50/50 rounded-lg border-l-4 border-blue-500"
                       >
                         <div className="font-semibold text-sm mb-1">{item.course}</div>
-                        <div className="text-xs text-slate-400 mb-2">{item.courseName}</div>
-                        <div className="flex items-center gap-2 text-xs text-slate-400 mb-1">
+                        <div className="text-xs text-gray-600 dark:text-gray-300 mb-2">{item.courseName}</div>
+                        <div className="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-300 mb-1">
                           <FiClock />
                           {getTimeSlot(item.startTime, item.endTime)}
                         </div>
-                        <div className="flex items-center gap-2 text-xs text-slate-400 mb-1">
+                        <div className="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-300 mb-1">
                           <FiMapPin />
                           {item.classroom}
                         </div>
-                        <div className="flex items-center gap-2 text-xs text-slate-400">
+                        <div className="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-300">
                           <FiUser />
                           {item.instructor}
                         </div>

@@ -5,7 +5,9 @@ import courseService from '../../services/courseService';
 import userService from '../../services/userService';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 
+import { useTranslation } from 'react-i18next';
 const AdminCoursesPage = () => {
+  const { t } = useTranslation();
     const [courses, setCourses] = useState([]);
     const [departments, setDepartments] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -138,7 +140,7 @@ const AdminCoursesPage = () => {
             <div className="flex items-center justify-between mb-8">
                 <div>
                     <h1 className="font-sans text-3xl font-bold mb-2">Ders Yönetimi</h1>
-                    <p className="text-slate-400">Tüm dersleri görüntüleyin ve yönetin</p>
+                    <p className="text-gray-600 dark:text-gray-300">Tüm dersleri görüntüleyin ve yönetin</p>
                 </div>
                 <button
                     onClick={() => handleOpenModal()}
@@ -153,8 +155,8 @@ const AdminCoursesPage = () => {
             <div className="card mb-6">
                 <form onSubmit={handleSearch} className="flex flex-wrap items-center gap-4">
                     <div className="flex items-center gap-2">
-                        <FiFilter className="w-4 h-4 text-slate-400" />
-                        <span className="text-sm text-slate-400">Filtreler:</span>
+                        <FiFilter className="w-4 h-4 text-gray-600 dark:text-gray-300" />
+                        <span className="text-sm text-gray-600 dark:text-gray-300">Filtreler:</span>
                     </div>
 
                     <select
@@ -172,7 +174,7 @@ const AdminCoursesPage = () => {
 
                     <div className="flex-1 max-w-md">
                         <div className="relative">
-                            <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                            <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600 dark:text-gray-300" />
                             <input
                                 type="text"
                                 placeholder="Ders kodu veya adı ara..."
@@ -188,26 +190,26 @@ const AdminCoursesPage = () => {
             {/* Stats */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                 <div className="card text-center py-4">
-                    <div className="text-2xl font-bold text-white">{courses.length}</div>
-                    <div className="text-sm text-slate-400">Toplam Ders</div>
+                    <div className="text-2xl font-bold text-gray-800 dark:text-gray-100">{courses.length}</div>
+                    <div className="text-sm text-gray-600 dark:text-gray-300">{t('dashboard.totalCourses')}</div>
                 </div>
                 <div className="card text-center py-4">
                     <div className="text-2xl font-bold text-blue-400">
                         {courses.filter(c => c.code?.startsWith('CSE')).length}
                     </div>
-                    <div className="text-sm text-slate-400">Bilgisayar Müh.</div>
+                    <div className="text-sm text-gray-600 dark:text-gray-300">Bilgisayar Müh.</div>
                 </div>
                 <div className="card text-center py-4">
                     <div className="text-2xl font-bold text-green-400">
                         {courses.filter(c => c.code?.startsWith('MATH')).length}
                     </div>
-                    <div className="text-sm text-slate-400">Matematik</div>
+                    <div className="text-sm text-gray-600 dark:text-gray-300">Matematik</div>
                 </div>
                 <div className="card text-center py-4">
                     <div className="text-2xl font-bold text-accent-400">
                         {courses.filter(c => c.credits >= 4).length}
                     </div>
-                    <div className="text-sm text-slate-400">4+ Kredi Ders</div>
+                    <div className="text-sm text-gray-600 dark:text-gray-300">4+ Kredi Ders</div>
                 </div>
             </div>
 
@@ -216,25 +218,25 @@ const AdminCoursesPage = () => {
                 <div className="overflow-x-auto">
                     <table className="w-full">
                         <thead>
-                            <tr className="border-b border-slate-700/50">
-                                <th className="text-left p-4 font-medium text-slate-400">Ders</th>
-                                <th className="text-left p-4 font-medium text-slate-400">Bölüm</th>
-                                <th className="text-center p-4 font-medium text-slate-400">Kredi</th>
-                                <th className="text-center p-4 font-medium text-slate-400">ECTS</th>
-                                <th className="text-center p-4 font-medium text-slate-400">Durum</th>
-                                <th className="text-right p-4 font-medium text-slate-400">İşlemler</th>
+                            <tr className="border-b border-gray-200 dark:border-gray-700/50">
+                                <th className="text-left p-4 font-medium text-gray-600 dark:text-gray-300">Ders</th>
+                                <th className="text-left p-4 font-medium text-gray-600 dark:text-gray-300">{t('profile.department')}</th>
+                                <th className="text-center p-4 font-medium text-gray-600 dark:text-gray-300">{t('courses.credits')}</th>
+                                <th className="text-center p-4 font-medium text-gray-600 dark:text-gray-300">ECTS</th>
+                                <th className="text-center p-4 font-medium text-gray-600 dark:text-gray-300">{t('common.status')}</th>
+                                <th className="text-right p-4 font-medium text-gray-600 dark:text-gray-300">{t('wallet.transactions')}</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-slate-800">
+                        <tbody className="divide-y divide-gray-200 dark:divide-gray-700 dark:divide-gray-700">
                             {filteredCourses.length === 0 ? (
                                 <tr>
-                                    <td colSpan="6" className="p-8 text-center text-slate-400">
+                                    <td colSpan="6" className="p-8 text-center text-gray-600 dark:text-gray-300">
                                         Ders bulunamadı
                                     </td>
                                 </tr>
                             ) : (
                                 filteredCourses.map((course) => (
-                                    <tr key={course.id} className="hover:bg-slate-800/30 transition-colors">
+                                    <tr key={course.id} className="hover:bg-gray-100 dark:hover:bg-gray-700 dark:bg-gray-800/30 transition-colors">
                                         <td className="p-4">
                                             <div className="flex items-center gap-3">
                                                 <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary-500/20 to-accent-500/20 flex items-center justify-center">
@@ -242,17 +244,17 @@ const AdminCoursesPage = () => {
                                                 </div>
                                                 <div>
                                                     <div className="font-medium">{course.code}</div>
-                                                    <div className="text-sm text-slate-400 max-w-xs truncate">{course.name}</div>
+                                                    <div className="text-sm text-gray-600 dark:text-gray-300 max-w-xs truncate">{course.name}</div>
                                                 </div>
                                             </div>
                                         </td>
                                         <td className="p-4">
-                                            <span className="text-sm text-slate-300">
+                                            <span className="text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500">
                                                 {course.department?.name || '-'}
                                             </span>
                                         </td>
                                         <td className="p-4 text-center">
-                                            <span className="px-2 py-1 rounded bg-primary-100 border-2 border-primary-300 text-primary-700 text-sm font-medium shadow-sm">
+                                            <span className="px-2 py-1 rounded bg-primary-100 border-2 border-primary-300 text-primary-700 dark:text-primary-300 text-sm font-medium shadow-sm">
                                                 {course.credits}
                                             </span>
                                         </td>
@@ -266,16 +268,16 @@ const AdminCoursesPage = () => {
                                                     ? 'bg-green-500/20 text-green-400'
                                                     : 'bg-red-500/20 text-red-400'
                                                 }`}>
-                                                {course.isActive !== false ? 'Aktif' : 'Pasif'}
+                                                {course.isActive !== false ? t('common.active') : t('common.inactive')}
                                             </span>
                                         </td>
                                         <td className="p-4 text-right">
                                             <button
                                                 onClick={() => handleOpenModal(course)}
-                                                className="p-2 rounded-lg hover:bg-slate-700 transition-colors"
-                                                title="Düzenle"
+                                                className="p-2 rounded-lg hover:bg-primary-50 transition-colors"
+                                                title={t('common.edit')}
                                             >
-                                                <FiEdit2 className="w-4 h-4 text-slate-400" />
+                                                <FiEdit2 className="w-4 h-4 text-gray-600 dark:text-gray-300" />
                                             </button>
                                         </td>
                                     </tr>
@@ -296,7 +298,7 @@ const AdminCoursesPage = () => {
                             </h3>
                             <button
                                 onClick={handleCloseModal}
-                                className="p-2 rounded-lg hover:bg-slate-700 transition-colors"
+                                className="p-2 rounded-lg hover:bg-primary-50 transition-colors"
                             >
                                 <FiX className="w-5 h-5" />
                             </button>
@@ -305,7 +307,7 @@ const AdminCoursesPage = () => {
                         <form onSubmit={handleSubmit} className="space-y-4">
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-sm font-medium mb-2">Ders Kodu</label>
+                                    <label className="block text-sm font-medium mb-2">{t('courses.courseCode')}</label>
                                     <input
                                         type="text"
                                         value={formData.code}
@@ -316,7 +318,7 @@ const AdminCoursesPage = () => {
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium mb-2">Bölüm</label>
+                                    <label className="block text-sm font-medium mb-2">{t('profile.department')}</label>
                                     <select
                                         value={formData.department_id}
                                         onChange={(e) => setFormData({ ...formData, department_id: e.target.value })}
@@ -333,7 +335,7 @@ const AdminCoursesPage = () => {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium mb-2">Ders Adı</label>
+                                <label className="block text-sm font-medium mb-2">{t('courses.courseName')}</label>
                                 <input
                                     type="text"
                                     value={formData.name}
@@ -345,7 +347,7 @@ const AdminCoursesPage = () => {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium mb-2">Açıklama</label>
+                                <label className="block text-sm font-medium mb-2">{t('courses.description')}</label>
                                 <textarea
                                     value={formData.description}
                                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
@@ -356,7 +358,7 @@ const AdminCoursesPage = () => {
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-sm font-medium mb-2">Kredi</label>
+                                    <label className="block text-sm font-medium mb-2">{t('courses.credits')}</label>
                                     <input
                                         type="number"
                                         min="1"
@@ -385,9 +387,7 @@ const AdminCoursesPage = () => {
                                     onClick={handleCloseModal}
                                     className="btn btn-secondary flex-1"
                                     disabled={saving}
-                                >
-                                    İptal
-                                </button>
+                                >{t('common.cancel')}</button>
                                 <button
                                     type="submit"
                                     className="btn btn-primary flex-1"
@@ -395,9 +395,7 @@ const AdminCoursesPage = () => {
                                 >
                                     {saving ? <LoadingSpinner size="sm" /> : (
                                         <>
-                                            <FiSave className="w-4 h-4 mr-2" />
-                                            Kaydet
-                                        </>
+                                            <FiSave className="w-4 h-4 mr-2" />{t('common.save')}</>
                                     )}
                                 </button>
                             </div>

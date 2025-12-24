@@ -8,6 +8,7 @@ import authService from '../../services/authService';
 import Input from '../../components/common/Input';
 import Button from '../../components/common/Button';
 
+import { useTranslation } from 'react-i18next';
 const emailSchema = Yup.object({
   email: Yup.string()
     .email('Geçerli bir e-posta adresi giriniz')
@@ -21,6 +22,7 @@ const tokenSchema = Yup.object({
 });
 
 const ForgotPasswordPage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
@@ -77,10 +79,10 @@ const ForgotPasswordPage = () => {
             <h1 className="font-display text-2xl font-bold mb-4">
               E-posta Gönderildi
             </h1>
-            <p className="text-slate-400 mb-6">
-              <span className="text-white">{userEmail}</span> adresine şifre sıfırlama kodu gönderildi.
+            <p className="text-gray-600 dark:text-gray-300 mb-6">
+              <span className="text-gray-800 dark:text-gray-100">{userEmail}</span> adresine şifre sıfırlama kodu gönderildi.
             </p>
-            <p className="text-sm text-slate-500 mb-6">
+            <p className="text-sm text-gray-700 dark:text-gray-200 mb-6">
               E-postanızdaki kodu aşağıya girin.
             </p>
             
@@ -107,7 +109,7 @@ const ForgotPasswordPage = () => {
             <div className="mt-6 text-center">
               <button
                 onClick={() => setEmailSent(false)}
-                className="text-sm text-slate-400 hover:text-white transition-colors"
+                className="text-sm text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 dark:text-gray-100 transition-colors"
               >
                 Farklı bir e-posta adresi kullan
               </button>
@@ -131,13 +133,11 @@ const ForgotPasswordPage = () => {
         <div className="text-center mb-8">
           <Link to="/" className="inline-flex items-center gap-3 mb-6">
             <div className="w-14 h-14 bg-gradient-to-br from-primary-500 to-accent-500 rounded-2xl flex items-center justify-center shadow-lg shadow-primary-500/25">
-              <span className="text-white font-bold text-2xl">Ü</span>
+              <span className="text-gray-800 dark:text-gray-100 font-bold text-2xl">Ü</span>
             </div>
           </Link>
-          <h1 className="font-display text-3xl font-bold mb-2">
-            Şifremi Unuttum
-          </h1>
-          <p className="text-slate-400">
+          <h1 className="font-display text-3xl font-bold mb-2">{t('auth.forgotPassword')}</h1>
+          <p className="text-gray-600 dark:text-gray-300">
             E-posta adresinizi girin, size şifre sıfırlama kodu gönderelim
           </p>
         </div>
@@ -165,7 +165,7 @@ const ForgotPasswordPage = () => {
           </form>
 
           <div className="mt-6 text-center">
-            <Link to="/login" className="inline-flex items-center gap-2 text-slate-400 hover:text-white transition-colors">
+            <Link to="/login" className="inline-flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 dark:text-gray-100 transition-colors">
               <FiArrowLeft className="w-4 h-4" />
               Giriş sayfasına dön
             </Link>

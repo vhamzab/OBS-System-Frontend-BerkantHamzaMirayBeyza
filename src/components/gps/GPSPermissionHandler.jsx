@@ -1,11 +1,13 @@
 import { useState, useCallback } from 'react';
 import { MapPin, AlertCircle, Loader2, CheckCircle, XCircle } from 'lucide-react';
 
+import { useTranslation } from 'react-i18next';
 /**
  * GPS Permission Handler Component
  * Handles GPS permission requests and location retrieval
  */
 const GPSPermissionHandler = ({ onLocationReceived, onError, className = '' }) => {
+  const { t } = useTranslation();
   const [status, setStatus] = useState('idle'); // idle, requesting, success, error, denied
   const [location, setLocation] = useState(null);
   const [error, setError] = useState(null);
@@ -80,7 +82,7 @@ const GPSPermissionHandler = ({ onLocationReceived, onError, className = '' }) =
       case 'denied':
         return <XCircle className="h-6 w-6 text-red-500" />;
       default:
-        return <MapPin className="h-6 w-6 text-gray-400" />;
+        return <MapPin className="h-6 w-6 text-gray-400 dark:text-gray-500" />;
     }
   };
 
@@ -109,7 +111,7 @@ const GPSPermissionHandler = ({ onLocationReceived, onError, className = '' }) =
       case 'denied':
         return 'border-red-200 bg-red-50';
       default:
-        return 'border-gray-200 bg-gray-50';
+        return 'border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900';
     }
   };
 
@@ -118,11 +120,11 @@ const GPSPermissionHandler = ({ onLocationReceived, onError, className = '' }) =
       <div className="flex items-center gap-3">
         {getStatusIcon()}
         <div className="flex-1">
-          <p className={`text-sm ${status === 'error' || status === 'denied' ? 'text-red-700' : 'text-gray-700'}`}>
+          <p className={`text-sm ${status === 'error' || status === 'denied' ? 'text-red-700' : 'text-gray-700 dark:text-gray-200'}`}>
             {getStatusText()}
           </p>
           {location && status === 'success' && (
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500 mt-1">
               Koordinatlar: {location.latitude.toFixed(6)}, {location.longitude.toFixed(6)}
             </p>
           )}
@@ -130,7 +132,7 @@ const GPSPermissionHandler = ({ onLocationReceived, onError, className = '' }) =
         {(status === 'idle' || status === 'error') && (
           <button
             onClick={requestLocation}
-            className="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700 transition-colors"
+            className="px-4 py-2 bg-indigo-600 text-gray-800 dark:text-gray-100 text-sm font-medium rounded-md hover:bg-indigo-700 transition-colors"
           >
             {status === 'error' ? 'Tekrar Dene' : 'Konum Al'}
           </button>

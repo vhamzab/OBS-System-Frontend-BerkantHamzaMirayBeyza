@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FiCheck, FiX } from 'react-icons/fi';
 
+import { useTranslation } from 'react-i18next';
 const VerifyEmailPage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [status, setStatus] = useState('success'); // success, error
   const [message, setMessage] = useState('E-posta doğrulama süreci kaldırıldı. Doğrudan giriş yapabilirsiniz.');
@@ -27,8 +29,8 @@ const VerifyEmailPage = () => {
               <h1 className="font-display text-2xl font-bold mb-4">
                 Doğrulama Başarılı
               </h1>
-              <p className="text-slate-400 mb-6">{message}</p>
-              <p className="text-sm text-slate-500">
+              <p className="text-gray-600 dark:text-gray-300 mb-6">{message}</p>
+              <p className="text-sm text-gray-700 dark:text-gray-200">
                 3 saniye içinde giriş sayfasına yönlendirileceksiniz...
               </p>
             </>
@@ -42,7 +44,7 @@ const VerifyEmailPage = () => {
               <h1 className="font-display text-2xl font-bold mb-4">
                 Doğrulama Başarısız
               </h1>
-              <p className="text-slate-400 mb-6">{message}</p>
+              <p className="text-gray-600 dark:text-gray-300 mb-6">{message}</p>
               <Link to="/login" className="btn-primary inline-block">
                 Giriş Sayfasına Git
               </Link>

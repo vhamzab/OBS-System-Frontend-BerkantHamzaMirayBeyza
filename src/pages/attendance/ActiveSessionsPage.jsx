@@ -5,7 +5,9 @@ import toast from 'react-hot-toast';
 import attendanceService from '../../services/attendanceService';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 
+import { useTranslation } from 'react-i18next';
 const ActiveSessionsPage = () => {
+  const { t } = useTranslation();
     const [sessions, setSessions] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -48,16 +50,16 @@ const ActiveSessionsPage = () => {
                     <FiClock className="w-6 h-6 text-primary-400" />
                 </div>
                 <div>
-                    <h1 className="font-display text-3xl font-bold">Aktif Yoklamalar</h1>
-                    <p className="text-slate-400">Katılabileceğiniz aktif yoklama oturumları</p>
+                    <h1 className="font-display text-3xl font-bold">{t('attendance.activeSessions')}</h1>
+                    <p className="text-gray-600 dark:text-gray-300">Katılabileceğiniz aktif yoklama oturumları</p>
                 </div>
             </div>
 
             {sessions.length === 0 ? (
                 <div className="card text-center py-16">
-                    <FiAlertCircle className="w-12 h-12 text-slate-500 mx-auto mb-4" />
+                    <FiAlertCircle className="w-12 h-12 text-gray-700 dark:text-gray-200 mx-auto mb-4" />
                     <h3 className="text-lg font-medium mb-2">Aktif Yoklama Yok</h3>
-                    <p className="text-slate-400 mb-4">
+                    <p className="text-gray-600 dark:text-gray-300 mb-4">
                         Şu anda kayıtlı olduğunuz derslerde aktif yoklama bulunmuyor.
                     </p>
                     <Link to="/my-courses" className="btn btn-secondary">
@@ -77,7 +79,7 @@ const ActiveSessionsPage = () => {
                                         </h3>
                                     </div>
 
-                                    <div className="flex flex-wrap gap-4 text-sm text-slate-400 mb-4">
+                                    <div className="flex flex-wrap gap-4 text-sm text-gray-600 dark:text-gray-300 mb-4">
                                         <div className="flex items-center gap-1">
                                             <FiClock className="w-4 h-4" />
                                             <span>Başlangıç: {session.startTime}</span>
@@ -109,9 +111,7 @@ const ActiveSessionsPage = () => {
                                         <Link
                                             to={`/attendance/give/${session.id}`}
                                             className="btn btn-primary"
-                                        >
-                                            Yoklama Ver
-                                        </Link>
+                                        >{t('attendance.giveAttendance')}</Link>
                                     )}
                                 </div>
                             </div>
@@ -120,8 +120,8 @@ const ActiveSessionsPage = () => {
                 </div>
             )}
 
-            <div className="mt-6 p-4 bg-slate-800/50 rounded-xl text-sm text-slate-400">
-                <strong className="text-slate-300">💡 Bilgi:</strong> Yoklama oturumları belirli bir süre sonra
+            <div className="mt-6 p-4 bg-gray-100 dark:bg-gray-800/50 rounded-xl text-sm text-gray-600 dark:text-gray-300">
+                <strong className="text-gray-500 dark:text-gray-400 dark:text-gray-500">💡 Bilgi:</strong> Yoklama oturumları belirli bir süre sonra
                 kapanır. Yoklamaya zamanında katıldığınızdan emin olun. Sayfa her 30 saniyede otomatik yenilenir.
             </div>
         </div>

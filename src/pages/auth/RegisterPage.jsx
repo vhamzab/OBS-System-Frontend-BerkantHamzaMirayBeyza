@@ -9,6 +9,7 @@ import Input from '../../components/common/Input';
 import Select from '../../components/common/Select';
 import Button from '../../components/common/Button';
 
+import { useTranslation } from 'react-i18next';
 const validationSchema = Yup.object({
   firstName: Yup.string()
     .min(2, 'Ad en az 2 karakter olmalıdır')
@@ -50,13 +51,14 @@ const validationSchema = Yup.object({
 });
 
 const RegisterPage = () => {
+  const { t } = useTranslation();
   const { register } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
   const roleOptions = [
-    { value: 'student', label: 'Öğrenci' },
-    { value: 'faculty', label: 'Öğretim Üyesi' },
+    { value: 'student', label: t('roles.student') },
+    { value: 'faculty', label: t('roles.faculty') },
   ];
 
   const titleOptions = [
@@ -117,10 +119,10 @@ const RegisterPage = () => {
               className="w-32 h-32 object-contain rounded-lg shadow-lg"
             />
           </Link>
-          <h1 className="font-sans text-3xl font-normal mb-2 text-gray-800">
+          <h1 className="font-sans text-3xl font-normal mb-2 text-gray-800 dark:text-gray-100">
             Hesap Oluşturun
           </h1>
-          <p className="text-gray-500">
+          <p className="text-gray-500 dark:text-gray-400 dark:text-gray-500">
             Doğu Karadeniz Üniversitesi (DKÜ) OBS'ye kayıt olun
           </p>
         </div>
@@ -130,7 +132,7 @@ const RegisterPage = () => {
           <form onSubmit={formik.handleSubmit} className="space-y-5">
             <div className="grid grid-cols-2 gap-4">
               <Input
-                label="Ad"
+                label={t('auth.firstName')}
                 name="firstName"
                 placeholder="Adınız"
                 icon={FiUser}
@@ -142,7 +144,7 @@ const RegisterPage = () => {
                 required
               />
               <Input
-                label="Soyad"
+                label={t('auth.lastName')}
                 name="lastName"
                 placeholder="Soyadınız"
                 value={formik.values.lastName}
@@ -170,7 +172,7 @@ const RegisterPage = () => {
 
             <div className="grid grid-cols-2 gap-4">
               <Input
-                label="Şifre"
+                label={t('auth.password')}
                 name="password"
                 type="password"
                 placeholder="••••••••"
@@ -183,7 +185,7 @@ const RegisterPage = () => {
                 required
               />
               <Input
-                label="Şifre Tekrar"
+                label={t('auth.confirmPassword')}
                 name="confirmPassword"
                 type="password"
                 placeholder="••••••••"
@@ -211,7 +213,7 @@ const RegisterPage = () => {
 
             {formik.values.role === 'student' && (
               <Input
-                label="Öğrenci Numarası"
+                label={t('profile.studentNumber')}
                 name="studentNumber"
                 placeholder="20210001"
                 icon={FiHash}
@@ -256,9 +258,9 @@ const RegisterPage = () => {
                 name="terms"
                 checked={formik.values.terms}
                 onChange={formik.handleChange}
-                className="w-5 h-5 mt-0.5 rounded border-gray-300 bg-white text-primary-500 focus:ring-primary-500 focus:ring-offset-white"
+                className="w-5 h-5 mt-0.5 rounded border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-primary-500 focus:ring-primary-500 focus:ring-offset-white dark:ring-offset-gray-900 dark:focus:ring-offset-gray-900"
               />
-              <span className="text-sm text-gray-500">
+              <span className="text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500">
                 <Link to="/terms" className="link">Kullanım koşullarını</Link> ve{' '}
                 <Link to="/privacy" className="link">gizlilik politikasını</Link> okudum ve kabul ediyorum.
               </span>
@@ -267,17 +269,13 @@ const RegisterPage = () => {
               <p className="error-text">{formik.errors.terms}</p>
             )}
 
-            <Button type="submit" loading={loading} fullWidth>
-              Kayıt Ol
-            </Button>
+            <Button type="submit" loading={loading} fullWidth>{t('common.register')}</Button>
           </form>
 
           <div className="mt-6 text-center">
-            <p className="text-gray-500">
+            <p className="text-gray-500 dark:text-gray-400 dark:text-gray-500">
               Zaten hesabınız var mı?{' '}
-              <Link to="/login" className="link font-medium">
-                Giriş Yap
-              </Link>
+              <Link to="/login" className="link font-medium">{t('common.login')}</Link>
             </p>
           </div>
         </div>

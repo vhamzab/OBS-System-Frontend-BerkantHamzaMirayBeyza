@@ -7,8 +7,10 @@ import LoadingSpinner from '../../components/common/LoadingSpinner';
 import { testApiConnection, testCoursesEndpoint } from '../../utils/apiTest';
 import { useAuth } from '../../context/AuthContext';
 
+import { useTranslation } from 'react-i18next';
 // Debounce hook
 const useDebounce = (value, delay) => {
+  const { t } = useTranslation();
   const [debouncedValue, setDebouncedValue] = useState(value);
 
   useEffect(() => {
@@ -28,19 +30,21 @@ const useDebounce = (value, delay) => {
 const CourseCardSkeleton = () => (
   <div className="card animate-pulse">
     <div className="flex items-start justify-between mb-4">
-      <div className="w-12 h-12 rounded-xl bg-slate-700"></div>
-      <div className="w-16 h-6 rounded-full bg-slate-700"></div>
+      <div className="w-12 h-12 rounded-xl bg-primary-50"></div>
+      <div className="w-16 h-6 rounded-full bg-primary-50"></div>
     </div>
-    <div className="h-6 bg-slate-700 rounded mb-2"></div>
-    <div className="h-4 bg-slate-700 rounded mb-4 w-3/4"></div>
+    <div className="h-6 bg-primary-50 rounded mb-2"></div>
+    <div className="h-4 bg-primary-50 rounded mb-4 w-3/4"></div>
     <div className="flex items-center gap-4">
-      <div className="h-4 bg-slate-700 rounded w-20"></div>
-      <div className="h-4 bg-slate-700 rounded w-20"></div>
+      <div className="h-4 bg-primary-50 rounded w-20"></div>
+      <div className="h-4 bg-primary-50 rounded w-20"></div>
     </div>
+
   </div>
 );
 
 const CourseCatalogPage = () => {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const [courses, setCourses] = useState([]);
   const [departments, setDepartments] = useState([]);
@@ -205,15 +209,15 @@ const CourseCatalogPage = () => {
     <div className="p-6 lg:p-8 max-w-7xl mx-auto">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="font-sans text-3xl font-bold mb-2">Ders Kataloğu</h1>
-        <p className="text-slate-400">Mevcut dersleri görüntüleyin ve kayıt olun</p>
+        <h1 className="font-sans text-3xl font-bold mb-2">{t('courses.courseCatalog')}</h1>
+        <p className="text-gray-600 dark:text-gray-300">Mevcut dersleri görüntüleyin ve kayıt olun</p>
       </div>
 
       {/* Search and Filter */}
       <div className="card mb-8">
         <div className="flex flex-col md:flex-row gap-4">
           <div className="flex-1 relative">
-            <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+            <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600 dark:text-gray-300" />
             <input
               type="text"
               placeholder="Ders kodu veya adı ile ara..."
@@ -224,7 +228,7 @@ const CourseCatalogPage = () => {
             {search && (
               <button
                 onClick={() => setSearch('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 transition-colors"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 dark:text-gray-300 hover:text-gray-400 dark:text-gray-500 transition-colors"
               >
                 <FiX className="w-4 h-4" />
               </button>
@@ -258,8 +262,8 @@ const CourseCatalogPage = () => {
 
         {/* Active filters indicator */}
         {hasActiveFilters && (
-          <div className="mt-4 pt-4 border-t border-slate-700/50 flex items-center gap-2 flex-wrap">
-            <span className="text-sm text-slate-400">Aktif filtreler:</span>
+          <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700/50 flex items-center gap-2 flex-wrap">
+            <span className="text-sm text-gray-600 dark:text-gray-300">Aktif filtreler:</span>
             {search.trim() && (
               <span className="px-3 py-1 rounded-full bg-primary-500/20 text-primary-400 text-sm flex items-center gap-2">
                 Arama: "{search}"
@@ -288,10 +292,9 @@ const CourseCatalogPage = () => {
 
       {/* Results count */}
       {!loading && (
-        <div className="mb-4 text-sm text-slate-400">
+        <div className="mb-4 text-sm text-gray-600 dark:text-gray-300">
           {pagination.total > 0 ? (
-            <>
-              Toplam <span className="font-semibold text-slate-200">{pagination.total}</span> ders bulundu
+            <>{t('common.total')}<span className="font-semibold text-gray-400 dark:text-gray-500">{pagination.total}</span> ders bulundu
               {hasActiveFilters && ' (filtrelenmiş)'}
             </>
           ) : (
@@ -309,9 +312,9 @@ const CourseCatalogPage = () => {
         </div>
       ) : courses.length === 0 ? (
         <div className="card text-center py-16">
-          <FiBook className="w-16 h-16 mx-auto text-slate-600 mb-4" />
+          <FiBook className="w-16 h-16 mx-auto text-gray-700 dark:text-gray-200 mb-4" />
           <h2 className="text-xl font-semibold mb-2">Ders Bulunamadı</h2>
-          <p className="text-slate-400 mb-4">
+          <p className="text-gray-600 dark:text-gray-300 mb-4">
             {hasActiveFilters
               ? 'Arama kriterlerinize uygun ders bulunamadı. Filtreleri değiştirmeyi deneyin.'
               : 'Henüz hiç ders eklenmemiş.'}
@@ -338,7 +341,7 @@ const CourseCatalogPage = () => {
                     <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary-500/20 to-accent-500/20 flex items-center justify-center group-hover:from-primary-500/30 group-hover:to-accent-500/30 transition-all">
                       <FiBook className="w-6 h-6 text-primary-400" />
                     </div>
-                    <span className="px-3 py-1 rounded-full bg-slate-700/50 text-xs font-medium group-hover:bg-slate-700/70 transition-colors">
+                    <span className="px-3 py-1 rounded-full bg-primary-50/50 text-xs font-medium group-hover:bg-primary-50/70 transition-colors">
                       {course.code}
                     </span>
                   </div>
@@ -347,11 +350,11 @@ const CourseCatalogPage = () => {
                     {course.name}
                   </h3>
 
-                  <p className="text-slate-400 text-sm mb-4 line-clamp-2 min-h-[2.5rem]">
+                  <p className="text-gray-600 dark:text-gray-300 text-sm mb-4 line-clamp-2 min-h-[2.5rem]">
                     {course.description || 'Açıklama bulunmuyor'}
                   </p>
 
-                  <div className="flex items-center justify-between text-sm text-slate-400 mb-4">
+                  <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-300 mb-4">
                     <div className="flex items-center gap-4">
                       <span className="flex items-center gap-1">
                         <FiClock className="w-4 h-4" />
@@ -365,15 +368,15 @@ const CourseCatalogPage = () => {
                   </div>
 
                   {course.department && (
-                    <div className="mt-2 pt-2 border-t border-slate-700/50">
-                      <span className="text-xs text-slate-500">{course.department.name}</span>
+                    <div className="mt-2 pt-2 border-t border-gray-200 dark:border-gray-700/50">
+                      <span className="text-xs text-gray-700 dark:text-gray-200">{course.department.name}</span>
                     </div>
                   )}
                 </Link>
 
                 {/* Detay / Kayıt butonu */}
-                <div className="mt-4 pt-4 border-t border-slate-700/50 flex items-center justify-between">
-                  <span className="text-xs text-slate-500">
+                <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700/50 flex items-center justify-between">
+                  <span className="text-xs text-gray-700 dark:text-gray-200">
                     Bu derse kayıt olmak için önce detay sayfasına gidin.
                   </span>
                   <Link
@@ -395,9 +398,7 @@ const CourseCatalogPage = () => {
                 onClick={() => setPagination((prev) => ({ ...prev, page: prev.page - 1 }))}
                 disabled={pagination.page === 1}
                 className="btn btn-secondary disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Önceki
-              </button>
+              >{t('common.previous')}</button>
               <div className="flex items-center gap-2">
                 {[...Array(pagination.totalPages)].map((_, i) => {
                   const pageNum = i + 1;
@@ -412,8 +413,8 @@ const CourseCatalogPage = () => {
                         key={pageNum}
                         onClick={() => setPagination((prev) => ({ ...prev, page: pageNum }))}
                         className={`px-4 py-2 rounded-lg transition-colors ${pagination.page === pageNum
-                            ? 'bg-primary-500 text-white'
-                            : 'bg-slate-700/50 text-slate-300 hover:bg-slate-700'
+                          ? 'bg-primary-500 text-gray-800 dark:text-gray-100'
+                          : 'bg-primary-50/50 text-gray-500 dark:text-gray-400 dark:text-gray-500 hover:bg-primary-50'
                           }`}
                       >
                         {pageNum}
@@ -423,7 +424,7 @@ const CourseCatalogPage = () => {
                     pageNum === pagination.page - 2 ||
                     pageNum === pagination.page + 2
                   ) {
-                    return <span key={pageNum} className="text-slate-400">...</span>;
+                    return <span key={pageNum} className="text-gray-600 dark:text-gray-300">...</span>;
                   }
                   return null;
                 })}
@@ -435,7 +436,7 @@ const CourseCatalogPage = () => {
               >
                 Sonraki
               </button>
-              <span className="text-sm text-slate-400 ml-4">
+              <span className="text-sm text-gray-600 dark:text-gray-300 ml-4">
                 Sayfa {pagination.page} / {pagination.totalPages}
               </span>
             </div>

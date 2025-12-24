@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
+import { useTranslation } from 'react-i18next';
 /**
  * Simple Calendar Component
  * For date selection
  */
 const Calendar = ({ selectedDate, onDateSelect, minDate = null, maxDate = null }) => {
+  const { t } = useTranslation();
   const [currentMonth, setCurrentMonth] = useState(
     selectedDate ? new Date(selectedDate) : new Date()
   );
@@ -74,11 +76,11 @@ const Calendar = ({ selectedDate, onDateSelect, minDate = null, maxDate = null }
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-4">
+    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4">
       <div className="flex items-center justify-between mb-4">
         <button
           onClick={goToPreviousMonth}
-          className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+          className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 dark:bg-gray-800 rounded-lg transition-colors"
         >
           <FiChevronLeft className="w-5 h-5" />
         </button>
@@ -87,7 +89,7 @@ const Calendar = ({ selectedDate, onDateSelect, minDate = null, maxDate = null }
         </h3>
         <button
           onClick={goToNextMonth}
-          className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+          className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 dark:bg-gray-800 rounded-lg transition-colors"
         >
           <FiChevronRight className="w-5 h-5" />
         </button>
@@ -95,7 +97,7 @@ const Calendar = ({ selectedDate, onDateSelect, minDate = null, maxDate = null }
 
       <div className="grid grid-cols-7 gap-1 mb-2">
         {dayNames.map((day) => (
-          <div key={day} className="text-center text-xs font-medium text-slate-600 py-2">
+          <div key={day} className="text-center text-xs font-medium text-gray-700 dark:text-gray-200 py-2">
             {day}
           </div>
         ))}
@@ -119,12 +121,12 @@ const Calendar = ({ selectedDate, onDateSelect, minDate = null, maxDate = null }
               className={`
                 aspect-square rounded-lg text-sm font-medium transition-all
                 ${disabled
-                  ? 'text-slate-300 cursor-not-allowed'
+                  ? 'text-gray-500 dark:text-gray-400 dark:text-gray-500 cursor-not-allowed'
                   : selected
-                  ? 'bg-blue-600 text-white'
+                  ? 'bg-blue-600 text-gray-800 dark:text-gray-100'
                   : todayDate
                   ? 'bg-blue-100 text-blue-700 font-bold'
-                  : 'hover:bg-slate-100 text-slate-700'
+                  : 'hover:bg-gray-100 dark:hover:bg-gray-700 dark:bg-gray-800 text-gray-700 dark:text-gray-200'
                 }
               `}
             >

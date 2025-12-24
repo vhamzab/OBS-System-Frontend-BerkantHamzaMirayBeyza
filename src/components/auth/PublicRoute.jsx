@@ -2,7 +2,9 @@ import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import LoadingSpinner from '../common/LoadingSpinner';
 
+import { useTranslation } from 'react-i18next';
 const PublicRoute = ({ children }) => {
+  const { t } = useTranslation();
   const { isAuthenticated, loading } = useAuth();
   const location = useLocation();
 

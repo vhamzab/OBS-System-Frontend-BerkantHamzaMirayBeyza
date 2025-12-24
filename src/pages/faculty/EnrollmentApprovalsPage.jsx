@@ -8,7 +8,9 @@ import toast from 'react-hot-toast';
 import enrollmentService from '../../services/enrollmentService';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 
+import { useTranslation } from 'react-i18next';
 const EnrollmentApprovalsPage = () => {
+  const { t } = useTranslation();
   const [enrollments, setEnrollments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [processing, setProcessing] = useState({});
@@ -170,7 +172,7 @@ const EnrollmentApprovalsPage = () => {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
           <h1 className="font-display text-3xl font-bold mb-2">Ders Kayıt Onayları</h1>
-          <p className="text-slate-400">
+          <p className="text-gray-600 dark:text-gray-300">
             Öğrencilerin ders kayıt taleplerini onaylayın veya reddedin
           </p>
         </div>
@@ -179,16 +181,14 @@ const EnrollmentApprovalsPage = () => {
           {/* Course Filter */}
           {uniqueCourses.length > 1 && (
             <div className="flex items-center gap-2">
-              <FiFilter className="w-4 h-4 text-slate-400" />
+              <FiFilter className="w-4 h-4 text-gray-600 dark:text-gray-300" />
               <select
                 value={filterCourse}
                 onChange={(e) => setFilterCourse(e.target.value)}
-                className="input text-white text-sm"
+                className="input text-gray-800 dark:text-gray-100 text-sm"
                 style={{ color: '#ffffff' }}
               >
-                <option value="all" style={{ color: '#ffffff', backgroundColor: '#0f172a' }}>
-                  Tüm Dersler
-                </option>
+                <option value="all" style={{ color: '#ffffff', backgroundColor: '#0f172a' }}>{t('nav.allCourses')}</option>
                 {uniqueCourses.map((course) => (
                   <option 
                     key={course.code} 
@@ -231,7 +231,7 @@ const EnrollmentApprovalsPage = () => {
             </div>
             <div>
               <div className="text-2xl font-bold text-amber-400">{enrollments.length}</div>
-              <div className="text-sm text-slate-400">Bekleyen Kayıt</div>
+              <div className="text-sm text-gray-600 dark:text-gray-300">Bekleyen Kayıt</div>
             </div>
           </div>
         </div>
@@ -243,7 +243,7 @@ const EnrollmentApprovalsPage = () => {
             </div>
             <div>
               <div className="text-2xl font-bold text-primary-400">{uniqueCourses.length}</div>
-              <div className="text-sm text-slate-400">Farklı Ders</div>
+              <div className="text-sm text-gray-600 dark:text-gray-300">Farklı Ders</div>
             </div>
           </div>
         </div>
@@ -255,7 +255,7 @@ const EnrollmentApprovalsPage = () => {
             </div>
             <div>
               <div className="text-2xl font-bold text-emerald-400">{selectedEnrollments.length}</div>
-              <div className="text-sm text-slate-400">Seçili Kayıt</div>
+              <div className="text-sm text-gray-600 dark:text-gray-300">Seçili Kayıt</div>
             </div>
           </div>
         </div>
@@ -266,7 +266,7 @@ const EnrollmentApprovalsPage = () => {
         <div className="card text-center py-16">
           <FiCheckCircle className="w-16 h-16 mx-auto text-emerald-500 mb-4" />
           <h2 className="text-xl font-semibold mb-2">Bekleyen Kayıt Yok</h2>
-          <p className="text-slate-400">
+          <p className="text-gray-600 dark:text-gray-300">
             {enrollments.length === 0
               ? 'Şu anda onaylanacak ders kaydı bulunmuyor.'
               : 'Seçili filtreye uygun bekleyen kayıt yok.'}
@@ -275,15 +275,15 @@ const EnrollmentApprovalsPage = () => {
       ) : (
         <div className="space-y-3">
           {/* Select All Header */}
-          <div className="card bg-gray-50 border-2 border-gray-200 shadow-md py-3">
+          <div className="card bg-gray-50 dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-700 shadow-md py-3">
             <label className="flex items-center gap-3 cursor-pointer">
               <input
                 type="checkbox"
                 checked={selectedEnrollments.length === filteredEnrollments.length}
                 onChange={toggleSelectAll}
-                className="w-5 h-5 rounded border-slate-600 bg-slate-700 text-primary-500 focus:ring-primary-500 focus:ring-offset-slate-800"
+                className="w-5 h-5 rounded border-gray-200 dark:border-gray-700 bg-primary-50 text-primary-500 focus:ring-primary-500 focus:ring-offset-white dark:ring-offset-gray-900 dark:focus:ring-offset-gray-900"
               />
-              <span className="text-sm text-slate-400">
+              <span className="text-sm text-gray-600 dark:text-gray-300">
                 {selectedEnrollments.length === filteredEnrollments.length
                   ? 'Tümünün seçimini kaldır'
                   : 'Tümünü seç'}
@@ -310,7 +310,7 @@ const EnrollmentApprovalsPage = () => {
                       type="checkbox"
                       checked={isSelected}
                       onChange={() => toggleSelectEnrollment(enrollment.id)}
-                      className="w-5 h-5 rounded border-slate-600 bg-slate-700 text-primary-500 focus:ring-primary-500 focus:ring-offset-slate-800"
+                      className="w-5 h-5 rounded border-gray-200 dark:border-gray-700 bg-primary-50 text-primary-500 focus:ring-primary-500 focus:ring-offset-white dark:ring-offset-gray-900 dark:focus:ring-offset-gray-900"
                     />
                   </div>
 
@@ -326,12 +326,12 @@ const EnrollmentApprovalsPage = () => {
                           <span className="font-display text-lg font-semibold">
                             {enrollment.student.firstName} {enrollment.student.lastName}
                           </span>
-                          <span className="px-2 py-0.5 rounded bg-slate-700 text-xs font-medium">
+                          <span className="px-2 py-0.5 rounded bg-primary-50 text-xs font-medium">
                             {enrollment.student.studentNumber}
                           </span>
                         </div>
                         
-                        <div className="flex flex-wrap gap-4 text-sm text-slate-400">
+                        <div className="flex flex-wrap gap-4 text-sm text-gray-600 dark:text-gray-300">
                           <span className="flex items-center gap-1">
                             <FiMail className="w-4 h-4" />
                             {enrollment.student.email}
@@ -353,19 +353,19 @@ const EnrollmentApprovalsPage = () => {
                       <span className="px-2 py-0.5 rounded bg-primary-500/20 text-primary-400 text-xs font-medium">
                         {enrollment.course.code}
                       </span>
-                      <span className="text-xs text-slate-500">
+                      <span className="text-xs text-gray-700 dark:text-gray-200">
                         Section {enrollment.section.sectionNumber}
                       </span>
                     </div>
                     <div className="font-medium text-sm">{enrollment.course.name}</div>
-                    <div className="text-xs text-slate-400 mt-1">
+                    <div className="text-xs text-gray-600 dark:text-gray-300 mt-1">
                       {semesterNames[enrollment.section.semester]} {enrollment.section.year} • {enrollment.course.credits} Kredi
                     </div>
                   </div>
 
                   {/* Date */}
                   <div className="lg:w-40 text-sm">
-                    <div className="flex items-center gap-2 text-slate-400">
+                    <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
                       <FiCalendar className="w-4 h-4" />
                       <span>{formatDate(enrollment.createdAt)}</span>
                     </div>
@@ -376,16 +376,14 @@ const EnrollmentApprovalsPage = () => {
                     <button
                       onClick={() => handleApprove(enrollment.id)}
                       disabled={isProcessing}
-                      className="btn bg-emerald-500 hover:bg-emerald-600 text-white px-4"
-                      title="Onayla"
+                      className="btn bg-emerald-500 hover:bg-emerald-600 text-gray-800 dark:text-gray-100 px-4"
+                      title={t('common.confirm')}
                     >
                       {isProcessing === 'approving' ? (
                         <LoadingSpinner size="sm" />
                       ) : (
                         <>
-                          <FiCheck className="w-4 h-4 mr-1" />
-                          Onayla
-                        </>
+                          <FiCheck className="w-4 h-4 mr-1" />{t('common.confirm')}</>
                       )}
                     </button>
                     
@@ -423,12 +421,12 @@ const EnrollmentApprovalsPage = () => {
               <h3 className="font-display text-xl font-semibold">Kaydı Reddet</h3>
             </div>
             
-            <p className="text-slate-400 mb-4">
+            <p className="text-gray-600 dark:text-gray-300 mb-4">
               Bu ders kaydını reddetmek istediğinizden emin misiniz?
             </p>
             
             <div className="mb-6">
-              <label className="block text-sm font-medium text-slate-300 mb-2">
+              <label className="block text-sm font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 mb-2">
                 Red Sebebi (Opsiyonel)
               </label>
               <textarea
@@ -448,12 +446,10 @@ const EnrollmentApprovalsPage = () => {
                 }}
                 className="btn btn-secondary"
                 disabled={processing[showRejectModal]}
-              >
-                İptal
-              </button>
+              >{t('common.cancel')}</button>
               <button
                 onClick={() => handleReject(showRejectModal)}
-                className="btn bg-red-500 hover:bg-red-600 text-white"
+                className="btn bg-red-500 hover:bg-red-600 text-gray-800 dark:text-gray-100"
                 disabled={processing[showRejectModal]}
               >
                 {processing[showRejectModal] ? <LoadingSpinner size="sm" /> : 'Reddet'}

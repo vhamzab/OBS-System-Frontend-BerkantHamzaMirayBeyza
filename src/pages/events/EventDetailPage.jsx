@@ -7,7 +7,9 @@ import walletService from '../../services/walletService';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import Button from '../../components/common/Button';
 
+import { useTranslation } from 'react-i18next';
 const EventDetailPage = () => {
+  const { t } = useTranslation();
   const { id } = useParams();
   const navigate = useNavigate();
   const [event, setEvent] = useState(null);
@@ -99,7 +101,7 @@ const EventDetailPage = () => {
     return (
       <div className="p-6 lg:p-8 max-w-4xl mx-auto">
         <div className="card text-center py-12">
-          <p className="text-slate-400">Etkinlik bulunamadı</p>
+          <p className="text-gray-600 dark:text-gray-300">Etkinlik bulunamadı</p>
         </div>
       </div>
     );
@@ -109,7 +111,7 @@ const EventDetailPage = () => {
     <div className="p-6 lg:p-8 max-w-4xl mx-auto">
       <button
         onClick={() => navigate(-1)}
-        className="flex items-center gap-2 text-slate-400 hover:text-slate-200 mb-6"
+        className="flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:text-gray-400 dark:text-gray-500 mb-6"
       >
         <FiArrowLeft />
         Geri Dön
@@ -132,44 +134,44 @@ const EventDetailPage = () => {
         </div>
 
         <div className="prose prose-invert max-w-none mb-6">
-          <p className="text-slate-300 whitespace-pre-wrap">{event.description}</p>
+          <p className="text-gray-500 dark:text-gray-400 dark:text-gray-500 whitespace-pre-wrap">{event.description}</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-          <div className="flex items-center gap-3 p-4 bg-slate-700/50 rounded-lg">
-            <FiCalendar className="text-slate-400" />
+          <div className="flex items-center gap-3 p-4 bg-primary-50/50 rounded-lg">
+            <FiCalendar className="text-gray-600 dark:text-gray-300" />
             <div>
-              <div className="text-sm text-slate-400">Tarih</div>
+              <div className="text-sm text-gray-600 dark:text-gray-300">{t('common.date')}</div>
               <div className="font-semibold">{formatDate(event.date)}</div>
             </div>
           </div>
 
-          <div className="flex items-center gap-3 p-4 bg-slate-700/50 rounded-lg">
-            <FiClock className="text-slate-400" />
+          <div className="flex items-center gap-3 p-4 bg-primary-50/50 rounded-lg">
+            <FiClock className="text-gray-600 dark:text-gray-300" />
             <div>
-              <div className="text-sm text-slate-400">Saat</div>
+              <div className="text-sm text-gray-600 dark:text-gray-300">{t('common.time')}</div>
               <div className="font-semibold">
                 {formatTime(event.start_time)} - {formatTime(event.end_time)}
               </div>
             </div>
           </div>
 
-          <div className="flex items-center gap-3 p-4 bg-slate-700/50 rounded-lg">
-            <FiMapPin className="text-slate-400" />
+          <div className="flex items-center gap-3 p-4 bg-primary-50/50 rounded-lg">
+            <FiMapPin className="text-gray-600 dark:text-gray-300" />
             <div>
-              <div className="text-sm text-slate-400">Yer</div>
+              <div className="text-sm text-gray-600 dark:text-gray-300">Yer</div>
               <div className="font-semibold">{event.location}</div>
             </div>
           </div>
 
-          <div className="flex items-center gap-3 p-4 bg-slate-700/50 rounded-lg">
-            <FiUsers className="text-slate-400" />
+          <div className="flex items-center gap-3 p-4 bg-primary-50/50 rounded-lg">
+            <FiUsers className="text-gray-600 dark:text-gray-300" />
             <div>
-              <div className="text-sm text-slate-400">Kapasite</div>
+              <div className="text-sm text-gray-600 dark:text-gray-300">{t('courses.capacity')}</div>
               <div className="font-semibold">
                 {event.registered_count}/{event.capacity} kayıtlı
               </div>
-              <div className="text-xs text-slate-400">
+              <div className="text-xs text-gray-600 dark:text-gray-300">
                 {remainingSpots > 0 ? `${remainingSpots} boş yer` : 'Dolu'}
               </div>
             </div>
@@ -186,11 +188,11 @@ const EventDetailPage = () => {
         )}
 
         {isPaidEvent && walletBalance !== null && (
-          <div className="mb-6 p-4 bg-slate-700/50 rounded-lg">
+          <div className="mb-6 p-4 bg-primary-50/50 rounded-lg">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <FiDollarSign className="text-slate-400" />
-                <span className="text-sm text-slate-400">Cüzdan Bakiyeniz:</span>
+                <FiDollarSign className="text-gray-600 dark:text-gray-300" />
+                <span className="text-sm text-gray-600 dark:text-gray-300">Cüzdan Bakiyeniz:</span>
                 <span className={`font-bold ${hasSufficientBalance ? 'text-green-400' : 'text-red-400'}`}>
                   {walletBalance.toFixed(2)} TRY
                 </span>
@@ -213,7 +215,7 @@ const EventDetailPage = () => {
         )}
 
         {canRegister && !isDeadlinePassed && (
-          <div className="border-t border-slate-700/50 pt-6">
+          <div className="border-t border-gray-200 dark:border-gray-700/50 pt-6">
             <Button
               onClick={handleRegister}
               loading={registering}
@@ -227,7 +229,7 @@ const EventDetailPage = () => {
         )}
 
         {isPaidEvent && !hasSufficientBalance && !isDeadlinePassed && !isFull && (
-          <div className="border-t border-slate-700/50 pt-6">
+          <div className="border-t border-gray-200 dark:border-gray-700/50 pt-6">
             <div className="p-4 bg-red-500/20 border border-red-500/30 rounded-lg text-center">
               <p className="text-red-400 font-semibold">Yetersiz bakiye. Lütfen cüzdanınıza para yükleyin.</p>
             </div>
@@ -235,7 +237,7 @@ const EventDetailPage = () => {
         )}
 
         {isFull && (
-          <div className="border-t border-slate-700/50 pt-6">
+          <div className="border-t border-gray-200 dark:border-gray-700/50 pt-6">
             <div className="p-4 bg-red-500/20 border border-red-500/30 rounded-lg text-center">
               <p className="text-red-400 font-semibold">Etkinlik dolu</p>
             </div>
@@ -243,7 +245,7 @@ const EventDetailPage = () => {
         )}
 
         {isDeadlinePassed && (
-          <div className="border-t border-slate-700/50 pt-6">
+          <div className="border-t border-gray-200 dark:border-gray-700/50 pt-6">
             <div className="p-4 bg-red-500/20 border border-red-500/30 rounded-lg text-center">
               <p className="text-red-400 font-semibold">Kayıt süresi dolmuş</p>
             </div>

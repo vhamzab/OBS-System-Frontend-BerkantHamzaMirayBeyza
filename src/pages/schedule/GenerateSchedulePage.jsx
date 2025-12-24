@@ -6,7 +6,9 @@ import courseService from '../../services/courseService';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import Button from '../../components/common/Button';
 
+import { useTranslation } from 'react-i18next';
 const GenerateSchedulePage = () => {
+  const { t } = useTranslation();
   const [sections, setSections] = useState([]);
   const [classrooms, setClassrooms] = useState([]);
   const [selectedSections, setSelectedSections] = useState([]);
@@ -119,17 +121,17 @@ const GenerateSchedulePage = () => {
     <div className="p-6 lg:p-8 max-w-7xl mx-auto">
       <div className="mb-8">
         <h1 className="font-display text-3xl font-bold mb-2">Otomatik Ders Programı Oluştur</h1>
-        <p className="text-slate-400">CSP algoritması ile otomatik ders programı oluşturun</p>
+        <p className="text-gray-600 dark:text-gray-300">CSP algoritması ile otomatik ders programı oluşturun</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Settings */}
         <div className="lg:col-span-1 space-y-6">
           <div className="card">
-            <h2 className="text-xl font-bold mb-4">Ayarlar</h2>
+            <h2 className="text-xl font-bold mb-4">{t('nav.settings')}</h2>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-2">Dönem</label>
+                <label className="block text-sm font-medium mb-2">{t('courses.semester')}</label>
                 <select
                   value={semester}
                   onChange={(e) => setSemester(e.target.value)}
@@ -142,7 +144,7 @@ const GenerateSchedulePage = () => {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2">Yıl</label>
+                <label className="block text-sm font-medium mb-2">{t('courses.year')}</label>
                 <input
                   type="number"
                   value={year}
@@ -155,9 +157,7 @@ const GenerateSchedulePage = () => {
                 loading={generating}
                 disabled={selectedSections.length === 0 || !semester || !year}
                 fullWidth
-              >
-                Program Oluştur
-              </Button>
+              >{t('dashboard.schedule')}</Button>
             </div>
           </div>
 
@@ -174,7 +174,7 @@ const GenerateSchedulePage = () => {
                   return (
                     <div
                       key={id}
-                      className="p-2 bg-slate-700/50 rounded flex items-center justify-between"
+                      className="p-2 bg-primary-50/50 rounded flex items-center justify-between"
                     >
                       <span className="text-sm">
                         {section?.course?.code} - {section?.section_number}
@@ -204,7 +204,7 @@ const GenerateSchedulePage = () => {
                   className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
                     selectedSections.includes(section.id)
                       ? 'border-blue-500 bg-blue-500/20'
-                      : 'border-slate-700 bg-slate-700/50 hover:border-slate-600'
+                      : 'border-gray-200 dark:border-gray-700 bg-primary-50/50 hover:border-gray-200 dark:border-gray-700'
                   }`}
                   onClick={() => toggleSection(section.id)}
                 >
@@ -213,7 +213,7 @@ const GenerateSchedulePage = () => {
                       <div className="font-semibold">
                         {section.course?.code} - {section.course?.name}
                       </div>
-                      <div className="text-sm text-slate-400">
+                      <div className="text-sm text-gray-600 dark:text-gray-300">
                         Section {section.section_number} - Kapasite: {section.capacity}
                       </div>
                     </div>
@@ -223,7 +223,7 @@ const GenerateSchedulePage = () => {
                   </div>
                 </div>
               )) : (
-                <div className="text-center py-8 text-slate-400">
+                <div className="text-center py-8 text-gray-600 dark:text-gray-300">
                   Henüz section bulunamadı
                 </div>
               )}
@@ -240,12 +240,12 @@ const GenerateSchedulePage = () => {
             <div className="grid grid-cols-5 gap-4 text-sm">
               <div className="font-semibold">Ders</div>
               <div className="font-semibold">Gün</div>
-              <div className="font-semibold">Saat</div>
+              <div className="font-semibold">{t('common.time')}</div>
               <div className="font-semibold">Derslik</div>
               <div className="font-semibold">İşlem</div>
             </div>
             {Array.isArray(generatedSchedule.schedule) && generatedSchedule.schedule.length > 0 ? generatedSchedule.schedule.map((item) => (
-              <div key={item.id} className="grid grid-cols-5 gap-4 p-3 bg-slate-700/50 rounded">
+              <div key={item.id} className="grid grid-cols-5 gap-4 p-3 bg-primary-50/50 rounded">
                 <div>{item.section?.course?.code}</div>
                 <div>{item.day_of_week}</div>
                 <div>
@@ -253,13 +253,11 @@ const GenerateSchedulePage = () => {
                 </div>
                 <div>{item.classroom?.building} {item.classroom?.room_number}</div>
                 <div>
-                  <Button size="sm" variant="secondary">
-                    Kaydet
-                  </Button>
+                  <Button size="sm" variant="secondary">{t('common.save')}</Button>
                 </div>
               </div>
             )) : (
-              <div className="text-center py-8 text-slate-400">
+              <div className="text-center py-8 text-gray-600 dark:text-gray-300">
                 Program oluşturulmadı
               </div>
             )}

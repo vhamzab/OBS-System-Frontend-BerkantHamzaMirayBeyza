@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom';
 import { FiHome, FiArrowLeft } from 'react-icons/fi';
 
+import { useTranslation } from 'react-i18next';
 const NotFoundPage = () => {
+  const { t } = useTranslation();
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-gradient-to-br from-gray-50 to-gray-100">
       {/* Background decoration */}
@@ -17,10 +19,10 @@ const NotFoundPage = () => {
         </h1>
 
         {/* Message */}
-        <h2 className="font-display text-2xl sm:text-3xl font-bold mb-4 text-gray-800">
+        <h2 className="font-display text-2xl sm:text-3xl font-bold mb-4 text-gray-800 dark:text-gray-100">
           Sayfa Bulunamadı
         </h2>
-        <p className="text-gray-500 mb-8 max-w-md mx-auto">
+        <p className="text-gray-500 dark:text-gray-400 dark:text-gray-500 mb-8 max-w-md mx-auto">
           Aradığınız sayfa mevcut değil veya taşınmış olabilir. 
           Ana sayfaya dönerek devam edebilirsiniz.
         </p>

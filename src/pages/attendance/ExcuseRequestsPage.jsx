@@ -10,7 +10,9 @@ import { getFileUrl } from '../../services/api';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import { useAuth } from '../../context/AuthContext';
 
+import { useTranslation } from 'react-i18next';
 const ExcuseRequestsPage = () => {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -126,9 +128,9 @@ const ExcuseRequestsPage = () => {
     <div className="p-6 lg:p-8 max-w-6xl mx-auto">
       <div className="mb-8">
         <h1 className="font-display text-3xl font-bold mb-2">
-          {isFaculty ? 'Mazeret Talepleri' : 'Mazeret Taleplerim'}
+          {isFaculty ? t('nav.excuseRequests') : 'Mazeret Taleplerim'}
         </h1>
-        <p className="text-slate-400">
+        <p className="text-gray-600 dark:text-gray-300">
           {isFaculty 
             ? 'Öğrencilerin mazeret taleplerini inceleyin' 
             : 'Gönderdiğiniz mazeret taleplerini görüntüleyin'}
@@ -138,7 +140,7 @@ const ExcuseRequestsPage = () => {
       {/* Filter (Faculty only) */}
       {isFaculty && (
         <div className="flex items-center gap-2 mb-6">
-          <FiFilter className="w-4 h-4 text-slate-400" />
+          <FiFilter className="w-4 h-4 text-gray-600 dark:text-gray-300" />
           <select
             value={filter}
             onChange={(e) => {
@@ -150,7 +152,7 @@ const ExcuseRequestsPage = () => {
             <option value="pending">Beklemede</option>
             <option value="approved">Onaylananlar</option>
             <option value="rejected">Reddedilenler</option>
-            <option value="all">Tümü</option>
+            <option value="all">{t('common.all')}</option>
           </select>
         </div>
       )}
@@ -158,9 +160,9 @@ const ExcuseRequestsPage = () => {
       {/* Requests List */}
       {requests.length === 0 ? (
         <div className="card text-center py-16">
-          <FiFileText className="w-16 h-16 mx-auto text-slate-600 mb-4" />
+          <FiFileText className="w-16 h-16 mx-auto text-gray-700 dark:text-gray-200 mb-4" />
           <h2 className="text-xl font-semibold mb-2">Talep Bulunamadı</h2>
-          <p className="text-slate-400">
+          <p className="text-gray-600 dark:text-gray-300">
             {isFaculty ? 'Bekleyen mazeret talebi bulunmuyor.' : 'Henüz mazeret talebiniz bulunmuyor.'}
           </p>
         </div>
@@ -183,23 +185,23 @@ const ExcuseRequestsPage = () => {
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
                           <span className="font-semibold">{request.course?.code}</span>
-                          <span className="px-2 py-0.5 rounded bg-slate-700 text-xs">
+                          <span className="px-2 py-0.5 rounded bg-primary-50 text-xs">
                             {getExcuseTypeLabel(request.excuseType)}
                           </span>
                           <span className={`px-2 py-0.5 rounded ${statusConfig.bg} ${statusConfig.color} text-xs`}>
                             {statusConfig.label}
                           </span>
                         </div>
-                        <div className="text-sm text-slate-400">{request.course?.name}</div>
+                        <div className="text-sm text-gray-600 dark:text-gray-300">{request.course?.name}</div>
                         
                         {isFaculty && request.student && (
-                          <div className="flex items-center gap-2 mt-2 text-sm text-slate-400">
+                          <div className="flex items-center gap-2 mt-2 text-sm text-gray-600 dark:text-gray-300">
                             <FiUser className="w-4 h-4" />
                             {request.student.name} ({request.student.studentNumber})
                           </div>
                         )}
                         
-                        <div className="flex items-center gap-4 mt-2 text-sm text-slate-500">
+                        <div className="flex items-center gap-4 mt-2 text-sm text-gray-700 dark:text-gray-200">
                           <span className="flex items-center gap-1">
                             <FiCalendar className="w-4 h-4" />
                             {new Date(request.sessionDate).toLocaleDateString('tr-TR')}
@@ -213,8 +215,8 @@ const ExcuseRequestsPage = () => {
                     </div>
                     
                     {/* Reason */}
-                    <div className="mt-4 p-3 rounded-lg bg-slate-800/50">
-                      <div className="text-sm text-slate-400 mb-1">Açıklama:</div>
+                    <div className="mt-4 p-3 rounded-lg bg-gray-100 dark:bg-gray-800/50">
+                      <div className="text-sm text-gray-600 dark:text-gray-300 mb-1">Açıklama:</div>
                       <div className="text-sm">{request.reason}</div>
                     </div>
                     
@@ -246,15 +248,13 @@ const ExcuseRequestsPage = () => {
                       <button
                         onClick={() => setShowNoteModal({ id: request.id, action: 'approve' })}
                         disabled={processing === request.id}
-                        className="btn bg-green-500 hover:bg-green-600 text-white flex-1"
+                        className="btn bg-green-500 hover:bg-green-600 text-gray-800 dark:text-gray-100 flex-1"
                       >
-                        <FiCheck className="w-4 h-4 mr-1" />
-                        Onayla
-                      </button>
+                        <FiCheck className="w-4 h-4 mr-1" />{t('common.confirm')}</button>
                       <button
                         onClick={() => setShowNoteModal({ id: request.id, action: 'reject' })}
                         disabled={processing === request.id}
-                        className="btn bg-red-500 hover:bg-red-600 text-white flex-1"
+                        className="btn bg-red-500 hover:bg-red-600 text-gray-800 dark:text-gray-100 flex-1"
                       >
                         <FiX className="w-4 h-4 mr-1" />
                         Reddet
@@ -275,10 +275,8 @@ const ExcuseRequestsPage = () => {
             onClick={() => setPagination((prev) => ({ ...prev, page: prev.page - 1 }))}
             disabled={pagination.page === 1}
             className="btn btn-secondary"
-          >
-            Önceki
-          </button>
-          <span className="px-4 py-2 text-slate-400">
+          >{t('common.previous')}</button>
+          <span className="px-4 py-2 text-gray-600 dark:text-gray-300">
             Sayfa {pagination.page} / {pagination.totalPages}
           </span>
           <button
@@ -300,7 +298,7 @@ const ExcuseRequestsPage = () => {
             </h3>
             
             <div className="mb-4">
-              <label className="block text-sm font-medium text-slate-300 mb-2">
+              <label className="block text-sm font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 mb-2">
                 Not (Opsiyonel)
               </label>
               <textarea
@@ -320,9 +318,7 @@ const ExcuseRequestsPage = () => {
                 }}
                 className="btn btn-secondary"
                 disabled={processing}
-              >
-                İptal
-              </button>
+              >{t('common.cancel')}</button>
               <button
                 onClick={() => {
                   if (showNoteModal.action === 'approve') {
@@ -335,7 +331,7 @@ const ExcuseRequestsPage = () => {
                   showNoteModal.action === 'approve' 
                     ? 'bg-green-500 hover:bg-green-600' 
                     : 'bg-red-500 hover:bg-red-600'
-                } text-white`}
+                } text-gray-800 dark:text-gray-100`}
                 disabled={processing}
               >
                 {processing ? (

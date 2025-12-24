@@ -8,7 +8,9 @@ import toast from 'react-hot-toast';
 import attendanceService from '../../services/attendanceService';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 
+import { useTranslation } from 'react-i18next';
 const MyAttendancePage = () => {
+  const { t } = useTranslation();
   const [attendance, setAttendance] = useState([]);
   const [activeSessions, setActiveSessions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -97,16 +99,14 @@ const MyAttendancePage = () => {
     <div className="p-6 lg:p-8 max-w-6xl mx-auto">
       <div className="mb-8">
         <h1 className="font-sans text-3xl font-bold mb-2">Devam Durumum</h1>
-        <p className="text-slate-400">Derslere katılım durumunuzu görüntüleyin</p>
+        <p className="text-gray-600 dark:text-gray-300">Derslere katılım durumunuzu görüntüleyin</p>
       </div>
 
       {/* Active Sessions Banner */}
       {activeSessions.length > 0 && (
         <div className="mb-8">
           <h2 className="font-sans text-lg font-semibold mb-4 flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-            Aktif Yoklamalar
-          </h2>
+            <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />{t('attendance.activeSessions')}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {activeSessions.map((session) => (
               <div
@@ -118,8 +118,8 @@ const MyAttendancePage = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <div className="font-semibold">{session.course?.code}</div>
-                    <div className="text-sm text-slate-400">{session.course?.name}</div>
-                    <div className="flex items-center gap-3 mt-2 text-xs text-slate-500">
+                    <div className="text-sm text-gray-600 dark:text-gray-300">{session.course?.name}</div>
+                    <div className="flex items-center gap-3 mt-2 text-xs text-gray-700 dark:text-gray-200">
                       <span className="flex items-center gap-1">
                         <FiMapPin className="w-3 h-3" />
                         {session.classroom || 'Belirtilmemiş'}
@@ -140,9 +140,7 @@ const MyAttendancePage = () => {
                     <Link
                       to={`/attendance/give/${session.id}`}
                       className="btn btn-primary"
-                    >
-                      Yoklama Ver
-                    </Link>
+                    >{t('attendance.giveAttendance')}</Link>
                   )}
                 </div>
               </div>
@@ -154,9 +152,9 @@ const MyAttendancePage = () => {
       {/* Attendance Summary */}
       {attendance.length === 0 ? (
         <div className="card text-center py-16">
-          <FiCalendar className="w-16 h-16 mx-auto text-slate-600 mb-4" />
+          <FiCalendar className="w-16 h-16 mx-auto text-gray-700 dark:text-gray-200 mb-4" />
           <h2 className="text-xl font-semibold mb-2">Devam Kaydı Yok</h2>
-          <p className="text-slate-400">Henüz devam kaydınız bulunmuyor.</p>
+          <p className="text-gray-600 dark:text-gray-300">Henüz devam kaydınız bulunmuyor.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -178,19 +176,19 @@ const MyAttendancePage = () => {
                         {statusConfig.label}
                       </span>
                     </div>
-                    <div className="text-sm text-slate-400">{course.course?.name}</div>
+                    <div className="text-sm text-gray-600 dark:text-gray-300">{course.course?.name}</div>
                   </div>
                 </div>
 
                 {/* Progress Bar */}
                 <div className="mb-4">
                   <div className="flex items-center justify-between text-sm mb-2">
-                    <span className="text-slate-400">Devam Oranı</span>
+                    <span className="text-gray-600 dark:text-gray-300">{t('attendance.attendanceRate')}</span>
                     <span className={`font-bold ${statusConfig.color}`}>
                       %{course.attendancePercentage}
                     </span>
                   </div>
-                  <div className="h-3 rounded-full bg-slate-800 overflow-hidden">
+                  <div className="h-3 rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden">
                     <div
                       className={`h-full rounded-full transition-all duration-500 ${
                         course.status === 'critical' ? 'bg-red-500' :
@@ -209,7 +207,7 @@ const MyAttendancePage = () => {
                   </div>
                   <div className="p-2 rounded-lg bg-amber-100 border-2 border-amber-300 shadow-md hover:scale-105 transition-all duration-300">
                     <div className="text-lg font-bold text-amber-700">{course.late}</div>
-                    <div className="text-xs text-amber-600 font-medium">Geç</div>
+                    <div className="text-xs text-amber-600 font-medium">{t('attendance.late')}</div>
                   </div>
                   <div className="p-2 rounded-lg bg-blue-100 border-2 border-blue-300 shadow-md hover:scale-105 transition-all duration-300">
                     <div className="text-lg font-bold text-blue-700">{course.excused}</div>
@@ -221,8 +219,8 @@ const MyAttendancePage = () => {
                   </div>
                 </div>
 
-                <div className="mt-4 pt-4 border-t border-slate-700/50 flex justify-between items-center">
-                  <span className="text-sm text-slate-500">
+                <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700/50 flex justify-between items-center">
+                  <span className="text-sm text-gray-700 dark:text-gray-200">
                     Toplam: {course.totalSessions} oturum
                   </span>
                   <Link

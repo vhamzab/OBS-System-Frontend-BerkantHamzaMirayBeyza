@@ -9,7 +9,9 @@ import Button from '../../components/common/Button';
 import Calendar from '../../components/common/Calendar';
 import { useNavigate } from 'react-router-dom';
 
+import { useTranslation } from 'react-i18next';
 const MenuPage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [menus, setMenus] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -171,8 +173,8 @@ const MenuPage = () => {
   return (
     <div className="p-6 lg:p-8 max-w-7xl mx-auto">
       <div className="mb-8">
-        <h1 className="font-display text-3xl font-bold mb-2">Yemek Menüsü</h1>
-        <p className="text-slate-400">Günlük menüleri görüntüleyin ve rezervasyon yapın</p>
+        <h1 className="font-display text-3xl font-bold mb-2">{t('meals.menu')}</h1>
+        <p className="text-gray-600 dark:text-gray-300">Günlük menüleri görüntüleyin ve rezervasyon yapın</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -191,8 +193,8 @@ const MenuPage = () => {
             <LoadingSpinner />
           ) : menus.length === 0 ? (
             <div className="card text-center py-12">
-              <FaUtensils className="w-16 h-16 text-slate-400 mx-auto mb-4" />
-              <p className="text-slate-400">Seçilen tarih için menü bulunamadı</p>
+              <FaUtensils className="w-16 h-16 text-gray-600 dark:text-gray-300 mx-auto mb-4" />
+              <p className="text-gray-600 dark:text-gray-300">Seçilen tarih için menü bulunamadı</p>
             </div>
           ) : (
             <div className="space-y-6">
@@ -206,18 +208,18 @@ const MenuPage = () => {
                   {typeMenus.map((menu) => {
                     const reservation = getReservationForMenu(menu);
                     return (
-                      <div key={menu.id} className="border-t border-slate-700/50 pt-4 mt-4 first:border-t-0 first:pt-0 first:mt-0">
+                      <div key={menu.id} className="border-t border-gray-200 dark:border-gray-700/50 pt-4 mt-4 first:border-t-0 first:pt-0 first:mt-0">
                         <div className="flex items-start justify-between mb-3">
                           <div className="flex-1">
                             <h3 className="font-semibold mb-2">{menu.cafeteria?.name}</h3>
-                            <p className="text-sm text-slate-400 mb-3">{menu.cafeteria?.location}</p>
-                            
+                            <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">{menu.cafeteria?.location}</p>
+
                             {menu.items_json && Array.isArray(menu.items_json) && (
                               <ul className="space-y-1 mb-3">
                                 {menu.items_json.map((item, idx) => (
-                                  <li key={idx} className="text-sm text-slate-300 flex items-center gap-2">
+                                  <li key={idx} className="text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500 flex items-center gap-2">
                                     <span className="w-1.5 h-1.5 rounded-full bg-primary-400"></span>
-                                    {item}
+                                    {typeof item === 'string' ? item : item.name || item.description || JSON.stringify(item)}
                                   </li>
                                 ))}
                               </ul>
@@ -226,13 +228,13 @@ const MenuPage = () => {
                             {menu.nutrition_json && (
                               <div className="flex flex-wrap gap-4 mt-3">
                                 {menu.nutrition_json.calories && (
-                                  <div className="flex items-center gap-2 text-xs text-slate-400">
+                                  <div className="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-300">
                                     <FaTint />
                                     <span>{menu.nutrition_json.calories} kcal</span>
                                   </div>
                                 )}
                                 {menu.nutrition_json.protein && (
-                                  <div className="flex items-center gap-2 text-xs text-slate-400">
+                                  <div className="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-300">
                                     <FaSeedling />
                                     <span>{menu.nutrition_json.protein}g protein</span>
                                   </div>
@@ -286,39 +288,39 @@ const MenuPage = () => {
       {/* Reservation Modal */}
       {showReservationModal && selectedMenu && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 p-4">
-          <div className="bg-slate-800 rounded-2xl p-6 max-w-md w-full">
+          <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-6 max-w-md w-full">
             <h3 className="text-xl font-bold mb-4">Rezervasyon Onayı</h3>
             <div className="space-y-3 mb-6">
               <div>
-                <span className="text-slate-400">Tarih:</span>
+                <span className="text-gray-600 dark:text-gray-300">Tarih:</span>
                 <span className="ml-2 font-semibold">
                   {new Date(selectedDate).toLocaleDateString('tr-TR')}
                 </span>
               </div>
               <div>
-                <span className="text-slate-400">Öğün:</span>
+                <span className="text-gray-600 dark:text-gray-300">Öğün:</span>
                 <span className="ml-2 font-semibold">
                   {getMealTypeLabel(selectedMenu.meal_type)}
                 </span>
               </div>
               <div>
-                <span className="text-slate-400">Kafeterya:</span>
+                <span className="text-gray-600 dark:text-gray-300">Kafeterya:</span>
                 <span className="ml-2 font-semibold">{selectedMenu.cafeteria?.name}</span>
               </div>
               {selectedMenu.price > 0 && (
                 <>
                   <div>
-                    <span className="text-slate-400">Tutar:</span>
+                    <span className="text-gray-600 dark:text-gray-300">Tutar:</span>
                     <span className="ml-2 font-semibold text-green-400">
                       {selectedMenu.price} TRY
                     </span>
                   </div>
                   {walletBalance !== null && (
-                    <div className="p-3 bg-slate-700/50 rounded-lg">
+                    <div className="p-3 bg-primary-50/50 rounded-lg">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                          <FiDollarSign className="text-slate-400" />
-                          <span className="text-sm text-slate-400">Cüzdan Bakiyeniz:</span>
+                          <FiDollarSign className="text-gray-600 dark:text-gray-300" />
+                          <span className="text-sm text-gray-600 dark:text-gray-300">Cüzdan Bakiyeniz:</span>
                           <span className={`font-bold ${walletBalance >= selectedMenu.price ? 'text-green-400' : 'text-red-400'}`}>
                             {walletBalance.toFixed(2)} TRY
                           </span>
@@ -353,17 +355,13 @@ const MenuPage = () => {
                   setSelectedMenu(null);
                 }}
                 className="flex-1"
-              >
-                İptal
-              </Button>
+              >{t('common.cancel')}</Button>
               <Button
                 onClick={confirmReservation}
                 loading={reserving === selectedMenu.id}
                 disabled={selectedMenu.price > 0 && walletBalance !== null && walletBalance < selectedMenu.price}
                 className="flex-1"
-              >
-                Onayla
-              </Button>
+              >{t('common.confirm')}</Button>
             </div>
           </div>
         </div>
@@ -372,33 +370,33 @@ const MenuPage = () => {
       {/* Transfer Modal */}
       {showTransferModal && transferringReservation && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 p-4">
-          <div className="bg-slate-800 rounded-2xl p-6 max-w-md w-full">
+          <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-6 max-w-md w-full">
             <h3 className="text-xl font-bold mb-4">Rezervasyonu Devret</h3>
             <div className="space-y-3 mb-6">
               <div>
-                <span className="text-slate-400">Tarih:</span>
+                <span className="text-gray-600 dark:text-gray-300">Tarih:</span>
                 <span className="ml-2 font-semibold">
                   {new Date(transferringReservation.date).toLocaleDateString('tr-TR')}
                 </span>
               </div>
               <div>
-                <span className="text-slate-400">Öğün:</span>
+                <span className="text-gray-600 dark:text-gray-300">Öğün:</span>
                 <span className="ml-2 font-semibold">
                   {getMealTypeLabel(transferringReservation.meal_type)}
                 </span>
               </div>
               <div>
-                <span className="text-slate-400">Kafeterya:</span>
+                <span className="text-gray-600 dark:text-gray-300">Kafeterya:</span>
                 <span className="ml-2 font-semibold">{transferringReservation.cafeteria?.name}</span>
               </div>
               <div className="mt-4">
-                <label className="block text-sm font-medium mb-2">Öğrenci Numarası</label>
+                <label className="block text-sm font-medium mb-2">{t('profile.studentNumber')}</label>
                 <input
                   type="text"
                   value={studentNumber}
                   onChange={(e) => setStudentNumber(e.target.value)}
                   placeholder="Öğrenci numarasını girin"
-                  className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="w-full px-4 py-2 bg-primary-50 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
                 />
               </div>
             </div>
@@ -411,9 +409,7 @@ const MenuPage = () => {
                   setStudentNumber('');
                 }}
                 className="flex-1"
-              >
-                İptal
-              </Button>
+              >{t('common.cancel')}</Button>
               <Button
                 onClick={confirmTransfer}
                 loading={transferring}

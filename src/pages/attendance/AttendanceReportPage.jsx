@@ -9,7 +9,9 @@ import courseService from '../../services/courseService';
 import attendanceService from '../../services/attendanceService';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 
+import { useTranslation } from 'react-i18next';
 const AttendanceReportPage = () => {
+  const { t } = useTranslation();
   const { sectionId } = useParams();
   const [section, setSection] = useState(null);
   const [report, setReport] = useState([]);
@@ -56,7 +58,7 @@ const AttendanceReportPage = () => {
       s.absent,
       `${s.attendancePercentage}%`,
       s.status,
-      s.isFlagged ? 'Evet' : 'Hayır',
+      s.isFlagged ? t('common.yes') : 'Hayır',
     ]);
 
     const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
@@ -99,7 +101,7 @@ const AttendanceReportPage = () => {
   return (
     <div className="p-6 lg:p-8 max-w-7xl mx-auto">
       {/* Back Button */}
-      <Link to="/faculty/sections" className="inline-flex items-center text-slate-400 hover:text-white mb-6 transition-colors">
+      <Link to="/faculty/sections" className="inline-flex items-center text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 dark:text-gray-100 mb-6 transition-colors">
         <FiArrowLeft className="w-4 h-4 mr-2" />
         Derslerime Dön
       </Link>
@@ -111,9 +113,9 @@ const AttendanceReportPage = () => {
             <span className="px-3 py-1 rounded-full bg-primary-500/20 text-primary-400 text-sm font-medium">
               {section?.course?.code}
             </span>
-            <span className="text-slate-400">Section {section?.sectionNumber}</span>
+            <span className="text-gray-600 dark:text-gray-300">Section {section?.sectionNumber}</span>
           </div>
-          <h1 className="font-display text-2xl font-bold">Yoklama Raporu</h1>
+          <h1 className="font-display text-2xl font-bold">{t('attendance.attendanceReport')}</h1>
         </div>
         
         <button onClick={exportToCSV} className="btn btn-secondary">
@@ -125,28 +127,28 @@ const AttendanceReportPage = () => {
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
         <div className="card text-center">
-          <div className="text-3xl font-bold text-white">{report.length}</div>
-          <div className="text-sm text-slate-400">Toplam Öğrenci</div>
+          <div className="text-3xl font-bold text-gray-800 dark:text-gray-100">{report.length}</div>
+          <div className="text-sm text-gray-600 dark:text-gray-300">{t('dashboard.totalStudents')}</div>
         </div>
         <div className="card text-center">
           <div className="text-3xl font-bold text-green-400">
             {report.filter((s) => s.status === 'ok').length}
           </div>
-          <div className="text-sm text-slate-400">İyi Durumda</div>
+          <div className="text-sm text-gray-600 dark:text-gray-300">İyi Durumda</div>
         </div>
         <div className="card text-center">
           <div className="text-3xl font-bold text-amber-400">{warningCount}</div>
-          <div className="text-sm text-slate-400">Uyarı/Kritik</div>
+          <div className="text-sm text-gray-600 dark:text-gray-300">Uyarı/Kritik</div>
         </div>
         <div className="card text-center">
           <div className="text-3xl font-bold text-red-400">{flaggedCount}</div>
-          <div className="text-sm text-slate-400">Şüpheli</div>
+          <div className="text-sm text-gray-600 dark:text-gray-300">Şüpheli</div>
         </div>
       </div>
 
       {/* Filter */}
       <div className="flex items-center gap-2 mb-6">
-        <FiFilter className="w-4 h-4 text-slate-400" />
+        <FiFilter className="w-4 h-4 text-gray-600 dark:text-gray-300" />
         <select
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
@@ -161,23 +163,23 @@ const AttendanceReportPage = () => {
       {/* Report Table */}
       {filteredReport.length === 0 ? (
         <div className="card text-center py-16">
-          <FiUser className="w-16 h-16 mx-auto text-slate-600 mb-4" />
+          <FiUser className="w-16 h-16 mx-auto text-gray-700 dark:text-gray-200 mb-4" />
           <h2 className="text-xl font-semibold mb-2">Öğrenci Bulunamadı</h2>
-          <p className="text-slate-400">Seçili filtreye uygun öğrenci bulunmuyor.</p>
+          <p className="text-gray-600 dark:text-gray-300">Seçili filtreye uygun öğrenci bulunmuyor.</p>
         </div>
       ) : (
         <div className="card overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-slate-700/50 bg-slate-800/50">
-                  <th className="text-left py-4 px-4 text-sm font-medium text-slate-400">Öğrenci</th>
-                  <th className="text-center py-4 px-3 text-sm font-medium text-slate-400">Katıldı</th>
-                  <th className="text-center py-4 px-3 text-sm font-medium text-slate-400">Geç</th>
-                  <th className="text-center py-4 px-3 text-sm font-medium text-slate-400">Mazeretli</th>
-                  <th className="text-center py-4 px-3 text-sm font-medium text-slate-400">Devamsız</th>
-                  <th className="text-center py-4 px-3 text-sm font-medium text-slate-400">Oran</th>
-                  <th className="text-center py-4 px-3 text-sm font-medium text-slate-400">Durum</th>
+                <tr className="border-b border-gray-200 dark:border-gray-700/50 bg-gray-100 dark:bg-gray-800/50">
+                  <th className="text-left py-4 px-4 text-sm font-medium text-gray-600 dark:text-gray-300">{t('roles.student')}</th>
+                  <th className="text-center py-4 px-3 text-sm font-medium text-gray-600 dark:text-gray-300">Katıldı</th>
+                  <th className="text-center py-4 px-3 text-sm font-medium text-gray-600 dark:text-gray-300">{t('attendance.late')}</th>
+                  <th className="text-center py-4 px-3 text-sm font-medium text-gray-600 dark:text-gray-300">Mazeretli</th>
+                  <th className="text-center py-4 px-3 text-sm font-medium text-gray-600 dark:text-gray-300">Devamsız</th>
+                  <th className="text-center py-4 px-3 text-sm font-medium text-gray-600 dark:text-gray-300">Oran</th>
+                  <th className="text-center py-4 px-3 text-sm font-medium text-gray-600 dark:text-gray-300">{t('common.status')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -188,8 +190,8 @@ const AttendanceReportPage = () => {
                   return (
                     <tr 
                       key={student.studentId}
-                      className={`border-b border-slate-700/30 ${
-                        student.isFlagged ? 'bg-red-500/5' : 'hover:bg-slate-800/30'
+                      className={`border-b border-gray-200 dark:border-gray-700/30 ${
+                        student.isFlagged ? 'bg-red-500/5' : 'hover:bg-gray-100 dark:hover:bg-gray-700 dark:bg-gray-800/30'
                       } transition-colors`}
                     >
                       <td className="py-3 px-4">
@@ -212,7 +214,7 @@ const AttendanceReportPage = () => {
                                 </span>
                               )}
                             </div>
-                            <div className="text-xs text-slate-400">{student.studentNumber}</div>
+                            <div className="text-xs text-gray-600 dark:text-gray-300">{student.studentNumber}</div>
                           </div>
                         </div>
                       </td>
@@ -230,7 +232,7 @@ const AttendanceReportPage = () => {
                       </td>
                       <td className="py-3 px-3 text-center">
                         <div className="flex items-center justify-center gap-2">
-                          <div className="w-16 h-2 rounded-full bg-slate-700 overflow-hidden">
+                          <div className="w-16 h-2 rounded-full bg-primary-50 overflow-hidden">
                             <div
                               className={`h-full rounded-full ${
                                 student.status === 'critical' ? 'bg-red-500' :

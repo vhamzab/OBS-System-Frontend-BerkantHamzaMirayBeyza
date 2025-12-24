@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { MapPin, Navigation, Maximize2, Minimize2 } from 'lucide-react';
 
+import { useTranslation } from 'react-i18next';
 /**
  * Location Map Component using Leaflet
  * Displays user location and classroom location on a map
@@ -12,6 +13,7 @@ const LocationMap = ({
   className = '',
   height = '300px',
 }) => {
+  const { t } = useTranslation();
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
   const markersRef = useRef({});
@@ -102,7 +104,7 @@ const LocationMap = ({
     if (classroomLocation) {
       const classroomIcon = L.divIcon({
         html: `<div class="flex items-center justify-center w-8 h-8 bg-indigo-600 rounded-full border-2 border-white shadow-lg">
-                 <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                 <svg class="w-5 h-5 text-gray-800 dark:text-gray-100" fill="currentColor" viewBox="0 0 24 24">
                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
                  </svg>
                </div>`,
@@ -140,7 +142,7 @@ const LocationMap = ({
 
       const userIcon = L.divIcon({
         html: `<div class="flex items-center justify-center w-8 h-8 ${isWithinGeofence ? 'bg-green-500' : 'bg-red-500'} rounded-full border-2 border-white shadow-lg animate-pulse">
-                 <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                 <svg class="w-5 h-5 text-gray-800 dark:text-gray-100" fill="currentColor" viewBox="0 0 24 24">
                    <path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3c-.46-4.17-3.77-7.48-7.94-7.94V1h-2v2.06C6.83 3.52 3.52 6.83 3.06 11H1v2h2.06c.46 4.17 3.77 7.48 7.94 7.94V23h2v-2.06c4.17-.46 7.48-3.77 7.94-7.94H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/>
                  </svg>
                </div>`,
@@ -196,12 +198,12 @@ const LocationMap = ({
     distance !== null && distance <= geofenceRadius + (userLocation?.accuracy || 0) + 5;
 
   return (
-    <div className={`rounded-lg overflow-hidden border border-gray-200 ${className}`}>
+    <div className={`rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 ${className}`}>
       {/* Map Header */}
-      <div className="flex items-center justify-between px-4 py-2 bg-gray-50 border-b">
+      <div className="flex items-center justify-between px-4 py-2 bg-gray-50 dark:bg-gray-900 border-b">
         <div className="flex items-center gap-2">
-          <MapPin className="h-4 w-4 text-gray-500" />
-          <span className="text-sm font-medium text-gray-700">Konum Haritası</span>
+          <MapPin className="h-4 w-4 text-gray-500 dark:text-gray-400 dark:text-gray-500" />
+          <span className="text-sm font-medium text-gray-700 dark:text-gray-200">Konum Haritası</span>
         </div>
         <div className="flex items-center gap-3">
           {distance !== null && (
@@ -217,12 +219,12 @@ const LocationMap = ({
           )}
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="p-1 hover:bg-gray-200 rounded"
+            className="p-1 hover:bg-gray-200 dark:bg-gray-700 rounded"
           >
             {isExpanded ? (
-              <Minimize2 className="h-4 w-4 text-gray-500" />
+              <Minimize2 className="h-4 w-4 text-gray-500 dark:text-gray-400 dark:text-gray-500" />
             ) : (
-              <Maximize2 className="h-4 w-4 text-gray-500" />
+              <Maximize2 className="h-4 w-4 text-gray-500 dark:text-gray-400 dark:text-gray-500" />
             )}
           </button>
         </div>
@@ -236,7 +238,7 @@ const LocationMap = ({
       />
 
       {/* Legend */}
-      <div className="flex items-center justify-center gap-6 px-4 py-2 bg-gray-50 border-t text-xs text-gray-600">
+      <div className="flex items-center justify-center gap-6 px-4 py-2 bg-gray-50 dark:bg-gray-900 border-t text-xs text-gray-600 dark:text-gray-300">
         <div className="flex items-center gap-1">
           <div className="w-3 h-3 bg-indigo-600 rounded-full" />
           <span>Derslik</span>

@@ -9,7 +9,9 @@ import toast from 'react-hot-toast';
 import attendanceService from '../../services/attendanceService';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 
+import { useTranslation } from 'react-i18next';
 const GiveAttendancePage = () => {
+  const { t } = useTranslation();
   const { sessionId } = useParams();
   const navigate = useNavigate();
   const [session, setSession] = useState(null);
@@ -217,7 +219,7 @@ const GiveAttendancePage = () => {
         <div className="card text-center py-16">
           <FiAlertCircle className="w-16 h-16 mx-auto text-red-400 mb-4" />
           <h2 className="text-xl font-semibold mb-2">Oturum Bulunamadı</h2>
-          <p className="text-slate-400 mb-4">Bu yoklama oturumu mevcut değil veya sona ermiş olabilir.</p>
+          <p className="text-gray-600 dark:text-gray-300 mb-4">Bu yoklama oturumu mevcut değil veya sona ermiş olabilir.</p>
           <button onClick={() => navigate('/my-attendance')} className="btn btn-primary">
             Devam Durumuma Git
           </button>
@@ -234,19 +236,19 @@ const GiveAttendancePage = () => {
             <FiCheckCircle className="w-10 h-10 text-green-400" />
           </div>
           <h2 className="font-display text-2xl font-bold mb-2">Yoklama Verildi!</h2>
-          <p className="text-slate-400 mb-6">
+          <p className="text-gray-600 dark:text-gray-300 mb-6">
             {session.course?.code} - {session.course?.name} dersine katılımınız kaydedildi.
           </p>
           
-          <div className="inline-flex flex-col items-center gap-2 px-6 py-4 rounded-xl bg-slate-800/50 mb-6">
-            <span className="text-sm text-slate-400">Durum</span>
+          <div className="inline-flex flex-col items-center gap-2 px-6 py-4 rounded-xl bg-gray-100 dark:bg-gray-800/50 mb-6">
+            <span className="text-sm text-gray-600 dark:text-gray-300">{t('common.status')}</span>
             <span className={`text-lg font-bold ${
               result?.status === 'present' ? 'text-green-400' : 'text-amber-400'
             }`}>
               {result?.status === 'present' ? 'Katıldı' : 'Geç Kaldı'}
             </span>
             {result?.distance && (
-              <span className="text-sm text-slate-500">
+              <span className="text-sm text-gray-700 dark:text-gray-200">
                 Mesafe: {result.distance}m
               </span>
             )}
@@ -283,8 +285,8 @@ const GiveAttendancePage = () => {
   return (
     <div className="p-6 lg:p-8 max-w-2xl mx-auto">
       <div className="mb-8">
-        <h1 className="font-display text-3xl font-bold mb-2">Yoklama Ver</h1>
-        <p className="text-slate-400">Konumunuzu paylaşarak yoklamaya katılın</p>
+        <h1 className="font-display text-3xl font-bold mb-2">{t('attendance.giveAttendance')}</h1>
+        <p className="text-gray-600 dark:text-gray-300">Konumunuzu paylaşarak yoklamaya katılın</p>
       </div>
 
       {/* Session Info */}
@@ -295,13 +297,13 @@ const GiveAttendancePage = () => {
           </div>
           <div>
             <div className="font-semibold">{session.course?.code} - {session.course?.name}</div>
-            <div className="text-sm text-slate-400">
+            <div className="text-sm text-gray-600 dark:text-gray-300">
               {session.instructor} • {session.classroom}
             </div>
           </div>
         </div>
         
-        <div className="flex items-center gap-4 text-sm text-slate-400">
+        <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-300">
           <span className="flex items-center gap-1">
             <FiClock className="w-4 h-4" />
             {session.startTime} - {session.endTime}
@@ -319,8 +321,8 @@ const GiveAttendancePage = () => {
           onClick={() => setUseQR(false)}
           className={`flex-1 py-3 rounded-xl font-medium transition-colors ${
             !useQR
-              ? 'bg-primary-500 text-white'
-              : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
+              ? 'bg-primary-500 text-gray-800 dark:text-gray-100'
+              : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-primary-50'
           }`}
         >
           <FiMapPin className="w-4 h-4 inline mr-2" />
@@ -330,8 +332,8 @@ const GiveAttendancePage = () => {
           onClick={() => setUseQR(true)}
           className={`flex-1 py-3 rounded-xl font-medium transition-colors ${
             useQR
-              ? 'bg-primary-500 text-white'
-              : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
+              ? 'bg-primary-500 text-gray-800 dark:text-gray-100'
+              : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-primary-50'
           }`}
         >
           <FiCamera className="w-4 h-4 inline mr-2" />
@@ -376,12 +378,12 @@ const GiveAttendancePage = () => {
                 </div>
               )}
               {scanning && (
-                <div className="rounded-xl overflow-hidden border border-slate-700 bg-slate-900">
+                <div className="rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
                   <video ref={videoRef} className="w-full aspect-video object-cover" autoPlay muted />
                 </div>
               )}
             </div>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-gray-700 dark:text-gray-200">
               QR kodunu öğretim üyesinden alabilir veya kameradan okutabilirsiniz.
             </p>
           </div>
@@ -420,9 +422,9 @@ const GiveAttendancePage = () => {
             </button>
           ) : (
             <div className="space-y-4">
-              <div className="p-4 rounded-xl bg-slate-800/50">
+              <div className="p-4 rounded-xl bg-gray-100 dark:bg-gray-800/50">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm text-slate-400">Konumunuz</span>
+                  <span className="text-sm text-gray-600 dark:text-gray-300">Konumunuz</span>
                   <button
                     onClick={getLocation}
                     className="text-sm text-primary-400 hover:text-primary-300"
@@ -433,7 +435,7 @@ const GiveAttendancePage = () => {
                 <div className="font-mono text-sm">
                   {location.latitude.toFixed(6)}, {location.longitude.toFixed(6)}
                 </div>
-                <div className="text-xs text-slate-500 mt-1">
+                <div className="text-xs text-gray-700 dark:text-gray-200 mt-1">
                   Doğruluk: ±{Math.round(location.accuracy)}m
                 </div>
               </div>
@@ -474,9 +476,7 @@ const GiveAttendancePage = () => {
           <LoadingSpinner size="sm" />
         ) : (
           <>
-            <FiCheckCircle className="w-5 h-5 mr-2" />
-            Yoklama Ver
-          </>
+            <FiCheckCircle className="w-5 h-5 mr-2" />{t('attendance.giveAttendance')}</>
         )}
       </button>
     </div>

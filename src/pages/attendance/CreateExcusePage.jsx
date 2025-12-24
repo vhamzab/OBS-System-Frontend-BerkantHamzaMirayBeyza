@@ -8,6 +8,7 @@ import attendanceService from '../../services/attendanceService';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import Button from '../../components/common/Button';
 
+import { useTranslation } from 'react-i18next';
 const validationSchema = Yup.object({
   session_id: Yup.string().required('Yoklama oturumu seçilmelidir'),
   reason: Yup.string()
@@ -19,6 +20,7 @@ const validationSchema = Yup.object({
 });
 
 const CreateExcusePage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const sectionId = searchParams.get('section');
@@ -116,13 +118,13 @@ const CreateExcusePage = () => {
     <div className="p-6 lg:p-8 max-w-2xl mx-auto">
       <div className="mb-8">
         <h1 className="font-display text-3xl font-bold mb-2">Mazeret Talebi Oluştur</h1>
-        <p className="text-slate-400">Devamsızlığınız için mazeret talebi gönderin</p>
+        <p className="text-gray-600 dark:text-gray-300">Devamsızlığınız için mazeret talebi gönderin</p>
       </div>
 
       <form onSubmit={formik.handleSubmit} className="card space-y-6">
         {/* Session Selection */}
         <div>
-          <label className="block text-sm font-medium text-slate-300 mb-2">
+          <label className="block text-sm font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 mb-2">
             Yoklama Oturumu <span className="text-red-400">*</span>
           </label>
           <select
@@ -130,7 +132,7 @@ const CreateExcusePage = () => {
             value={formik.values.session_id}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            className={`input w-full text-white ${formik.errors.session_id && formik.touched.session_id ? 'border-red-500' : ''}`}
+            className={`input w-full text-gray-800 dark:text-gray-100 ${formik.errors.session_id && formik.touched.session_id ? 'border-red-500' : ''}`}
             style={{ color: formik.values.session_id ? '#ffffff' : '#64748b' }}
           >
             <option value="" style={{ color: '#64748b', backgroundColor: '#0f172a' }}>Yoklama oturumu seçiniz</option>
@@ -152,7 +154,7 @@ const CreateExcusePage = () => {
 
         {/* Excuse Type */}
         <div>
-          <label className="block text-sm font-medium text-slate-300 mb-2">
+          <label className="block text-sm font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 mb-2">
             Mazeret Tipi <span className="text-red-400">*</span>
           </label>
           <select
@@ -160,7 +162,7 @@ const CreateExcusePage = () => {
             value={formik.values.excuse_type}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            className={`input w-full text-white ${formik.errors.excuse_type && formik.touched.excuse_type ? 'border-red-500' : ''}`}
+            className={`input w-full text-gray-800 dark:text-gray-100 ${formik.errors.excuse_type && formik.touched.excuse_type ? 'border-red-500' : ''}`}
             style={{ color: '#ffffff' }}
           >
             {excuseTypes.map((type) => (
@@ -176,7 +178,7 @@ const CreateExcusePage = () => {
 
         {/* Reason */}
         <div>
-          <label className="block text-sm font-medium text-slate-300 mb-2">
+          <label className="block text-sm font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 mb-2">
             Mazeret Nedeni <span className="text-red-400">*</span>
           </label>
           <textarea
@@ -185,7 +187,7 @@ const CreateExcusePage = () => {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             rows={5}
-            className={`input w-full text-white placeholder:text-slate-500 ${formik.errors.reason && formik.touched.reason ? 'border-red-500' : ''}`}
+            className={`input w-full text-gray-800 dark:text-gray-100 placeholder:text-gray-700 dark:text-gray-200 ${formik.errors.reason && formik.touched.reason ? 'border-red-500' : ''}`}
             placeholder="Mazeret nedeninizi detaylı olarak açıklayın..."
           />
           {formik.errors.reason && formik.touched.reason && (
@@ -195,7 +197,7 @@ const CreateExcusePage = () => {
 
         {/* Document Upload */}
         <div>
-          <label className="block text-sm font-medium text-slate-300 mb-2">
+          <label className="block text-sm font-medium text-gray-500 dark:text-gray-400 dark:text-gray-500 mb-2">
             Destekleyici Belge (Opsiyonel)
           </label>
           <div className="flex items-center gap-4">
@@ -206,9 +208,9 @@ const CreateExcusePage = () => {
                 onChange={(e) => setSelectedFile(e.target.files[0])}
                 className="hidden"
               />
-              <div className="flex items-center gap-2 p-3 rounded-lg border border-slate-600 hover:border-primary-500 transition-colors">
-                <FiUpload className="w-5 h-5 text-slate-400" />
-                <span className="text-sm text-slate-400">
+              <div className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-primary-500 transition-colors">
+                <FiUpload className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+                <span className="text-sm text-gray-600 dark:text-gray-300">
                   {selectedFile ? selectedFile.name : 'Belge seçiniz (PDF, JPG, PNG)'}
                 </span>
               </div>
@@ -223,21 +225,19 @@ const CreateExcusePage = () => {
               </button>
             )}
           </div>
-          <p className="text-xs text-slate-500 mt-2">
+          <p className="text-xs text-gray-700 dark:text-gray-200 mt-2">
             Maksimum dosya boyutu: 5MB. Destekleyici belge yüklemek talebinizin onaylanma şansını artırır.
           </p>
         </div>
 
         {/* Actions */}
-        <div className="flex gap-3 justify-end pt-4 border-t border-slate-700">
+        <div className="flex gap-3 justify-end pt-4 border-t border-gray-200 dark:border-gray-700">
           <Button
             type="button"
             variant="secondary"
             onClick={() => navigate(-1)}
             disabled={submitting}
-          >
-            İptal
-          </Button>
+          >{t('common.cancel')}</Button>
           <Button
             type="submit"
             loading={submitting}

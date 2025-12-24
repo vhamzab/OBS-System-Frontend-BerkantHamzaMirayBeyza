@@ -6,9 +6,9 @@
   html {
     font-family: 'Outfit', system-ui, sans-serif;
   }
-  
+
   body {
-    @apply bg-gradient-to-br from-white via-blue-50/40 to-accent-50/30 text-gray-900 antialiased;
+    @apply bg-gradient-to-br from-white via-violet-50/40 to-amber-50/30 text-gray-900 antialiased;
     min-height: 100vh;
     background-attachment: fixed;
   }
@@ -16,36 +16,23 @@
 
 @layer components {
   .btn-primary {
-    @apply bg-primary-500 text-white font-semibold py-3 px-6 rounded-xl
-           hover:bg-primary-600 transform hover:scale-105 transition-all duration-300
-           focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-white
-           disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
-           border-2 border-primary-600 shadow-lg shadow-primary-500/30;
+    @apply bg-primary-500 text-white font-semibold py-3 px-6 rounded-xl hover:bg-primary-600 transform hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-white disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 border-2 border-primary-600 shadow-lg shadow-primary-500/30;
   }
 
   .btn-secondary {
-    @apply bg-white text-gray-800 font-semibold py-3 px-6 rounded-xl border-2 border-gray-300
-           hover:bg-gray-50 hover:border-gray-400 hover:scale-105 transition-all duration-300
-           focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-white
-           shadow-md shadow-gray-200/50;
+    @apply bg-white text-gray-800 font-semibold py-3 px-6 rounded-xl border-2 border-gray-300 hover:bg-gray-50 hover:border-gray-400 hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-white shadow-md shadow-gray-200/50;
   }
 
   .btn-ghost {
-    @apply text-gray-700 font-medium py-2 px-4 rounded-lg border border-transparent
-           hover:text-gray-900 hover:bg-gray-100 hover:border-gray-300 hover:scale-105 
-           transition-all duration-300 shadow-sm;
+    @apply text-gray-700 font-medium py-2 px-4 rounded-lg border border-transparent hover:text-gray-900 hover:bg-gray-100 hover:border-gray-300 hover:scale-105 transition-all duration-300 shadow-sm;
   }
 
   .input-field {
-    @apply w-full bg-white border border-gray-300 rounded-xl px-4 py-3 text-gray-900
-           placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 
-           focus:border-primary-500 transition-all duration-300;
+    @apply w-full bg-white border border-gray-300 rounded-xl px-4 py-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-300;
   }
 
   .input {
-    @apply w-full bg-white border border-gray-300 rounded-xl px-4 py-3 text-gray-900
-           placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 
-           focus:border-primary-500 transition-all duration-300;
+    @apply w-full bg-white border border-gray-300 rounded-xl px-4 py-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-300;
   }
 
   .input-error {
@@ -53,13 +40,11 @@
   }
 
   .card {
-    @apply bg-white rounded-2xl border border-gray-200 p-6
-           shadow-lg shadow-gray-200/50;
+    @apply bg-white rounded-2xl border border-gray-200 p-6 shadow-lg shadow-gray-200/50;
   }
 
   .card-hover {
-    @apply card hover:border-primary-200 hover:shadow-xl hover:shadow-primary-100
-           transition-all duration-300;
+    @apply card hover:border-primary-200 hover:shadow-xl hover:shadow-primary-100 transition-all duration-300;
   }
 
   .glass {
@@ -107,9 +92,9 @@
 .spinner {
   width: 24px;
   height: 24px;
-  border: 3px solid rgba(59, 130, 246, 0.3);
+  border: 3px solid rgba(139, 92, 246, 0.3);
   border-radius: 50%;
-  border-top-color: #3b82f6;
+  border-top-color: #8b5cf6;
   animation: spin 1s ease-in-out infinite;
 }
 
@@ -131,3 +116,340 @@
   transition: opacity 300ms, transform 300ms;
 }
 
+/* ==================== DARK MODE STYLES ==================== */
+
+/* CSS Variables */
+:root {
+  --toast-bg: #1a1c4c;
+  --toast-color: #fff;
+}
+
+.dark {
+  --toast-bg: #1e1e2e;
+  --toast-color: #f5f5f5;
+}
+
+/* Dark mode body */
+.dark body {
+  @apply bg-gradient-to-br from-gray-900 via-slate-900 to-gray-950 text-gray-100;
+}
+
+/* Dark mode base layer overrides */
+@layer components {
+
+  /* Dark mode cards */
+  .dark .card {
+    @apply bg-gray-800 border-gray-700 shadow-gray-900/50;
+  }
+
+  .dark .card-hover {
+    @apply hover:border-primary-600 hover:shadow-primary-900/30;
+  }
+
+  .dark .glass {
+    @apply bg-gray-800/80 border-gray-700;
+  }
+
+  /* Dark mode buttons */
+  .dark .btn-primary {
+    @apply shadow-primary-900/30 focus:ring-offset-gray-900;
+  }
+
+  .dark .btn-secondary {
+    @apply bg-gray-800 text-gray-100 border-gray-600 hover:bg-gray-700 hover:border-gray-500 shadow-gray-900/50 focus:ring-offset-gray-900;
+  }
+
+  .dark .btn-ghost {
+    @apply text-gray-300 hover:text-gray-100 hover:bg-gray-700/50 hover:border-gray-600;
+  }
+
+  /* Dark mode inputs */
+  .dark .input-field,
+  .dark .input {
+    @apply bg-gray-800 border-gray-600 text-gray-100 placeholder:text-gray-500 focus:ring-offset-gray-900;
+  }
+
+  /* Dark mode labels */
+  .dark .label {
+    @apply text-gray-300;
+  }
+
+  /* Dark mode links */
+  .dark .link {
+    @apply text-primary-400 hover:text-primary-300;
+  }
+}
+
+/* Dark mode scrollbar */
+.dark ::-webkit-scrollbar-track {
+  background: #1f2937;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #4b5563;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
+}
+
+/* Smooth theme transition */
+html {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+/* ==================== RESPONSIVE STYLES ==================== */
+
+/* Screen reader only class */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Mobile-first responsive utilities */
+@layer utilities {
+
+  /* Touch-friendly tap targets (min 44px) */
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Safe area for notched devices */
+  .safe-area-inset {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  /* Responsive text sizes */
+  .text-responsive-sm {
+    @apply text-xs sm:text-sm;
+  }
+
+  .text-responsive-base {
+    @apply text-sm sm:text-base;
+  }
+
+  .text-responsive-lg {
+    @apply text-base sm:text-lg md:text-xl;
+  }
+
+  .text-responsive-xl {
+    @apply text-lg sm:text-xl md:text-2xl lg:text-3xl;
+  }
+
+  /* Responsive padding */
+  .p-responsive {
+    @apply p-3 sm:p-4 md:p-6 lg:p-8;
+  }
+
+  .px-responsive {
+    @apply px-3 sm:px-4 md:px-6 lg:px-8;
+  }
+
+  .py-responsive {
+    @apply py-3 sm:py-4 md:py-6;
+  }
+
+  /* Responsive gaps */
+  .gap-responsive {
+    @apply gap-2 sm:gap-3 md:gap-4 lg:gap-6;
+  }
+
+  /* Mobile-friendly grid */
+  .grid-responsive {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4;
+  }
+
+  .grid-responsive-2 {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-4;
+  }
+
+  /* Hide on mobile, show on desktop */
+  .desktop-only {
+    @apply hidden md:block;
+  }
+
+  .mobile-only {
+    @apply block md:hidden;
+  }
+
+  /* Responsive flex direction */
+  .flex-col-mobile {
+    @apply flex flex-col sm:flex-row;
+  }
+
+  /* Responsive table container */
+  .table-responsive {
+    @apply overflow-x-auto -mx-4 sm:mx-0;
+  }
+
+  /* Full width on mobile */
+  .w-full-mobile {
+    @apply w-full sm:w-auto;
+  }
+}
+
+/* Mobile-specific component overrides */
+@media (max-width: 639px) {
+
+  /* Larger touch targets for buttons on mobile */
+  .btn-primary,
+  .btn-secondary,
+  .btn-ghost {
+    @apply py-3.5 px-5 text-base min-h-[48px];
+  }
+
+  /* Larger input fields on mobile */
+  .input-field,
+  .input {
+    @apply py-3.5 text-base min-h-[48px];
+  }
+
+  /* Cards with less padding on mobile */
+  .card {
+    @apply p-4 rounded-xl;
+  }
+
+  /* Full-width modals on mobile */
+  .modal-content {
+    @apply w-full max-w-none mx-2 rounded-2xl;
+  }
+
+  /* Stacked form layouts on mobile */
+  .form-row {
+    @apply flex-col space-y-3;
+  }
+
+  /* Hide table columns on mobile - show summary */
+  .table-hide-mobile {
+    @apply hidden;
+  }
+
+  /* Mobile-friendly dropdowns */
+  .dropdown-menu {
+    @apply fixed bottom-0 left-0 right-0 top-auto rounded-b-none rounded-t-2xl max-h-[70vh] w-full;
+  }
+}
+
+/* Tablet-specific adjustments */
+@media (min-width: 640px) and (max-width: 1023px) {
+
+  .btn-primary,
+  .btn-secondary {
+    @apply py-3 px-5;
+  }
+
+  .card {
+    @apply p-5;
+  }
+}
+
+/* Large screen optimizations */
+@media (min-width: 1280px) {
+  .container-wide {
+    max-width: 1400px;
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+
+  /* Remove hover effects that don't work well on touch */
+  .btn-primary:hover,
+  .btn-secondary:hover,
+  .btn-ghost:hover,
+  .card-hover:hover {
+    transform: none;
+  }
+
+  /* Add active states instead */
+  .btn-primary:active {
+    @apply scale-95;
+  }
+
+  .btn-secondary:active {
+    @apply scale-95 bg-gray-100;
+  }
+
+  /* Increase spacing for touch targets */
+  .touch-spacing>* {
+    @apply mb-2;
+  }
+}
+
+/* Landscape mobile adjustments */
+@media (max-height: 500px) and (orientation: landscape) {
+  .modal-content {
+    @apply max-h-[90vh] overflow-y-auto;
+  }
+
+  .navbar {
+    @apply py-1;
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  .card {
+    @apply shadow-none border;
+  }
+
+  body {
+    background: white !important;
+  }
+}
+
+/* iOS-specific fixes */
+@supports (-webkit-touch-callout: none) {
+
+  /* Fix for iOS input zoom */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
+  input[type="tel"],
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+
+  /* Fix for iOS bottom bar */
+  .fixed-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Smooth scrolling with reduced motion preference */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

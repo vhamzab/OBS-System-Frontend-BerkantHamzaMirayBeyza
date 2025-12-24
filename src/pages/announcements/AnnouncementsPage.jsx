@@ -8,7 +8,9 @@ import Button from '../../components/common/Button';
 import Input from '../../components/common/Input';
 import Select from '../../components/common/Select';
 
+import { useTranslation } from 'react-i18next';
 const AnnouncementsPage = () => {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const isAdmin = user?.role === 'admin';
 
@@ -142,8 +144,8 @@ const AnnouncementsPage = () => {
             <FiBell className="w-6 h-6 text-primary-400" />
           </div>
           <div>
-            <h1 className="font-sans text-3xl font-bold">Duyurular</h1>
-            <p className="text-slate-400">Önemli bildirimler ve haberler</p>
+            <h1 className="font-sans text-3xl font-bold">{t('nav.announcements')}</h1>
+            <p className="text-gray-600 dark:text-gray-300">Önemli bildirimler ve haberler</p>
           </div>
         </div>
 
@@ -153,7 +155,7 @@ const AnnouncementsPage = () => {
             onChange={(e) => setFilterType(e.target.value)}
             className="input py-2 px-4 w-full sm:w-40"
           >
-            <option value="all">Tümü</option>
+            <option value="all">{t('common.all')}</option>
             <option value="urgent">Acil</option>
             <option value="warning">Önemli</option>
             <option value="info">Bilgi</option>
@@ -174,9 +176,9 @@ const AnnouncementsPage = () => {
 
       {filteredAnnouncements.length === 0 ? (
         <div className="card text-center py-12">
-          <FiBell className="w-12 h-12 text-slate-500 mx-auto mb-4" />
+          <FiBell className="w-12 h-12 text-gray-700 dark:text-gray-200 mx-auto mb-4" />
           <h3 className="text-lg font-medium mb-2">Henüz duyuru yok</h3>
-          <p className="text-slate-400">Yeni duyurular burada görünecektir.</p>
+          <p className="text-gray-600 dark:text-gray-300">Yeni duyurular burada görünecektir.</p>
         </div>
       ) : (
         <div className="space-y-4">
@@ -191,17 +193,17 @@ const AnnouncementsPage = () => {
                   <div className="flex items-start justify-between">
                     <h3 className="font-semibold text-lg mb-2">{announcement.title}</h3>
                     {/* Target Audience Badge */}
-                    <span className="text-xs px-2 py-1 rounded bg-gray-100 text-gray-700 border-2 border-gray-300 font-medium shadow-sm">
+                    <span className="text-xs px-2 py-1 rounded bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 border-2 border-gray-300 dark:border-gray-600 font-medium shadow-sm">
                       {announcement.target_audience === 'all' ? 'Herkese Açık' :
                         announcement.target_audience === 'students' ? 'Öğrenciler' :
                           announcement.target_audience === 'faculty' ? 'Öğretim Üyeleri' : announcement.target_audience}
                     </span>
                   </div>
-                  <p className="text-slate-300 leading-relaxed whitespace-pre-wrap">
+                  <p className="text-gray-500 dark:text-gray-400 dark:text-gray-500 leading-relaxed whitespace-pre-wrap">
                     {announcement.content}
                   </p>
-                  <div className="flex items-center gap-4 mt-4 text-sm text-slate-400">
-                    <span className="font-medium text-slate-500">
+                  <div className="flex items-center gap-4 mt-4 text-sm text-gray-600 dark:text-gray-300">
+                    <span className="font-medium text-gray-700 dark:text-gray-200">
                       {announcement.author?.first_name} {announcement.author?.last_name}
                     </span>
                     <span>•</span>
@@ -214,7 +216,7 @@ const AnnouncementsPage = () => {
                 <button
                   onClick={() => handleDelete(announcement.id)}
                   className="absolute top-4 right-4 p-2 rounded-lg bg-red-100 border-2 border-red-300 text-red-700 opacity-0 group-hover:opacity-100 transition-all hover:bg-red-200 hover:scale-110 shadow-md"
-                  title="Sil"
+                  title={t('common.delete')}
                 >
                   <FiTrash2 className="w-4 h-4" />
                 </button>
@@ -227,15 +229,15 @@ const AnnouncementsPage = () => {
       {/* Create Announcement Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="card w-full max-w-lg shadow-xl border border-slate-700">
-            <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-700/50">
+          <div className="card w-full max-w-lg shadow-xl border border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-200 dark:border-gray-700/50">
               <h3 className="font-sans text-xl font-semibold flex items-center gap-2">
                 <FiPlus className="w-5 h-5 text-primary-400" />
                 Yeni Duyuru Oluştur
               </h3>
               <button
                 onClick={() => setShowModal(false)}
-                className="p-2 rounded-lg hover:bg-slate-700 transition-colors text-slate-400 hover:text-white"
+                className="p-2 rounded-lg hover:bg-primary-50 transition-colors text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 dark:text-gray-100"
               >
                 <FiX className="w-5 h-5" />
               </button>
@@ -251,7 +253,7 @@ const AnnouncementsPage = () => {
               />
 
               <div>
-                <label className="block text-sm font-medium mb-2 text-slate-300">İçerik</label>
+                <label className="block text-sm font-medium mb-2 text-gray-500 dark:text-gray-400 dark:text-gray-500">İçerik</label>
                 <textarea
                   value={formData.content}
                   onChange={(e) => setFormData({ ...formData, content: e.target.value })}
@@ -286,16 +288,14 @@ const AnnouncementsPage = () => {
                 />
               </div>
 
-              <div className="flex gap-3 pt-6 border-t border-slate-700/50 mt-6">
+              <div className="flex gap-3 pt-6 border-t border-gray-200 dark:border-gray-700/50 mt-6">
                 <Button
                   type="button"
                   variant="outline"
                   onClick={() => setShowModal(false)}
                   className="flex-1"
                   disabled={saving}
-                >
-                  İptal
-                </Button>
+                >{t('common.cancel')}</Button>
                 <Button
                   type="submit"
                   loading={saving}

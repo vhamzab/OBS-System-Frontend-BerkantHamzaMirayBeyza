@@ -4,7 +4,9 @@ import Navbar from './Navbar';
 import Sidebar from './Sidebar';
 import { useAuth } from '../../context/AuthContext';
 
+import { useTranslation } from 'react-i18next';
 const Layout = ({ withSidebar = false }) => {
+  const { t } = useTranslation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { isAuthenticated } = useAuth();
 

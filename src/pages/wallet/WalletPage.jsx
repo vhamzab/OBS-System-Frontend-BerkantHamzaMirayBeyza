@@ -6,7 +6,9 @@ import LoadingSpinner from '../../components/common/LoadingSpinner';
 import Button from '../../components/common/Button';
 import PaymentForm from '../../components/common/PaymentForm';
 
+import { useTranslation } from 'react-i18next';
 const WalletPage = () => {
+  const { t } = useTranslation();
   const [balance, setBalance] = useState(null);
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -161,8 +163,8 @@ const WalletPage = () => {
   return (
     <div className="p-6 lg:p-8 max-w-7xl mx-auto">
         <div className="mb-8">
-          <h1 className="font-display text-3xl font-bold mb-2">Cüzdan</h1>
-          <p className="text-slate-400">Bakiyenizi görüntüleyin ve para yükleyin</p>
+          <h1 className="font-display text-3xl font-bold mb-2">{t('wallet.title')}</h1>
+          <p className="text-gray-600 dark:text-gray-300">Bakiyenizi görüntüleyin ve para yükleyin</p>
         </div>
 
         {loading ? (
@@ -173,13 +175,13 @@ const WalletPage = () => {
           <div className="card bg-gradient-to-br from-blue-600 to-purple-600">
             <div className="flex items-center justify-between mb-6">
               <div>
-                <h2 className="text-slate-300 text-sm mb-1">Toplam Bakiye</h2>
-                <p className="text-4xl font-bold text-white">
+                <h2 className="text-gray-500 dark:text-gray-400 dark:text-gray-500 text-sm mb-1">Toplam Bakiye</h2>
+                <p className="text-4xl font-bold text-gray-800 dark:text-gray-100">
                   {formatAmount(balance?.balance)} ₺
                 </p>
               </div>
-              <div className="w-20 h-20 rounded-full bg-white/20 flex items-center justify-center">
-                <FiDollarSign className="w-10 h-10 text-white" />
+              <div className="w-20 h-20 rounded-full bg-white dark:bg-gray-800/20 flex items-center justify-center">
+                <FiDollarSign className="w-10 h-10 text-gray-800 dark:text-gray-100" />
               </div>
             </div>
             <Button
@@ -200,8 +202,8 @@ const WalletPage = () => {
               <LoadingSpinner />
             ) : !transactions || !Array.isArray(transactions) || transactions.length === 0 ? (
               <div className="text-center py-12">
-                <FiClock className="w-16 h-16 text-slate-400 mx-auto mb-4" />
-                <p className="text-slate-400">Henüz işlem geçmişiniz yok</p>
+                <FiClock className="w-16 h-16 text-gray-600 dark:text-gray-300 mx-auto mb-4" />
+                <p className="text-gray-600 dark:text-gray-300">Henüz işlem geçmişiniz yok</p>
               </div>
             ) : (
               <div className="space-y-3">
@@ -216,15 +218,15 @@ const WalletPage = () => {
                       return (
                         <div
                           key={transaction.id}
-                          className="flex items-center justify-between p-4 bg-slate-700/50 rounded-lg"
+                          className="flex items-center justify-between p-4 bg-primary-50/50 rounded-lg"
                         >
                           <div className="flex items-center gap-4 flex-1">
-                            <div className="p-2 bg-slate-600 rounded-lg">
+                            <div className="p-2 bg-gray-200 dark:bg-gray-700 rounded-lg">
                               {getTransactionIcon(transactionType)}
                             </div>
                             <div className="flex-1">
                               <div className="font-semibold">{transaction.description || 'İşlem'}</div>
-                              <div className="text-sm text-slate-400">
+                              <div className="text-sm text-gray-600 dark:text-gray-300">
                                 {formatDate(transaction.created_at)}
                               </div>
                             </div>
@@ -242,7 +244,7 @@ const WalletPage = () => {
                               {transactionType === 'credit' ? '+' : '-'}
                               {amount} ₺
                             </div>
-                            <div className="text-xs text-slate-400">
+                            <div className="text-xs text-gray-600 dark:text-gray-300">
                               Bakiye: {balanceAfter} ₺
                             </div>
                           </div>
@@ -258,15 +260,13 @@ const WalletPage = () => {
 
             {/* Pagination */}
             {pagination.pages > 1 && (
-              <div className="flex items-center justify-between mt-6 pt-6 border-t border-slate-700/50">
+              <div className="flex items-center justify-between mt-6 pt-6 border-t border-gray-200 dark:border-gray-700/50">
                 <button
                   onClick={() => fetchTransactions(pagination.page - 1)}
                   disabled={pagination.page === 1}
                   className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  Önceki
-                </button>
-                <span className="text-sm text-slate-400">
+                >{t('common.previous')}</button>
+                <span className="text-sm text-gray-600 dark:text-gray-300">
                   Sayfa {pagination.page} / {pagination.pages}
                 </span>
                 <button
@@ -288,11 +288,11 @@ const WalletPage = () => {
           <div className="bg-gradient-to-br from-white via-blue-50/30 to-accent-50/20 rounded-3xl p-8 max-w-md w-full shadow-2xl border-2 border-primary-100/50 backdrop-blur-xl">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center shadow-lg">
-                <FiDollarSign className="w-6 h-6 text-white" />
+                <FiDollarSign className="w-6 h-6 text-gray-800 dark:text-gray-100" />
               </div>
               <div>
-                <h3 className="text-2xl font-bold text-gray-900">Para Yükle</h3>
-                <p className="text-sm text-gray-600">Cüzdanınıza bakiye ekleyin</p>
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Para Yükle</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-300">Cüzdanınıza bakiye ekleyin</p>
               </div>
             </div>
             <PaymentForm

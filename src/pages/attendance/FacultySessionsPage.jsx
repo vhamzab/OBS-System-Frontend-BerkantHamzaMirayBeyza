@@ -5,7 +5,9 @@ import toast from 'react-hot-toast';
 import attendanceService from '../../services/attendanceService';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 
+import { useTranslation } from 'react-i18next';
 const FacultySessionsPage = () => {
+  const { t } = useTranslation();
     const navigate = useNavigate();
     const [sessions, setSessions] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -43,13 +45,11 @@ const FacultySessionsPage = () => {
         switch (status) {
             case 'active':
                 return (
-                    <span className="px-2 py-1 text-xs font-medium rounded-full bg-green-500/20 text-green-400">
-                        Aktif
-                    </span>
+                    <span className="px-2 py-1 text-xs font-medium rounded-full bg-green-500/20 text-green-400">{t('common.active')}</span>
                 );
             case 'closed':
                 return (
-                    <span className="px-2 py-1 text-xs font-medium rounded-full bg-slate-500/20 text-slate-400">
+                    <span className="px-2 py-1 text-xs font-medium rounded-full bg-gray-300/20 text-gray-600 dark:text-gray-300">
                         Kapatıldı
                     </span>
                 );
@@ -75,7 +75,7 @@ const FacultySessionsPage = () => {
             <div className="flex items-center justify-between mb-8">
                 <div>
                     <h1 className="font-display text-3xl font-bold">Yoklama Oturumları</h1>
-                    <p className="text-slate-400">Tüm yoklama oturumlarınızı görüntüleyin</p>
+                    <p className="text-gray-600 dark:text-gray-300">Tüm yoklama oturumlarınızı görüntüleyin</p>
                 </div>
                 <Link to="/attendance/start" className="btn btn-primary">
                     Yeni Yoklama Başlat
@@ -85,27 +85,27 @@ const FacultySessionsPage = () => {
             {/* Filter */}
             <div className="flex items-center gap-4 mb-6">
                 <div className="flex items-center gap-2">
-                    <FiFilter className="text-slate-400" />
+                    <FiFilter className="text-gray-600 dark:text-gray-300" />
                     <select
                         value={statusFilter}
                         onChange={(e) => setStatusFilter(e.target.value)}
                         className="input py-2"
                     >
                         <option value="all">Tüm Oturumlar</option>
-                        <option value="active">Aktif</option>
+                        <option value="active">{t('common.active')}</option>
                         <option value="closed">Kapatıldı</option>
                     </select>
                 </div>
-                <span className="text-slate-400 text-sm">
+                <span className="text-gray-600 dark:text-gray-300 text-sm">
                     Toplam {sessions.length} oturum
                 </span>
             </div>
 
             {sessions.length === 0 ? (
                 <div className="card text-center py-16">
-                    <FiCalendar className="w-12 h-12 text-slate-500 mx-auto mb-4" />
+                    <FiCalendar className="w-12 h-12 text-gray-700 dark:text-gray-200 mx-auto mb-4" />
                     <h3 className="text-lg font-medium mb-2">Yoklama Oturumu Bulunamadı</h3>
-                    <p className="text-slate-400 mb-4">
+                    <p className="text-gray-600 dark:text-gray-300 mb-4">
                         Henüz hiç yoklama oturumu başlatmamışsınız.
                     </p>
                     <Link to="/attendance/start" className="btn btn-primary">
@@ -128,11 +128,11 @@ const FacultySessionsPage = () => {
                                             </h3>
                                             {getStatusBadge(session.status)}
                                         </div>
-                                        <p className="text-slate-400 text-sm mb-3">
+                                        <p className="text-gray-600 dark:text-gray-300 text-sm mb-3">
                                             Section {session.sectionNumber}
                                         </p>
 
-                                        <div className="flex flex-wrap items-center gap-4 text-sm text-slate-400">
+                                        <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 dark:text-gray-300">
                                             <span className="flex items-center gap-1">
                                                 <FiCalendar className="w-4 h-4" />
                                                 {formatDate(session.date)}

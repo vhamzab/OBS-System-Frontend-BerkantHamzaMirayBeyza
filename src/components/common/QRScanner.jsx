@@ -3,11 +3,13 @@ import { FiCamera, FiX } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import { BrowserMultiFormatReader } from '@zxing/browser';
 
+import { useTranslation } from 'react-i18next';
 /**
  * QR Scanner Component
  * Uses HTML5 QR Code Scanner
  */
-const QRScanner = ({ onScan, onClose, title = 'QR Kod Tara' }) => {
+const QRScanner = ({ onScan, onClose, title = t('attendance.scanQR') }) => {
+  const { t } = useTranslation();
   const videoRef = useRef(null);
   const [scanning, setScanning] = useState(false);
   const [error, setError] = useState(null);
@@ -80,7 +82,7 @@ const QRScanner = ({ onScan, onClose, title = 'QR Kod Tara' }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 p-4">
-      <div className="bg-white rounded-2xl p-6 max-w-md w-full">
+      <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-md w-full">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-xl font-bold">{title}</h3>
           <button
@@ -88,7 +90,7 @@ const QRScanner = ({ onScan, onClose, title = 'QR Kod Tara' }) => {
               stopScanning();
               onClose();
             }}
-            className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 dark:bg-gray-800 rounded-lg transition-colors"
           >
             <FiX className="w-5 h-5" />
           </button>
@@ -97,8 +99,8 @@ const QRScanner = ({ onScan, onClose, title = 'QR Kod Tara' }) => {
         <div className="mb-4">
           {!scanning ? (
             <div className="flex flex-col items-center gap-4 py-8">
-              <div className="w-24 h-24 rounded-full bg-slate-100 flex items-center justify-center">
-                <FiCamera className="w-12 h-12 text-slate-400" />
+              <div className="w-24 h-24 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
+                <FiCamera className="w-12 h-12 text-gray-600 dark:text-gray-300" />
               </div>
               <button
                 onClick={startScanning}
@@ -128,13 +130,13 @@ const QRScanner = ({ onScan, onClose, title = 'QR Kod Tara' }) => {
         </div>
 
         <div className="border-t pt-4">
-          <p className="text-sm text-slate-600 mb-2 text-center">veya</p>
+          <p className="text-sm text-gray-700 dark:text-gray-200 mb-2 text-center">veya</p>
           <form onSubmit={handleManualInput} className="flex gap-2">
             <input
               type="text"
               name="qrCode"
               placeholder="QR kodu manuel girin"
-              className="flex-1 px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <button type="submit" className="btn-primary">
               Doğrula

@@ -8,6 +8,7 @@ import authService from '../../services/authService';
 import Input from '../../components/common/Input';
 import Button from '../../components/common/Button';
 
+import { useTranslation } from 'react-i18next';
 const validationSchema = Yup.object({
   password: Yup.string()
     .min(8, 'Şifre en az 8 karakter olmalıdır')
@@ -21,6 +22,7 @@ const validationSchema = Yup.object({
 });
 
 const ResetPasswordPage = () => {
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -74,10 +76,10 @@ const ResetPasswordPage = () => {
             <h1 className="font-display text-2xl font-bold mb-4">
               Şifre Sıfırlandı
             </h1>
-            <p className="text-slate-400 mb-6">
+            <p className="text-gray-600 dark:text-gray-300 mb-6">
               Şifreniz başarıyla sıfırlandı. Yeni şifrenizle giriş yapabilirsiniz.
             </p>
-            <p className="text-sm text-slate-500">
+            <p className="text-sm text-gray-700 dark:text-gray-200">
               3 saniye içinde giriş sayfasına yönlendirileceksiniz...
             </p>
           </div>
@@ -99,13 +101,13 @@ const ResetPasswordPage = () => {
         <div className="text-center mb-8">
           <Link to="/" className="inline-flex items-center gap-3 mb-6">
             <div className="w-14 h-14 bg-gradient-to-br from-primary-500 to-accent-500 rounded-2xl flex items-center justify-center shadow-lg shadow-primary-500/25">
-              <span className="text-white font-bold text-2xl">Ü</span>
+              <span className="text-gray-800 dark:text-gray-100 font-bold text-2xl">Ü</span>
             </div>
           </Link>
           <h1 className="font-display text-3xl font-bold mb-2">
             Yeni Şifre Belirle
           </h1>
-          <p className="text-slate-400">
+          <p className="text-gray-600 dark:text-gray-300">
             Hesabınız için yeni bir şifre belirleyin
           </p>
         </div>
@@ -141,9 +143,9 @@ const ResetPasswordPage = () => {
               required
             />
 
-            <div className="p-3 bg-slate-800/50 rounded-lg">
-              <p className="text-xs text-slate-400 font-medium mb-2">Şifre gereksinimleri:</p>
-              <ul className="text-xs text-slate-500 space-y-1">
+            <div className="p-3 bg-gray-100 dark:bg-gray-800/50 rounded-lg">
+              <p className="text-xs text-gray-600 dark:text-gray-300 font-medium mb-2">Şifre gereksinimleri:</p>
+              <ul className="text-xs text-gray-700 dark:text-gray-200 space-y-1">
                 <li className={formik.values.password.length >= 8 ? 'text-green-400' : ''}>
                   • En az 8 karakter
                 </li>

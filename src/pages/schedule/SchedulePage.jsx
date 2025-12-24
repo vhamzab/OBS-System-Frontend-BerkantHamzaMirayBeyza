@@ -4,7 +4,9 @@ import toast from 'react-hot-toast';
 import enrollmentService from '../../services/enrollmentService';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 
+import { useTranslation } from 'react-i18next';
 const SchedulePage = () => {
+  const { t } = useTranslation();
   const [schedule, setSchedule] = useState([]);
   const [semester, setSemester] = useState(null);
   const [year, setYear] = useState(null);
@@ -31,7 +33,7 @@ const SchedulePage = () => {
       setLoading(true);
       console.log('📅 SchedulePage: Fetching schedule...');
       const response = await enrollmentService.getMySchedule();
-      
+
       if (response.success) {
         console.log('✅ SchedulePage: Schedule fetched successfully:', response.data);
         setSchedule(response.data.schedule || []);
@@ -88,31 +90,31 @@ const SchedulePage = () => {
     <div className="p-6 lg:p-8 max-w-7xl mx-auto">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="font-display text-3xl font-bold mb-2">Ders Programı</h1>
-        <p className="text-slate-400">
+        <h1 className="font-display text-3xl font-bold mb-2">{t('dashboard.schedule')}</h1>
+        <p className="text-gray-500 dark:text-gray-400 dark:text-gray-500">
           {semester && year && `${year} - ${getSemesterName(semester)} Dönemi`}
         </p>
       </div>
 
       {schedule.length === 0 ? (
         <div className="card text-center py-16">
-          <FiCalendar className="w-16 h-16 mx-auto text-slate-600 mb-4" />
-          <h2 className="text-xl font-semibold mb-2">Ders Programı Boş</h2>
-          <p className="text-slate-400 mb-4">Henüz kayıtlı olduğunuz ders bulunmuyor.</p>
+          <FiCalendar className="w-16 h-16 mx-auto text-gray-400 dark:text-gray-500 mb-4" />
+          <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-2">Ders Programı Boş</h2>
+          <p className="text-gray-500 dark:text-gray-400 dark:text-gray-500 mb-4">Henüz kayıtlı olduğunuz ders bulunmuyor.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-7 gap-4">
           {dayOrder.map((day) => {
             const daySchedule = scheduleByDay[day] || [];
-            
+
             return (
               <div key={day} className="card">
-                <div className="mb-4 pb-3 border-b border-slate-700/50">
-                  <h3 className="font-semibold text-lg">{dayNames[day]}</h3>
+                <div className="mb-4 pb-3 border-b border-gray-200 dark:border-gray-700">
+                  <h3 className="font-semibold text-lg text-gray-800 dark:text-gray-100">{dayNames[day]}</h3>
                 </div>
-                
+
                 {daySchedule.length === 0 ? (
-                  <div className="text-center py-8 text-slate-500 text-sm">
+                  <div className="text-center py-8 text-gray-400 dark:text-gray-500 text-sm">
                     Ders yok
                   </div>
                 ) : (
@@ -120,7 +122,7 @@ const SchedulePage = () => {
                     {daySchedule.map((item, idx) => (
                       <div
                         key={idx}
-                        className="p-3 rounded-lg bg-slate-800/50 border border-slate-700/30 hover:border-primary-500/50 transition-colors"
+                        className="p-3 rounded-lg bg-primary-50 border border-primary-200 hover:border-primary-400 transition-colors"
                       >
                         <div className="flex items-start justify-between mb-2">
                           <div className="flex-1">
@@ -128,32 +130,32 @@ const SchedulePage = () => {
                               <FiBook className="w-4 h-4 text-primary-400" />
                               <span className="font-semibold text-sm">{item.course.code}</span>
                             </div>
-                            <p className="text-xs text-slate-400 mb-2">{item.course.name}</p>
+                            <p className="text-xs text-gray-600 dark:text-gray-300 mb-2">{item.course.name}</p>
                           </div>
                         </div>
-                        
+
                         <div className="space-y-1 text-xs">
-                          <div className="flex items-center gap-2 text-slate-400">
+                          <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
                             <FiClock className="w-3 h-3" />
                             <span>{item.start_time} - {item.end_time}</span>
                           </div>
-                          
+
                           {item.classroom && (
-                            <div className="flex items-center gap-2 text-slate-400">
+                            <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
                               <FiMapPin className="w-3 h-3" />
                               <span>{item.classroom}</span>
                             </div>
                           )}
-                          
+
                           {item.instructor && (
-                            <div className="flex items-center gap-2 text-slate-400">
+                            <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
                               <FiUser className="w-3 h-3" />
                               <span>{item.instructor}</span>
                             </div>
                           )}
-                          
+
                           {item.sectionNumber && (
-                            <div className="text-slate-500">
+                            <div className="text-gray-500 dark:text-gray-400 dark:text-gray-500">
                               Section {item.sectionNumber}
                             </div>
                           )}

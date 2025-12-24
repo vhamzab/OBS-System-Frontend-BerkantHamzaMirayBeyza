@@ -4,7 +4,9 @@ import toast from 'react-hot-toast';
 import userService from '../../services/userService';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 
+import { useTranslation } from 'react-i18next';
 const AdminDepartmentsPage = () => {
+  const { t } = useTranslation();
     const [departments, setDepartments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
@@ -145,8 +147,8 @@ const AdminDepartmentsPage = () => {
             {/* Header */}
             <div className="flex items-center justify-between mb-8">
                 <div>
-                    <h1 className="font-display text-3xl font-bold mb-2 text-gray-800">Bölüm Yönetimi</h1>
-                    <p className="text-gray-500">Üniversite bölümlerini görüntüleyin ve yönetin</p>
+                    <h1 className="font-display text-3xl font-bold mb-2 text-gray-800 dark:text-gray-100">Bölüm Yönetimi</h1>
+                    <p className="text-gray-500 dark:text-gray-400 dark:text-gray-500">Üniversite bölümlerini görüntüleyin ve yönetin</p>
                 </div>
                 <div className="flex gap-3">
                     <button
@@ -177,20 +179,20 @@ const AdminDepartmentsPage = () => {
             {/* Stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                 <div className="card text-center py-4">
-                    <div className="text-2xl font-bold text-gray-800">{departments.length}</div>
-                    <div className="text-sm text-gray-500">Toplam Bölüm</div>
+                    <div className="text-2xl font-bold text-gray-800 dark:text-gray-100">{departments.length}</div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500">Toplam Bölüm</div>
                 </div>
                 <div className="card text-center py-4">
                     <div className="text-2xl font-bold text-primary-600">
                         {[...new Set(departments.map(d => d.faculty))].length}
                     </div>
-                    <div className="text-sm text-gray-500">Fakülte</div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500">{t('profile.faculty')}</div>
                 </div>
                 <div className="card text-center py-4">
                     <div className="text-2xl font-bold text-green-600">
                         {departments.filter(d => d.code?.startsWith('CSE') || d.code?.startsWith('MATH')).length}
                     </div>
-                    <div className="text-sm text-gray-500">Mühendislik/Fen</div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500">Mühendislik/Fen</div>
                 </div>
             </div>
 
@@ -198,9 +200,9 @@ const AdminDepartmentsPage = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {departments.length === 0 ? (
                     <div className="col-span-full card text-center py-16">
-                        <FiBookOpen className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                        <h3 className="text-lg font-medium mb-2 text-gray-800">Bölüm Bulunamadı</h3>
-                        <p className="text-gray-500 mb-4">Henüz hiç bölüm eklenmemiş.</p>
+                        <FiBookOpen className="w-12 h-12 text-gray-400 dark:text-gray-500 mx-auto mb-4" />
+                        <h3 className="text-lg font-medium mb-2 text-gray-800 dark:text-gray-100">Bölüm Bulunamadı</h3>
+                        <p className="text-gray-500 dark:text-gray-400 dark:text-gray-500 mb-4">Henüz hiç bölüm eklenmemiş.</p>
                         <button
                             onClick={() => handleOpenModal()}
                             className="btn btn-primary"
@@ -216,37 +218,35 @@ const AdminDepartmentsPage = () => {
                                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center">
                                     <FiBookOpen className="w-6 h-6 text-primary-600" />
                                 </div>
-                                <span className="px-3 py-1 rounded-full bg-gray-100 text-gray-700 text-sm font-medium">
+                                <span className="px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 text-sm font-medium">
                                     {dept.code}
                                 </span>
                             </div>
 
-                            <h3 className="font-semibold text-lg mb-2 text-gray-800">{dept.name}</h3>
-                            <p className="text-sm text-gray-500 mb-4">{dept.faculty || 'Fakülte belirtilmemiş'}</p>
+                            <h3 className="font-semibold text-lg mb-2 text-gray-800 dark:text-gray-100">{dept.name}</h3>
+                            <p className="text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500 mb-4">{dept.faculty || 'Fakülte belirtilmemiş'}</p>
 
-                            <div className="flex items-center justify-between pt-4 border-t border-gray-200">
-                                <div className="flex items-center gap-4 text-sm text-gray-500">
+                            <div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-700">
+                                <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500">
                                     <span className="flex items-center gap-1">
                                         <FiUsers className="w-4 h-4" />
                                         Öğretim Üyeleri
                                     </span>
                                     <span className="flex items-center gap-1">
-                                        <FiBook className="w-4 h-4" />
-                                        Dersler
-                                    </span>
+                                        <FiBook className="w-4 h-4" />{t('courses.title')}</span>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <button
                                         onClick={() => handleOpenModal(dept)}
-                                        className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
-                                        title="Düzenle"
+                                        className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 dark:bg-gray-800 transition-colors"
+                                        title={t('common.edit')}
                                     >
-                                        <FiEdit2 className="w-4 h-4 text-gray-500" />
+                                        <FiEdit2 className="w-4 h-4 text-gray-500 dark:text-gray-400 dark:text-gray-500" />
                                     </button>
                                     <button
                                         onClick={() => setShowDeleteModal(dept)}
                                         className="p-2 rounded-lg hover:bg-red-50 transition-colors"
-                                        title="Sil"
+                                        title={t('common.delete')}
                                     >
                                         <FiTrash2 className="w-4 h-4 text-red-500" />
                                     </button>
@@ -265,11 +265,11 @@ const AdminDepartmentsPage = () => {
                             <div className="w-10 h-10 rounded-xl bg-red-100 flex items-center justify-center">
                                 <FiAlertCircle className="w-5 h-5 text-red-500" />
                             </div>
-                            <h3 className="font-display text-xl font-semibold text-gray-800">Bölümü Sil</h3>
+                            <h3 className="font-display text-xl font-semibold text-gray-800 dark:text-gray-100">Bölümü Sil</h3>
                         </div>
 
-                        <p className="text-gray-600 mb-4">
-                            <strong className="text-gray-800">{showDeleteModal.name}</strong> bölümünü silmek istediğinizden emin misiniz?
+                        <p className="text-gray-600 dark:text-gray-300 mb-4">
+                            <strong className="text-gray-800 dark:text-gray-100">{showDeleteModal.name}</strong> bölümünü silmek istediğinizden emin misiniz?
                         </p>
                         <p className="text-sm text-amber-600 mb-6">
                             Bu işlem geri alınamaz. Bölüme bağlı öğrenci, öğretim üyesi veya ders varsa silme işlemi başarısız olur.
@@ -280,15 +280,13 @@ const AdminDepartmentsPage = () => {
                                 onClick={() => setShowDeleteModal(null)}
                                 className="btn btn-secondary"
                                 disabled={deleting}
-                            >
-                                İptal
-                            </button>
+                            >{t('common.cancel')}</button>
                             <button
                                 onClick={() => handleDelete(showDeleteModal.id)}
-                                className="btn bg-red-500 hover:bg-red-600 text-white"
+                                className="btn bg-red-500 hover:bg-red-600 text-gray-800 dark:text-gray-100"
                                 disabled={deleting}
                             >
-                                {deleting ? <LoadingSpinner size="sm" /> : 'Sil'}
+                                {deleting ? <LoadingSpinner size="sm" /> : t('common.delete')}
                             </button>
                         </div>
                     </div>
@@ -300,20 +298,20 @@ const AdminDepartmentsPage = () => {
                 <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
                     <div className="card w-full max-w-md mx-4">
                         <div className="flex items-center justify-between mb-6">
-                            <h3 className="font-display text-xl font-semibold text-gray-800">
+                            <h3 className="font-display text-xl font-semibold text-gray-800 dark:text-gray-100">
                                 {editingDept ? 'Bölüm Düzenle' : 'Yeni Bölüm'}
                             </h3>
                             <button
                                 onClick={handleCloseModal}
-                                className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                                className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 dark:bg-gray-800 transition-colors"
                             >
-                                <FiX className="w-5 h-5 text-gray-500" />
+                                <FiX className="w-5 h-5 text-gray-500 dark:text-gray-400 dark:text-gray-500" />
                             </button>
                         </div>
 
                         <form onSubmit={handleSubmit} className="space-y-4">
                             <div>
-                                <label className="block text-sm font-medium mb-2 text-gray-700">Bölüm Kodu</label>
+                                <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-200">Bölüm Kodu</label>
                                 <input
                                     type="text"
                                     value={formData.code}
@@ -325,7 +323,7 @@ const AdminDepartmentsPage = () => {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium mb-2 text-gray-700">Bölüm Adı</label>
+                                <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-200">Bölüm Adı</label>
                                 <input
                                     type="text"
                                     value={formData.name}
@@ -337,7 +335,7 @@ const AdminDepartmentsPage = () => {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium mb-2 text-gray-700">Fakülte</label>
+                                <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-200">{t('profile.faculty')}</label>
                                 <input
                                     type="text"
                                     value={formData.faculty}
@@ -353,9 +351,7 @@ const AdminDepartmentsPage = () => {
                                     onClick={handleCloseModal}
                                     className="btn btn-secondary flex-1"
                                     disabled={saving}
-                                >
-                                    İptal
-                                </button>
+                                >{t('common.cancel')}</button>
                                 <button
                                     type="submit"
                                     className="btn btn-primary flex-1"
@@ -363,9 +359,7 @@ const AdminDepartmentsPage = () => {
                                 >
                                     {saving ? <LoadingSpinner size="sm" /> : (
                                         <>
-                                            <FiSave className="w-4 h-4 mr-2" />
-                                            Kaydet
-                                        </>
+                                            <FiSave className="w-4 h-4 mr-2" />{t('common.save')}</>
                                     )}
                                 </button>
                             </div>
