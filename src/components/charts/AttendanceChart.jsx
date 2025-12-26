@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { TrendingUp, TrendingDown, Minus } from 'lucide-react';
+import { FiTrendingUp, FiTrendingDown, FiMinus } from 'react-icons/fi';
 
 import { useTranslation } from 'react-i18next';
 /**
@@ -63,7 +63,7 @@ const AttendanceChart = ({
     return 'bg-red-100';
   };
 
-  const TrendIcon = stats.trend === 'up' ? TrendingUp : stats.trend === 'down' ? TrendingDown : Minus;
+  const TrendIcon = stats.trend === 'up' ? FiTrendingUp : stats.trend === 'down' ? FiTrendingDown : FiMinus;
   const trendColor = stats.trend === 'up' ? 'text-green-500' : stats.trend === 'down' ? 'text-red-500' : 'text-gray-500 dark:text-gray-400 dark:text-gray-500';
 
   return (
@@ -121,13 +121,12 @@ const AttendanceChart = ({
               </div>
               <div className="flex-1 h-4 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
                 <div
-                  className={`h-full transition-all duration-500 ${
-                    (course.attendancePercentage || 100) >= 80
-                      ? 'bg-green-500'
-                      : (course.attendancePercentage || 100) >= 70
+                  className={`h-full transition-all duration-500 ${(course.attendancePercentage || 100) >= 80
+                    ? 'bg-green-500'
+                    : (course.attendancePercentage || 100) >= 70
                       ? 'bg-yellow-500'
                       : 'bg-red-500'
-                  }`}
+                    }`}
                   style={{ width: `${course.attendancePercentage || 100}%` }}
                 />
               </div>

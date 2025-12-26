@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { TrendingUp, TrendingDown, Minus, Award } from 'lucide-react';
+import { FiTrendingUp, FiTrendingDown, FiMinus, FiAward } from 'react-icons/fi';
 
 import { useTranslation } from 'react-i18next';
 /**
@@ -23,21 +23,21 @@ const GPATrendChart = ({
   // Calculate trend
   const trend = useMemo(() => {
     if (semesters.length < 2) return 'stable';
-    
+
     const recent = semesters.slice(-2);
     const older = semesters.slice(-4, -2);
-    
+
     const avgRecent = recent.reduce((acc, s) => acc + (s.gpa || 0), 0) / recent.length;
     const avgOlder = older.length > 0
       ? older.reduce((acc, s) => acc + (s.gpa || 0), 0) / older.length
       : avgRecent;
-    
+
     if (avgRecent > avgOlder + 0.1) return 'up';
     if (avgRecent < avgOlder - 0.1) return 'down';
     return 'stable';
   }, [semesters]);
 
-  const TrendIcon = trend === 'up' ? TrendingUp : trend === 'down' ? TrendingDown : Minus;
+  const TrendIcon = trend === 'up' ? FiTrendingUp : trend === 'down' ? FiTrendingDown : FiMinus;
   const trendColor = trend === 'up' ? 'text-green-500' : trend === 'down' ? 'text-red-500' : 'text-gray-500 dark:text-gray-400 dark:text-gray-500';
   const trendText = trend === 'up' ? 'Yükseliyor' : trend === 'down' ? 'Düşüyor' : 'Stabil';
 
@@ -83,7 +83,7 @@ const GPATrendChart = ({
       {/* CGPA Display */}
       <div className={`text-center p-6 rounded-lg border ${getGPABg(cgpa)} mb-6`}>
         <div className="flex items-center justify-center gap-2 mb-2">
-          <Award className={`h-6 w-6 ${getGPAColor(cgpa)}`} />
+          <FiAward className={`h-6 w-6 ${getGPAColor(cgpa)}`} />
           <span className={`text-4xl font-bold ${getGPAColor(cgpa)}`}>
             {cgpa.toFixed(2)}
           </span>
@@ -98,7 +98,7 @@ const GPATrendChart = ({
       {semesters && semesters.length > 0 && (
         <>
           <p className="text-sm font-medium text-gray-700 dark:text-gray-200 mb-4">Dönemlik GPA</p>
-          
+
           {/* Visual chart */}
           <div className="relative h-40 mb-4">
             {/* Grid lines */}
@@ -121,10 +121,9 @@ const GPATrendChart = ({
                       {semester.gpa.toFixed(2)}
                     </span>
                     <div
-                      className={`w-8 rounded-t transition-all duration-500 ${
-                        semester.gpa >= 3.0 ? 'bg-green-500' :
+                      className={`w-8 rounded-t transition-all duration-500 ${semester.gpa >= 3.0 ? 'bg-green-500' :
                         semester.gpa >= 2.0 ? 'bg-yellow-500' : 'bg-red-500'
-                      }`}
+                        }`}
                       style={{ height: `${Math.max(height, 5)}%` }}
                     />
                     <span className="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500 text-center">
