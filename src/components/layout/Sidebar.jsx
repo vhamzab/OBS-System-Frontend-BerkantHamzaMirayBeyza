@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import {
   FiHome,
@@ -24,6 +24,7 @@ import { useTranslation } from 'react-i18next';
 const Sidebar = ({ isOpen, onClose }) => {
   const { user } = useAuth();
   const { t } = useTranslation();
+  const location = useLocation();
 
   const studentLinks = [
     { to: '/dashboard', icon: FiHome, label: t('nav.dashboard') },
@@ -143,33 +144,32 @@ const Sidebar = ({ isOpen, onClose }) => {
 
         {/* Scrollable Navigation */}
         <nav className="flex-1 overflow-y-auto p-4 space-y-1.5 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 scrollbar-track-transparent">
-          {links.map((link, index) => (
-            <NavLink
-              key={link.to}
-              to={link.to}
-              onClick={onClose}
-              className={({ isActive }) => `
-                group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300
-                relative overflow-hidden
-                ${isActive
-                  ? 'bg-gradient-to-r from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/30 scale-[1.02] border border-primary-400/50'
-                  : 'text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gradient-to-r hover:from-gray-50 hover:to-gray-100 dark:hover:from-gray-800 dark:hover:to-gray-800/50 border border-transparent hover:border-gray-200 dark:hover:border-gray-700 hover:shadow-md'
-                }
-              `}
-              style={{ animationDelay: `${index * 30}ms` }}
-            >
-              {({ isActive }) => (
-                <>
-                  <div className={`absolute inset-0 bg-gradient-to-r from-primary-500/10 to-accent-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${isActive ? 'opacity-0' : ''}`}></div>
-                  <link.icon className={`w-5 h-5 relative z-10 ${isActive ? 'text-white' : 'text-gray-600 dark:text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-400'}`} />
-                  <span className={`font-medium relative z-10 ${isActive ? 'text-white' : 'text-gray-700 dark:text-gray-300'}`}>{link.label}</span>
-                  {isActive && (
-                    <div className="absolute right-2 w-1.5 h-1.5 rounded-full bg-white/80"></div>
-                  )}
-                </>
-              )}
-            </NavLink>
-          ))}
+          {links.map((link, index) => {
+            const isActive = location.pathname === link.to || (link.to !== '/dashboard' && location.pathname.startsWith(link.to));
+            return (
+              <NavLink
+                key={link.to}
+                to={link.to}
+                onClick={onClose}
+                className={`
+                  group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300
+                  relative overflow-hidden
+                  ${isActive
+                    ? 'bg-gradient-to-r from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/30 scale-[1.02] border border-primary-400/50'
+                    : 'text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gradient-to-r hover:from-gray-50 hover:to-gray-100 dark:hover:from-gray-800 dark:hover:to-gray-800/50 border border-transparent hover:border-gray-200 dark:hover:border-gray-700 hover:shadow-md'
+                  }
+                `}
+                style={{ animationDelay: `${index * 30}ms` }}
+              >
+                <div className={`absolute inset-0 bg-gradient-to-r from-primary-500/10 to-accent-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${isActive ? 'opacity-0' : ''}`}></div>
+                <link.icon className={`w-5 h-5 relative z-10 ${isActive ? 'text-white' : 'text-gray-600 dark:text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-400'}`} />
+                <span className={`font-medium relative z-10 ${isActive ? 'text-white' : 'text-gray-700 dark:text-gray-300'}`}>{link.label}</span>
+                {isActive && (
+                  <div className="absolute right-2 w-1.5 h-1.5 rounded-full bg-white/80"></div>
+                )}
+              </NavLink>
+            );
+          })}
         </nav>
 
         {/* User Role Badge - Sticky at bottom */}
