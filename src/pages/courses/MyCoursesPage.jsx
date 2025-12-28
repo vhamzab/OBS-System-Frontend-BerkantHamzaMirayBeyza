@@ -184,10 +184,11 @@ const MyCoursesPage = () => {
   return (
     <div className="p-6 lg:p-8 max-w-6xl mx-auto">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <h1 className="font-display text-3xl font-bold mb-2">{t('courses.myCourses')}</h1>
-          <p className="text-gray-600 dark:text-gray-300">Kayıtlı olduğunuz dersler</p>
+      <div className="flex items-center justify-between mb-8 relative">
+        <div className="absolute -top-4 -left-4 w-32 h-32 bg-primary-500/10 rounded-full blur-3xl"></div>
+        <div className="relative">
+          <h1 className="font-display text-4xl font-bold mb-3 bg-gradient-to-r from-primary-600 to-accent-600 bg-clip-text text-transparent">{t('courses.myCourses')}</h1>
+          <p className="text-gray-600 dark:text-gray-400 text-lg">Kayıtlı olduğunuz dersler</p>
         </div>
         <Link to="/courses" className="btn btn-primary">
           <FiBook className="w-4 h-4 mr-2" />{t('admin.addCourse')}</Link>
@@ -210,14 +211,16 @@ const MyCoursesPage = () => {
             const scheduleItems = formatSchedule(enrollment.section?.schedule);
 
             return (
-              <div key={enrollment.id} className="card">
-                <div className="flex flex-col lg:flex-row lg:items-center gap-6">
-                  {/* Course Info */}
-                  <div className="flex-1">
-                    <div className="flex items-start gap-4">
-                      <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary-500/20 to-accent-500/20 flex items-center justify-center shrink-0">
-                        <FiBook className="w-7 h-7 text-primary-400" />
-                      </div>
+              <div key={enrollment.id} className="card-hover group relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-primary-500/10 to-accent-500/10 rounded-full blur-2xl -mr-16 -mt-16"></div>
+                <div className="relative z-10">
+                  <div className="flex flex-col lg:flex-row lg:items-center gap-6">
+                    {/* Course Info */}
+                    <div className="flex-1">
+                      <div className="flex items-start gap-4">
+                        <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary-500/20 to-accent-500/20 flex items-center justify-center shrink-0 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                          <FiBook className="w-7 h-7 text-primary-600 dark:text-primary-400" />
+                        </div>
 
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
@@ -269,76 +272,78 @@ const MyCoursesPage = () => {
                     ))}
                   </div>
 
-                  {/* Attendance */}
-                  <div className="flex items-center gap-4">
-                    <div className={`px-4 py-2 rounded-xl border-2 shadow-md hover:scale-105 transition-all duration-300 ${attendanceStatus.color === 'text-red-400'
-                      ? 'bg-red-100 border-red-300'
-                      : attendanceStatus.color === 'text-amber-400'
-                        ? 'bg-amber-100 border-amber-300'
-                        : 'bg-green-100 border-green-300'
-                      }`}>
-                      <div className="flex items-center gap-2">
-                        {attendanceStatus.icon && (
-                          <attendanceStatus.icon className={`w-4 h-4 ${attendanceStatus.color === 'text-red-400'
-                            ? 'text-red-700'
-                            : attendanceStatus.color === 'text-amber-400'
-                              ? 'text-amber-700'
-                              : 'text-green-700'
-                            }`} />
-                        )}
-                        <span className={`text-lg font-bold ${attendanceStatus.color === 'text-red-400'
-                          ? 'text-red-700'
-                          : attendanceStatus.color === 'text-amber-400'
-                            ? 'text-amber-700'
-                            : 'text-green-700'
-                          }`}>
-                          %{enrollment.attendance?.attendancePercentage || 100}
-                        </span>
-                      </div>
-                      <div className={`text-xs font-medium mt-1 ${attendanceStatus.color === 'text-red-400'
-                        ? 'text-red-600'
+                    {/* Attendance */}
+                    <div className="flex items-center gap-4">
+                      <div className={`px-4 py-3 rounded-xl border shadow-lg hover:scale-105 transition-all duration-300 ${attendanceStatus.color === 'text-red-400'
+                        ? 'bg-gradient-to-br from-red-100 to-red-50 dark:from-red-900/30 dark:to-red-800/20 border-red-300/50 dark:border-red-700/50'
                         : attendanceStatus.color === 'text-amber-400'
-                          ? 'text-amber-600'
-                          : 'text-green-600'
-                        }`}>Devam</div>
-                    </div>
+                          ? 'bg-gradient-to-br from-amber-100 to-amber-50 dark:from-amber-900/30 dark:to-amber-800/20 border-amber-300/50 dark:border-amber-700/50'
+                          : 'bg-gradient-to-br from-green-100 to-green-50 dark:from-green-900/30 dark:to-green-800/20 border-green-300/50 dark:border-green-700/50'
+                        }`}>
+                        <div className="flex items-center gap-2">
+                          {attendanceStatus.icon && (
+                            <attendanceStatus.icon className={`w-5 h-5 ${attendanceStatus.color === 'text-red-400'
+                              ? 'text-red-700 dark:text-red-400'
+                              : attendanceStatus.color === 'text-amber-400'
+                                ? 'text-amber-700 dark:text-amber-400'
+                                : 'text-green-700 dark:text-green-400'
+                              }`} />
+                          )}
+                          <span className={`text-xl font-bold ${attendanceStatus.color === 'text-red-400'
+                            ? 'text-red-700 dark:text-red-400'
+                            : attendanceStatus.color === 'text-amber-400'
+                              ? 'text-amber-700 dark:text-amber-400'
+                              : 'text-green-700 dark:text-green-400'
+                            }`}>
+                            %{enrollment.attendance?.attendancePercentage || 100}
+                          </span>
+                        </div>
+                        <div className={`text-xs font-semibold mt-1 ${attendanceStatus.color === 'text-red-400'
+                          ? 'text-red-600 dark:text-red-400'
+                          : attendanceStatus.color === 'text-amber-400'
+                            ? 'text-amber-600 dark:text-amber-400'
+                            : 'text-green-600 dark:text-green-400'
+                          }`}>Devam</div>
+                      </div>
 
-                    {/* Actions */}
-                    <button
-                      onClick={() => setShowDropModal(enrollment.id)}
-                      className="p-2 rounded-lg bg-red-100 border-2 border-red-300 text-red-700 hover:bg-red-200 hover:scale-110 transition-all duration-300 shadow-md"
-                      title="Dersi Bırak"
-                    >
-                      <FiTrash2 className="w-5 h-5" />
-                    </button>
+                      {/* Actions */}
+                      <button
+                        onClick={() => setShowDropModal(enrollment.id)}
+                        className="p-3 rounded-xl bg-gradient-to-br from-red-100 to-red-50 dark:from-red-900/30 dark:to-red-800/20 border border-red-300/50 dark:border-red-700/50 text-red-700 dark:text-red-400 hover:from-red-200 hover:to-red-100 dark:hover:from-red-800 dark:hover:to-red-700 hover:scale-110 transition-all duration-300 shadow-lg"
+                        title="Dersi Bırak"
+                      >
+                        <FiTrash2 className="w-5 h-5" />
+                      </button>
+                    </div>
                   </div>
                 </div>
 
-                {/* Grades Preview */}
-                {(enrollment.grades?.midterm || enrollment.grades?.final) && (
-                  <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700/50">
-                    <div className="flex items-center gap-6 text-sm">
-                      <span className="text-gray-600 dark:text-gray-300">Notlar:</span>
-                      {enrollment.grades?.midterm && (
-                        <span>
-                          <span className="text-gray-600 dark:text-gray-300">Vize:</span>{' '}
-                          <span className="font-medium">{enrollment.grades.midterm}</span>
-                        </span>
-                      )}
-                      {enrollment.grades?.final && (
-                        <span>
-                          <span className="text-gray-600 dark:text-gray-300">Final:</span>{' '}
-                          <span className="font-medium">{enrollment.grades.final}</span>
-                        </span>
-                      )}
-                      {enrollment.grades?.letterGrade && (
-                        <span className="px-2 py-0.5 rounded bg-primary-500/20 text-primary-400 font-medium">
-                          {enrollment.grades.letterGrade}
-                        </span>
-                      )}
+                  {/* Grades Preview */}
+                  {(enrollment.grades?.midterm || enrollment.grades?.final) && (
+                    <div className="mt-4 pt-4 border-t border-gray-200/50 dark:border-gray-700/50">
+                      <div className="flex items-center gap-6 text-sm">
+                        <span className="text-gray-600 dark:text-gray-400 font-medium">Notlar:</span>
+                        {enrollment.grades?.midterm && (
+                          <span className="px-3 py-1.5 rounded-lg bg-blue-100/50 dark:bg-blue-900/30 border border-blue-200/50 dark:border-blue-700/50">
+                            <span className="text-gray-600 dark:text-gray-400">Vize: </span>
+                            <span className="font-bold text-blue-700 dark:text-blue-400">{enrollment.grades.midterm}</span>
+                          </span>
+                        )}
+                        {enrollment.grades?.final && (
+                          <span className="px-3 py-1.5 rounded-lg bg-purple-100/50 dark:bg-purple-900/30 border border-purple-200/50 dark:border-purple-700/50">
+                            <span className="text-gray-600 dark:text-gray-400">Final: </span>
+                            <span className="font-bold text-purple-700 dark:text-purple-400">{enrollment.grades.final}</span>
+                          </span>
+                        )}
+                        {enrollment.grades?.letterGrade && (
+                          <span className="px-3 py-1.5 rounded-lg bg-gradient-to-br from-primary-500/20 to-accent-500/20 border border-primary-300/50 dark:border-primary-700/50 text-primary-700 dark:text-primary-400 font-bold">
+                            {enrollment.grades.letterGrade}
+                          </span>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
             );
           })}
@@ -347,25 +352,28 @@ const MyCoursesPage = () => {
 
       {/* Drop Confirmation Modal */}
       {showDropModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="card max-w-md mx-4">
-            <h3 className="font-display text-xl font-semibold mb-4">Dersi Bırak</h3>
-            <p className="text-gray-600 dark:text-gray-300 mb-6">
-              Bu dersi bırakmak istediğinizden emin misiniz? Bu işlem geri alınamaz.
-            </p>
-            <div className="flex gap-3 justify-end">
-              <button
-                onClick={() => setShowDropModal(null)}
-                className="btn btn-secondary"
-                disabled={dropping}
-              >{t('common.cancel')}</button>
-              <button
-                onClick={() => handleDrop(showDropModal)}
-                className="btn bg-red-500 hover:bg-red-600 text-gray-800 dark:text-gray-100"
-                disabled={dropping}
-              >
-                {dropping ? <LoadingSpinner size="sm" /> : 'Dersi Bırak'}
-              </button>
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="card max-w-md w-full relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-red-500/10 to-red-600/10 rounded-full blur-3xl -mr-16 -mt-16"></div>
+            <div className="relative z-10">
+              <h3 className="font-display text-2xl font-bold mb-4 text-gray-800 dark:text-gray-100">Dersi Bırak</h3>
+              <p className="text-gray-600 dark:text-gray-400 mb-6">
+                Bu dersi bırakmak istediğinizden emin misiniz? Bu işlem geri alınamaz.
+              </p>
+              <div className="flex gap-3 justify-end">
+                <button
+                  onClick={() => setShowDropModal(null)}
+                  className="btn-secondary"
+                  disabled={dropping}
+                >{t('common.cancel')}</button>
+                <button
+                  onClick={() => handleDrop(showDropModal)}
+                  className="btn-primary bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700"
+                  disabled={dropping}
+                >
+                  {dropping ? <LoadingSpinner size="sm" /> : 'Dersi Bırak'}
+                </button>
+              </div>
             </div>
           </div>
         </div>

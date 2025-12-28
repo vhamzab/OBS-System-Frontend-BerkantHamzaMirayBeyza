@@ -117,8 +117,10 @@ const LoginPage = () => {
         </div>
 
         {/* Form */}
-        <div className="card rounded-3xl border-2 border-gray-300 dark:border-gray-600 shadow-2xl">
-          <form onSubmit={formik.handleSubmit} className="space-y-5">
+        <div className="card rounded-3xl border border-gray-200/50 dark:border-gray-800/50 shadow-2xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-primary-500/10 to-accent-500/10 rounded-full blur-3xl -mr-20 -mt-20"></div>
+          <div className="relative z-10">
+            <form onSubmit={formik.handleSubmit} className="space-y-5">
             <Input
               label="E-posta Adresi"
               name="email"
@@ -164,10 +166,11 @@ const LoginPage = () => {
           </form>
 
           <div className="mt-6 text-center">
-            <p className="text-gray-500 dark:text-gray-400 dark:text-gray-500">
+            <p className="text-gray-600 dark:text-gray-400">
               Hesabınız yok mu?{' '}
-              <Link to="/register" className="link font-medium">{t('common.register')}</Link>
+              <Link to="/register" className="link font-semibold hover:underline">{t('common.register')}</Link>
             </p>
+          </div>
           </div>
         </div>
 

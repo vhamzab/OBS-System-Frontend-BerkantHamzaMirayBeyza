@@ -57,22 +57,30 @@ const Navbar = ({ onMenuClick }) => {
 
   return (
     <nav
-      className="glass sticky top-0 z-50 border-b border-gray-200 dark:border-gray-700 dark:bg-gray-800/80"
+      className="sticky top-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-b border-gray-200/50 dark:border-gray-800/50 shadow-sm"
       role="navigation"
       aria-label="Ana Navigasyon"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 py-2">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3">
-            <img
-              src="/logo2.png"
-              alt="Doğu Karadeniz Üniversitesi Logo"
-              className="w-12 h-12 object-contain rounded-lg shadow-md"
-            />
-            <span className="font-sans font-normal text-xl hidden sm:block text-gray-800 dark:text-gray-100">
-              DKÜ Doğu Karadeniz Üniversitesi
-            </span>
+          <Link to="/" className="flex items-center gap-3 group">
+            <div className="relative">
+              <img
+                src="/logo2.png"
+                alt="Doğu Karadeniz Üniversitesi Logo"
+                className="w-12 h-12 object-contain rounded-xl shadow-lg ring-2 ring-primary-200/30 dark:ring-primary-800/30 group-hover:ring-primary-400/50 dark:group-hover:ring-primary-600/50 transition-all duration-300 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-primary-400/20 to-accent-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            </div>
+            <div className="hidden sm:block">
+              <span className="font-sans font-bold text-lg text-gray-800 dark:text-gray-100 block">
+                DKÜ OBS
+              </span>
+              <span className="text-xs text-gray-600 dark:text-gray-400 block">
+                Doğu Karadeniz Üniversitesi
+              </span>
+            </div>
           </Link>
 
           {/* Desktop Navigation */}
@@ -186,33 +194,45 @@ const Navbar = ({ onMenuClick }) => {
 
                 {/* Dropdown */}
                 {isDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-56 card p-2 animate-slide-down" role="menu" aria-orientation="vertical">
-                    <div className="px-3 py-2 border-b border-gray-200 dark:border-gray-700 mb-2 sm:hidden">
-                      <p className="font-medium text-gray-800 dark:text-gray-100">
+                  <div className="absolute right-0 mt-2 w-64 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-800/50 shadow-2xl p-2 animate-slide-down z-50" role="menu" aria-orientation="vertical">
+                    <div className="px-4 py-3 border-b border-gray-200/50 dark:border-gray-800/50 mb-2 sm:hidden bg-gradient-to-r from-primary-50/50 to-accent-50/30 dark:from-primary-900/20 dark:to-gray-900/30 rounded-lg">
+                      <p className="font-semibold text-gray-800 dark:text-gray-100">
                         {user?.first_name} {user?.last_name}
                       </p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500">
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
                         {getRoleLabel(user?.role)}
                       </p>
                     </div>
                     <Link
                       to="/profile"
-                      className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 dark:bg-gray-800 transition-colors text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 dark:text-gray-100"
+                      className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gradient-to-r hover:from-primary-50 hover:to-accent-50 dark:hover:from-primary-900/30 dark:hover:to-gray-800/50 transition-all duration-300 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 group"
                       onClick={() => setIsDropdownOpen(false)}
                     >
-                      <FiUser className="w-4 h-4" />{t('nav.profile')}</Link>
+                      <div className="p-2 rounded-lg bg-primary-100/50 dark:bg-primary-900/30 group-hover:bg-primary-200 dark:group-hover:bg-primary-800 transition-colors">
+                        <FiUser className="w-4 h-4 text-primary-600 dark:text-primary-400" />
+                      </div>
+                      <span className="font-medium">{t('nav.profile')}</span>
+                    </Link>
                     <Link
                       to="/settings"
-                      className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 dark:bg-gray-800 transition-colors text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 dark:text-gray-100"
+                      className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gradient-to-r hover:from-primary-50 hover:to-accent-50 dark:hover:from-primary-900/30 dark:hover:to-gray-800/50 transition-all duration-300 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 group"
                       onClick={() => setIsDropdownOpen(false)}
                     >
-                      <FiSettings className="w-4 h-4" />{t('nav.settings')}</Link>
-                    <hr className="border-gray-200 dark:border-gray-700 my-2" />
+                      <div className="p-2 rounded-lg bg-primary-100/50 dark:bg-primary-900/30 group-hover:bg-primary-200 dark:group-hover:bg-primary-800 transition-colors">
+                        <FiSettings className="w-4 h-4 text-primary-600 dark:text-primary-400" />
+                      </div>
+                      <span className="font-medium">{t('nav.settings')}</span>
+                    </Link>
+                    <hr className="border-gray-200/50 dark:border-gray-800/50 my-2" />
                     <button
                       onClick={handleLogout}
-                      className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-red-50 transition-colors text-red-500 hover:text-red-600"
+                      className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gradient-to-r hover:from-red-50 hover:to-red-100 dark:hover:from-red-900/30 dark:hover:to-red-800/30 transition-all duration-300 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 group"
                     >
-                      <FiLogOut className="w-4 h-4" />{t('nav.logout')}</button>
+                      <div className="p-2 rounded-lg bg-red-100/50 dark:bg-red-900/30 group-hover:bg-red-200 dark:group-hover:bg-red-800 transition-colors">
+                        <FiLogOut className="w-4 h-4" />
+                      </div>
+                      <span className="font-medium">{t('nav.logout')}</span>
+                    </button>
                   </div>
                 )}
               </div>

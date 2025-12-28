@@ -103,16 +103,17 @@ const FacultySectionsPage = () => {
 
   return (
     <div className="p-6 lg:p-8 max-w-6xl mx-auto">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-        <div>
-          <h1 className="font-display text-3xl font-bold mb-2">{t('courses.myCourses')}</h1>
-          <p className="text-gray-600 dark:text-gray-300">Verdiğiniz dersleri yönetin</p>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 relative">
+        <div className="absolute -top-4 -left-4 w-32 h-32 bg-primary-500/10 rounded-full blur-3xl"></div>
+        <div className="relative">
+          <h1 className="font-display text-4xl font-bold mb-3 bg-gradient-to-r from-primary-600 to-accent-600 bg-clip-text text-transparent">{t('courses.myCourses')}</h1>
+          <p className="text-gray-600 dark:text-gray-400 text-lg">Verdiğiniz dersleri yönetin</p>
         </div>
         
         <select
           value={selectedSemester}
           onChange={(e) => setSelectedSemester(e.target.value)}
-          className="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 min-w-[280px] cursor-pointer"
+          className="px-4 py-3 rounded-xl border border-gray-200/50 dark:border-gray-700/50 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 min-w-[280px] cursor-pointer shadow-md hover:shadow-lg transition-all duration-300 relative z-10"
         >
           <option value="" disabled style={{ color: '#94a3b8' }}>{t('courses.selectSemester')}</option>
           <option value="current">{t('profile.currentSemester')}</option>
@@ -126,30 +127,33 @@ const FacultySectionsPage = () => {
           <h2 className="text-xl font-semibold mb-4">Size Atanan Dersler</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {courses.map((course) => (
-              <div key={course.id} className="card">
-                <div className="flex items-start gap-3 mb-3">
-                  <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary-500/20 to-accent-500/20 flex items-center justify-center shrink-0">
-                    <FiBook className="w-6 h-6 text-primary-400" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="font-medium text-sm text-primary-600 dark:text-primary-400 mb-1">
-                      {course.code}
+              <div key={course.id} className="card-hover group relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-primary-500/10 to-accent-500/10 rounded-full blur-2xl -mr-12 -mt-12"></div>
+                <div className="relative z-10">
+                  <div className="flex items-start gap-3 mb-3">
+                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary-500/20 to-accent-500/20 flex items-center justify-center shrink-0 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                      <FiBook className="w-7 h-7 text-primary-600 dark:text-primary-400" />
                     </div>
-                    <h3 className="font-semibold">{course.name}</h3>
-                    {course.department && (
-                      <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                        {course.department.name}
+                    <div className="flex-1">
+                      <div className="font-semibold text-sm text-primary-600 dark:text-primary-400 mb-1">
+                        {course.code}
                       </div>
-                    )}
+                      <h3 className="font-bold text-lg">{course.name}</h3>
+                      {course.department && (
+                        <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                          {course.department.name}
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
-                <div className="flex gap-2 text-sm">
-                  <span className="px-2 py-1 rounded bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300">
-                    {course.credits} Kredi
-                  </span>
-                  <span className="px-2 py-1 rounded bg-accent-100 dark:bg-accent-900/30 text-accent-700 dark:text-accent-300">
-                    {course.ects} ECTS
-                  </span>
+                  <div className="flex gap-2 text-sm">
+                    <span className="px-3 py-1.5 rounded-lg bg-primary-100/50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 font-medium border border-primary-200/50 dark:border-primary-800/50">
+                      {course.credits} Kredi
+                    </span>
+                    <span className="px-3 py-1.5 rounded-lg bg-accent-100/50 dark:bg-accent-900/30 text-accent-700 dark:text-accent-300 font-medium border border-accent-200/50 dark:border-accent-800/50">
+                      {course.ects} ECTS
+                    </span>
+                  </div>
                 </div>
               </div>
             ))}
@@ -174,11 +178,13 @@ const FacultySectionsPage = () => {
             const scheduleItems = formatSchedule(section.schedule);
             
             return (
-              <div key={section.id} className="card">
-                <div className="flex items-start gap-4 mb-4">
-                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary-500/20 to-accent-500/20 flex items-center justify-center shrink-0">
-                    <FiBook className="w-7 h-7 text-primary-400" />
-                  </div>
+              <div key={section.id} className="card-hover group relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-primary-500/10 to-accent-500/10 rounded-full blur-2xl -mr-16 -mt-16"></div>
+                <div className="relative z-10">
+                  <div className="flex items-start gap-4 mb-4">
+                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary-500/20 to-accent-500/20 flex items-center justify-center shrink-0 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                      <FiBook className="w-7 h-7 text-primary-600 dark:text-primary-400" />
+                    </div>
                   
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
@@ -198,17 +204,17 @@ const FacultySectionsPage = () => {
 
                 {/* Stats */}
                 <div className="grid grid-cols-3 gap-3 mb-4">
-                  <div className="p-3 rounded-xl bg-primary-100 border-2 border-primary-300 shadow-md hover:scale-105 transition-all duration-300 text-center">
-                    <div className="text-lg font-bold text-primary-700 dark:text-primary-300">{section.enrolledCount}</div>
-                    <div className="text-xs text-primary-600 font-medium">{t('roles.student')}</div>
+                  <div className="p-4 rounded-xl bg-gradient-to-br from-primary-100 to-primary-50 dark:from-primary-900/30 dark:to-primary-800/20 border border-primary-300/50 dark:border-primary-700/50 shadow-lg hover:scale-105 transition-all duration-300 text-center group">
+                    <div className="text-2xl font-bold text-primary-700 dark:text-primary-300">{section.enrolledCount}</div>
+                    <div className="text-xs text-primary-600 dark:text-primary-400 font-semibold mt-1">{t('roles.student')}</div>
                   </div>
-                  <div className="p-3 rounded-xl bg-emerald-100 border-2 border-emerald-300 shadow-md hover:scale-105 transition-all duration-300 text-center">
-                    <div className="text-lg font-bold text-emerald-700">{section.course?.credits}</div>
-                    <div className="text-xs text-emerald-600 font-medium">{t('courses.credits')}</div>
+                  <div className="p-4 rounded-xl bg-gradient-to-br from-emerald-100 to-emerald-50 dark:from-emerald-900/30 dark:to-emerald-800/20 border border-emerald-300/50 dark:border-emerald-700/50 shadow-lg hover:scale-105 transition-all duration-300 text-center group">
+                    <div className="text-2xl font-bold text-emerald-700 dark:text-emerald-300">{section.course?.credits}</div>
+                    <div className="text-xs text-emerald-600 dark:text-emerald-400 font-semibold mt-1">{t('courses.credits')}</div>
                   </div>
-                  <div className="p-3 rounded-xl bg-blue-100 border-2 border-blue-300 shadow-md hover:scale-105 transition-all duration-300 text-center">
-                    <div className="text-lg font-bold text-blue-700">{section.capacity}</div>
-                    <div className="text-xs text-blue-600 font-medium">{t('courses.capacity')}</div>
+                  <div className="p-4 rounded-xl bg-gradient-to-br from-blue-100 to-blue-50 dark:from-blue-900/30 dark:to-blue-800/20 border border-blue-300/50 dark:border-blue-700/50 shadow-lg hover:scale-105 transition-all duration-300 text-center group">
+                    <div className="text-2xl font-bold text-blue-700 dark:text-blue-300">{section.capacity}</div>
+                    <div className="text-xs text-blue-600 dark:text-blue-400 font-semibold mt-1">{t('courses.capacity')}</div>
                   </div>
                 </div>
 
@@ -233,22 +239,23 @@ const FacultySectionsPage = () => {
                 )}
 
                 {/* Actions */}
-                <div className="flex flex-wrap gap-2 pt-4 border-t border-gray-200 dark:border-gray-700/50">
+                <div className="flex flex-wrap gap-2 pt-4 border-t border-gray-200/50 dark:border-gray-700/50">
                   <Link
                     to={`/gradebook/${section.id}`}
-                    className="btn btn-secondary flex-1 min-w-[140px]"
+                    className="btn-secondary flex-1 min-w-[140px] flex items-center justify-center gap-2"
                   >
-                    <FiClipboard className="w-4 h-4 mr-2" />{t('grades.gradebook')}</Link>
+                    <FiClipboard className="w-4 h-4" />{t('grades.gradebook')}</Link>
                   <Link
                     to={`/attendance/report/${section.id}`}
-                    className="btn btn-secondary flex-1 min-w-[140px]"
+                    className="btn-secondary flex-1 min-w-[140px] flex items-center justify-center gap-2"
                   >
-                    <FiBarChart2 className="w-4 h-4 mr-2" />{t('attendance.attendanceReport')}</Link>
+                    <FiBarChart2 className="w-4 h-4" />{t('attendance.attendanceReport')}</Link>
                   <Link
                     to={`/attendance/start?section=${section.id}`}
-                    className="btn btn-primary flex-1 min-w-[140px]"
+                    className="btn-primary flex-1 min-w-[140px] flex items-center justify-center gap-2"
                   >
-                    <FiPlay className="w-4 h-4 mr-2" />{t('nav.startAttendance')}</Link>
+                    <FiPlay className="w-4 h-4" />{t('nav.startAttendance')}</Link>
+                </div>
                 </div>
               </div>
             );

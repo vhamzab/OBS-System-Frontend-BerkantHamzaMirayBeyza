@@ -130,8 +130,10 @@ const RegisterPage = () => {
         </div>
 
         {/* Form */}
-        <div className="card">
-          <form onSubmit={formik.handleSubmit} className="space-y-5">
+        <div className="card relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-primary-500/10 to-accent-500/10 rounded-full blur-3xl -mr-20 -mt-20"></div>
+          <div className="relative z-10">
+            <form onSubmit={formik.handleSubmit} className="space-y-5">
             <div className="grid grid-cols-2 gap-4">
               <Input
                 label={t('auth.firstName')}
@@ -278,10 +280,11 @@ const RegisterPage = () => {
           </form>
 
           <div className="mt-6 text-center">
-            <p className="text-gray-500 dark:text-gray-400 dark:text-gray-500">
+            <p className="text-gray-600 dark:text-gray-400">
               Zaten hesabınız var mı?{' '}
-              <Link to="/login" className="link font-medium">{t('common.login')}</Link>
+              <Link to="/login" className="link font-semibold hover:underline">{t('common.login')}</Link>
             </p>
+          </div>
           </div>
         </div>
       </div>

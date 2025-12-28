@@ -42,19 +42,22 @@ const AdminDashboardPage = () => {
     };
 
     const StatCard = ({ title, value, icon: Icon, color, trend, link }) => (
-        <Link to={link || '#'} className="card hover:shadow-lg transition-shadow duration-200">
-            <div className="flex items-center justify-between">
-                <div>
-                    <p className="text-gray-600 dark:text-gray-300 text-sm mb-1">{title}</p>
-                    <p className="text-3xl font-bold text-gray-800 dark:text-gray-100">{value}</p>
-                    {trend && (
-                        <p className={`text-sm mt-1 ${trend > 0 ? 'text-emerald-600' : 'text-red-600'}`}>
-                            {trend > 0 ? '↑' : '↓'} {Math.abs(trend)}% bu hafta
-                        </p>
-                    )}
-                </div>
-                <div className={`p-4 rounded-xl ${color}`}>
-                    <Icon className="text-2xl text-gray-800 dark:text-gray-100" />
+        <Link to={link || '#'} className="card-hover group relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-primary-500/10 to-accent-500/10 rounded-full blur-2xl -mr-16 -mt-16"></div>
+            <div className="relative z-10">
+                <div className="flex items-center justify-between">
+                    <div className="flex-1">
+                        <p className="text-gray-600 dark:text-gray-400 text-sm mb-2 font-medium">{title}</p>
+                        <p className="text-4xl font-bold text-gray-800 dark:text-gray-100 mb-1">{value}</p>
+                        {trend && (
+                            <p className={`text-sm font-medium mt-1 ${trend > 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'}`}>
+                                {trend > 0 ? '↑' : '↓'} {Math.abs(trend)}% bu hafta
+                            </p>
+                        )}
+                    </div>
+                    <div className={`p-4 rounded-xl ${color} shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                        <Icon className="text-2xl text-white" />
+                    </div>
                 </div>
             </div>
         </Link>
@@ -63,15 +66,16 @@ const AdminDashboardPage = () => {
     const QuickLink = ({ title, description, icon: Icon, to, color }) => (
         <Link
             to={to}
-            className="card hover:shadow-lg transition-all duration-200 hover:scale-[1.02]"
+            className="card-hover group relative overflow-hidden"
         >
-            <div className="flex items-start gap-4">
-                <div className={`p-3 rounded-xl ${color}`}>
-                    <Icon className="text-xl text-gray-800 dark:text-gray-100" />
+            <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-primary-500/10 to-accent-500/10 rounded-full blur-2xl -mr-12 -mt-12"></div>
+            <div className="relative z-10 flex items-start gap-4">
+                <div className={`p-4 rounded-xl ${color} shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                    <Icon className="text-xl text-white" />
                 </div>
-                <div>
-                    <h3 className="font-semibold text-gray-800 dark:text-gray-100">{title}</h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-300">{description}</p>
+                <div className="flex-1">
+                    <h3 className="font-semibold text-lg text-gray-800 dark:text-gray-100 mb-1">{title}</h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">{description}</p>
                 </div>
             </div>
         </Link>
@@ -95,15 +99,16 @@ const AdminDashboardPage = () => {
     return (
         <div className="p-6 lg:p-8 max-w-7xl mx-auto">
             {/* Header */}
-            <div className="flex justify-between items-center mb-8">
-                <div>
-                    <h1 className="font-display text-3xl font-bold text-gray-800 dark:text-gray-100">Admin Dashboard</h1>
-                    <p className="text-gray-600 dark:text-gray-300 mt-1">Sistem istatistikleri ve analizler</p>
+            <div className="flex justify-between items-center mb-8 relative">
+                <div className="absolute -top-4 -left-4 w-32 h-32 bg-primary-500/10 rounded-full blur-3xl"></div>
+                <div className="relative">
+                    <h1 className="font-display text-4xl font-bold mb-3 bg-gradient-to-r from-primary-600 to-accent-600 bg-clip-text text-transparent">Admin Dashboard</h1>
+                    <p className="text-gray-600 dark:text-gray-400 text-lg">Sistem istatistikleri ve analizler</p>
                 </div>
                 <button
                     onClick={handleRefresh}
                     disabled={refreshing}
-                    className="btn-secondary flex items-center gap-2"
+                    className="btn-secondary flex items-center gap-2 relative z-10"
                 >
                     <FiRefreshCw className={refreshing ? 'animate-spin' : ''} />
                     Yenile

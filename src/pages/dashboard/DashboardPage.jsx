@@ -142,13 +142,16 @@ const DashboardPage = () => {
   return (
     <div className="p-6 lg:p-8 max-w-7xl mx-auto">
       {/* Welcome Section */}
-      <div className="mb-8">
-        <h1 className="font-sans text-3xl font-normal mb-2 text-gray-800 dark:text-gray-100">
-          {t('common.welcome')}, {user?.first_name}!
-        </h1>
-        <p className="text-gray-500 dark:text-gray-400 dark:text-gray-500">
-          {t('dashboard.welcomeMessage')}
-        </p>
+      <div className="mb-8 relative">
+        <div className="absolute -top-4 -left-4 w-32 h-32 bg-primary-500/10 rounded-full blur-3xl"></div>
+        <div className="relative">
+          <h1 className="font-sans text-4xl font-bold mb-3 bg-gradient-to-r from-primary-600 to-accent-600 bg-clip-text text-transparent">
+            {t('common.welcome')}, {user?.first_name}!
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400 text-lg">
+            {t('dashboard.welcomeMessage')}
+          </p>
+        </div>
       </div>
 
       {/* Stats Grid */}
@@ -168,19 +171,22 @@ const DashboardPage = () => {
           stats.map((stat, index) => (
             <div
               key={index}
-              className="card-hover group animate-slide-up"
+              className="card-hover group relative overflow-hidden animate-slide-up"
               style={{ animationDelay: `${index * 100}ms` }}
             >
-              <div className="flex items-start justify-between mb-4">
-                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center shadow-lg`}>
-                  <stat.icon className="w-6 h-6 text-gray-800 dark:text-gray-100" />
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-primary-500/10 to-accent-500/10 rounded-full blur-2xl -mr-16 -mt-16"></div>
+              <div className="relative z-10">
+                <div className="flex items-start justify-between mb-4">
+                  <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                    <stat.icon className="w-7 h-7 text-white" />
+                  </div>
+                  <span className="text-xs font-medium text-primary-600 dark:text-primary-400 bg-primary-100/50 dark:bg-primary-900/30 px-3 py-1 rounded-full border border-primary-200/50 dark:border-primary-800/50">
+                    Güncel
+                  </span>
                 </div>
-                <span className="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded-full">
-                  Güncel
-                </span>
+                <h3 className="text-4xl font-bold mb-2 text-gray-800 dark:text-gray-100">{stat.value}</h3>
+                <p className="text-gray-600 dark:text-gray-400 font-medium">{stat.label}</p>
               </div>
-              <h3 className="text-3xl font-bold mb-1 text-gray-800 dark:text-gray-100">{stat.value}</h3>
-              <p className="text-gray-500 dark:text-gray-400 dark:text-gray-500">{stat.label}</p>
             </div>
           ))
         )}
@@ -189,66 +195,84 @@ const DashboardPage = () => {
       {/* Quick Actions & Recent Activity */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Quick Actions */}
-        <div className="card">
-          <h2 className="font-sans text-xl font-normal mb-4 text-gray-800 dark:text-gray-100">{t('dashboard.quickActions')}</h2>
-          <div className="grid grid-cols-2 gap-3">
+        <div className="card relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-primary-500/10 to-accent-500/10 rounded-full blur-3xl -mr-20 -mt-20"></div>
+          <div className="relative z-10">
+            <h2 className="font-sans text-2xl font-bold mb-6 text-gray-800 dark:text-gray-100">{t('dashboard.quickActions')}</h2>
+            <div className="grid grid-cols-2 gap-3">
             {user?.role === 'student' && (
               <>
                 <button
                   onClick={() => navigate('/courses')}
-                  className="p-4 rounded-xl bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-colors text-left"
+                  className="group p-4 rounded-xl bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 hover:from-primary-50 hover:to-accent-50 dark:hover:from-primary-900/30 dark:hover:to-gray-800 border border-gray-200/50 dark:border-gray-700/50 hover:border-primary-300/50 dark:hover:border-primary-700/50 transition-all duration-300 text-left hover:scale-105 hover:shadow-lg"
                 >
-                  <FiBook className="w-5 h-5 text-primary-500 mb-2" />
-                  <span className="block text-sm font-medium text-gray-700 dark:text-gray-200">{t('courses.courseCatalog')}</span>
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary-500/20 to-accent-500/20 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
+                    <FiBook className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+                  </div>
+                  <span className="block text-sm font-semibold text-gray-700 dark:text-gray-200">{t('courses.courseCatalog')}</span>
                 </button>
                 <button
                   onClick={() => navigate('/schedule')}
-                  className="p-4 rounded-xl bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-colors text-left"
+                  className="group p-4 rounded-xl bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 hover:from-blue-50 hover:to-blue-100 dark:hover:from-blue-900/30 dark:hover:to-gray-800 border border-gray-200/50 dark:border-gray-700/50 hover:border-blue-300/50 dark:hover:border-blue-700/50 transition-all duration-300 text-left hover:scale-105 hover:shadow-lg"
                 >
-                  <FiCalendar className="w-5 h-5 text-blue-500 mb-2" />
-                  <span className="block text-sm font-medium text-gray-700 dark:text-gray-200">{t('dashboard.schedule')}</span>
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500/20 to-blue-600/20 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
+                    <FiCalendar className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                  </div>
+                  <span className="block text-sm font-semibold text-gray-700 dark:text-gray-200">{t('dashboard.schedule')}</span>
                 </button>
                 <button
                   onClick={() => navigate('/grades')}
-                  className="p-4 rounded-xl bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-colors text-left"
+                  className="group p-4 rounded-xl bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 hover:from-green-50 hover:to-green-100 dark:hover:from-green-900/30 dark:hover:to-gray-800 border border-gray-200/50 dark:border-gray-700/50 hover:border-green-300/50 dark:hover:border-green-700/50 transition-all duration-300 text-left hover:scale-105 hover:shadow-lg"
                 >
-                  <FiClipboard className="w-5 h-5 text-green-500 mb-2" />
-                  <span className="block text-sm font-medium text-gray-700 dark:text-gray-200">{t('grades.myGrades')}</span>
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-green-500/20 to-green-600/20 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
+                    <FiClipboard className="w-5 h-5 text-green-600 dark:text-green-400" />
+                  </div>
+                  <span className="block text-sm font-semibold text-gray-700 dark:text-gray-200">{t('grades.myGrades')}</span>
                 </button>
                 <button
                   onClick={() => navigate('/announcements')}
-                  className="p-4 rounded-xl bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-colors text-left"
+                  className="group p-4 rounded-xl bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 hover:from-orange-50 hover:to-orange-100 dark:hover:from-orange-900/30 dark:hover:to-gray-800 border border-gray-200/50 dark:border-gray-700/50 hover:border-orange-300/50 dark:hover:border-orange-700/50 transition-all duration-300 text-left hover:scale-105 hover:shadow-lg"
                 >
-                  <FiBell className="w-5 h-5 text-orange-500 mb-2" />
-                  <span className="block text-sm font-medium text-gray-700 dark:text-gray-200">{t('nav.announcements')}</span>
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-orange-500/20 to-orange-600/20 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
+                    <FiBell className="w-5 h-5 text-orange-600 dark:text-orange-400" />
+                  </div>
+                  <span className="block text-sm font-semibold text-gray-700 dark:text-gray-200">{t('nav.announcements')}</span>
                 </button>
                 <button
                   onClick={() => navigate('/meals/menu')}
-                  className="p-4 rounded-xl bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-colors text-left"
+                  className="group p-4 rounded-xl bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 hover:from-amber-50 hover:to-amber-100 dark:hover:from-amber-900/30 dark:hover:to-gray-800 border border-gray-200/50 dark:border-gray-700/50 hover:border-amber-300/50 dark:hover:border-amber-700/50 transition-all duration-300 text-left hover:scale-105 hover:shadow-lg"
                 >
-                  <FiCoffee className="w-5 h-5 text-amber-500 mb-2" />
-                  <span className="block text-sm font-medium text-gray-700 dark:text-gray-200">{t('meals.menu')}</span>
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-500/20 to-amber-600/20 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
+                    <FiCoffee className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+                  </div>
+                  <span className="block text-sm font-semibold text-gray-700 dark:text-gray-200">{t('meals.menu')}</span>
                 </button>
                 <button
                   onClick={() => navigate('/meals/reservations')}
-                  className="p-4 rounded-xl bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-colors text-left"
+                  className="group p-4 rounded-xl bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 hover:from-amber-50 hover:to-amber-100 dark:hover:from-amber-900/30 dark:hover:to-gray-800 border border-gray-200/50 dark:border-gray-700/50 hover:border-amber-300/50 dark:hover:border-amber-700/50 transition-all duration-300 text-left hover:scale-105 hover:shadow-lg"
                 >
-                  <FiCoffee className="w-5 h-5 text-amber-600 mb-2" />
-                  <span className="block text-sm font-medium text-gray-700 dark:text-gray-200">{t('meals.reservations')}</span>
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-600/20 to-amber-700/20 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
+                    <FiCoffee className="w-5 h-5 text-amber-700 dark:text-amber-500" />
+                  </div>
+                  <span className="block text-sm font-semibold text-gray-700 dark:text-gray-200">{t('meals.reservations')}</span>
                 </button>
                 <button
                   onClick={() => navigate('/events')}
-                  className="p-4 rounded-xl bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-colors text-left"
+                  className="group p-4 rounded-xl bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 hover:from-purple-50 hover:to-purple-100 dark:hover:from-purple-900/30 dark:hover:to-gray-800 border border-gray-200/50 dark:border-gray-700/50 hover:border-purple-300/50 dark:hover:border-purple-700/50 transition-all duration-300 text-left hover:scale-105 hover:shadow-lg"
                 >
-                  <FiCalendar className="w-5 h-5 text-purple-500 mb-2" />
-                  <span className="block text-sm font-medium text-gray-700 dark:text-gray-200">{t('events.title')}</span>
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500/20 to-purple-600/20 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
+                    <FiCalendar className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                  </div>
+                  <span className="block text-sm font-semibold text-gray-700 dark:text-gray-200">{t('events.title')}</span>
                 </button>
                 <button
                   onClick={() => navigate('/events/create')}
-                  className="p-4 rounded-xl bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-colors text-left"
+                  className="group p-4 rounded-xl bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 hover:from-purple-50 hover:to-purple-100 dark:hover:from-purple-900/30 dark:hover:to-gray-800 border border-gray-200/50 dark:border-gray-700/50 hover:border-purple-300/50 dark:hover:border-purple-700/50 transition-all duration-300 text-left hover:scale-105 hover:shadow-lg"
                 >
-                  <FiPlus className="w-5 h-5 text-purple-600 mb-2" />
-                  <span className="block text-sm font-medium text-gray-700 dark:text-gray-200">{t('events.createEvent')}</span>
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-600/20 to-purple-700/20 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
+                    <FiPlus className="w-5 h-5 text-purple-700 dark:text-purple-500" />
+                  </div>
+                  <span className="block text-sm font-semibold text-gray-700 dark:text-gray-200">{t('events.createEvent')}</span>
                 </button>
               </>
             )}
@@ -256,60 +280,76 @@ const DashboardPage = () => {
               <>
                 <button
                   onClick={() => navigate('/attendance/start')}
-                  className="p-4 rounded-xl bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-colors text-left"
+                  className="group p-4 rounded-xl bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 hover:from-primary-50 hover:to-accent-50 dark:hover:from-primary-900/30 dark:hover:to-gray-800 border border-gray-200/50 dark:border-gray-700/50 hover:border-primary-300/50 dark:hover:border-primary-700/50 transition-all duration-300 text-left hover:scale-105 hover:shadow-lg"
                 >
-                  <FiUsers className="w-5 h-5 text-primary-500 mb-2" />
-                  <span className="block text-sm font-medium text-gray-700 dark:text-gray-200">{t('attendance.giveAttendance')}</span>
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary-500/20 to-accent-500/20 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
+                    <FiUsers className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+                  </div>
+                  <span className="block text-sm font-semibold text-gray-700 dark:text-gray-200">{t('attendance.giveAttendance')}</span>
                 </button>
                 <button
                   onClick={handleGradeEntry}
                   disabled={loadingGradeEntry}
-                  className="p-4 rounded-xl bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-colors text-left disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="group p-4 rounded-xl bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 hover:from-blue-50 hover:to-blue-100 dark:hover:from-blue-900/30 dark:hover:to-gray-800 border border-gray-200/50 dark:border-gray-700/50 hover:border-blue-300/50 dark:hover:border-blue-700/50 transition-all duration-300 text-left hover:scale-105 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                 >
-                  <FiClipboard className="w-5 h-5 text-blue-500 mb-2" />
-                  <span className="block text-sm font-medium text-gray-700 dark:text-gray-200">{t('grades.gradebook')}</span>
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500/20 to-blue-600/20 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
+                    <FiClipboard className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                  </div>
+                  <span className="block text-sm font-semibold text-gray-700 dark:text-gray-200">{t('grades.gradebook')}</span>
                 </button>
                 <button
                   onClick={() => navigate('/faculty/sections')}
-                  className="p-4 rounded-xl bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-colors text-left"
+                  className="group p-4 rounded-xl bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 hover:from-green-50 hover:to-green-100 dark:hover:from-green-900/30 dark:hover:to-gray-800 border border-gray-200/50 dark:border-gray-700/50 hover:border-green-300/50 dark:hover:border-green-700/50 transition-all duration-300 text-left hover:scale-105 hover:shadow-lg"
                 >
-                  <FiBook className="w-5 h-5 text-green-500 mb-2" />
-                  <span className="block text-sm font-medium text-gray-700 dark:text-gray-200">{t('courses.myCourses')}</span>
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-green-500/20 to-green-600/20 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
+                    <FiBook className="w-5 h-5 text-green-600 dark:text-green-400" />
+                  </div>
+                  <span className="block text-sm font-semibold text-gray-700 dark:text-gray-200">{t('courses.myCourses')}</span>
                 </button>
                 <button
                   onClick={() => navigate('/excuse-requests')}
-                  className="p-4 rounded-xl bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-colors text-left"
+                  className="group p-4 rounded-xl bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 hover:from-orange-50 hover:to-orange-100 dark:hover:from-orange-900/30 dark:hover:to-gray-800 border border-gray-200/50 dark:border-gray-700/50 hover:border-orange-300/50 dark:hover:border-orange-700/50 transition-all duration-300 text-left hover:scale-105 hover:shadow-lg"
                 >
-                  <FiCalendar className="w-5 h-5 text-orange-500 mb-2" />
-                  <span className="block text-sm font-medium text-gray-700 dark:text-gray-200">{t('nav.excuseRequests')}</span>
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-orange-500/20 to-orange-600/20 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
+                    <FiCalendar className="w-5 h-5 text-orange-600 dark:text-orange-400" />
+                  </div>
+                  <span className="block text-sm font-semibold text-gray-700 dark:text-gray-200">{t('nav.excuseRequests')}</span>
                 </button>
                 <button
                   onClick={() => navigate('/meals/menu')}
-                  className="p-4 rounded-xl bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-colors text-left"
+                  className="group p-4 rounded-xl bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 hover:from-amber-50 hover:to-amber-100 dark:hover:from-amber-900/30 dark:hover:to-gray-800 border border-gray-200/50 dark:border-gray-700/50 hover:border-amber-300/50 dark:hover:border-amber-700/50 transition-all duration-300 text-left hover:scale-105 hover:shadow-lg"
                 >
-                  <FiCoffee className="w-5 h-5 text-amber-500 mb-2" />
-                  <span className="block text-sm font-medium text-gray-700 dark:text-gray-200">{t('meals.menu')}</span>
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-500/20 to-amber-600/20 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
+                    <FiCoffee className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+                  </div>
+                  <span className="block text-sm font-semibold text-gray-700 dark:text-gray-200">{t('meals.menu')}</span>
                 </button>
                 <button
                   onClick={() => navigate('/meals/reservations')}
-                  className="p-4 rounded-xl bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-colors text-left"
+                  className="group p-4 rounded-xl bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 hover:from-amber-50 hover:to-amber-100 dark:hover:from-amber-900/30 dark:hover:to-gray-800 border border-gray-200/50 dark:border-gray-700/50 hover:border-amber-300/50 dark:hover:border-amber-700/50 transition-all duration-300 text-left hover:scale-105 hover:shadow-lg"
                 >
-                  <FiCoffee className="w-5 h-5 text-amber-600 mb-2" />
-                  <span className="block text-sm font-medium text-gray-700 dark:text-gray-200">{t('meals.reservations')}</span>
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-600/20 to-amber-700/20 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
+                    <FiCoffee className="w-5 h-5 text-amber-700 dark:text-amber-500" />
+                  </div>
+                  <span className="block text-sm font-semibold text-gray-700 dark:text-gray-200">{t('meals.reservations')}</span>
                 </button>
                 <button
                   onClick={() => navigate('/events')}
-                  className="p-4 rounded-xl bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-colors text-left"
+                  className="group p-4 rounded-xl bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 hover:from-purple-50 hover:to-purple-100 dark:hover:from-purple-900/30 dark:hover:to-gray-800 border border-gray-200/50 dark:border-gray-700/50 hover:border-purple-300/50 dark:hover:border-purple-700/50 transition-all duration-300 text-left hover:scale-105 hover:shadow-lg"
                 >
-                  <FiCalendar className="w-5 h-5 text-purple-500 mb-2" />
-                  <span className="block text-sm font-medium text-gray-700 dark:text-gray-200">{t('events.title')}</span>
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500/20 to-purple-600/20 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
+                    <FiCalendar className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                  </div>
+                  <span className="block text-sm font-semibold text-gray-700 dark:text-gray-200">{t('events.title')}</span>
                 </button>
                 <button
                   onClick={() => navigate('/events/create')}
-                  className="p-4 rounded-xl bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-colors text-left"
+                  className="group p-4 rounded-xl bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 hover:from-purple-50 hover:to-purple-100 dark:hover:from-purple-900/30 dark:hover:to-gray-800 border border-gray-200/50 dark:border-gray-700/50 hover:border-purple-300/50 dark:hover:border-purple-700/50 transition-all duration-300 text-left hover:scale-105 hover:shadow-lg"
                 >
-                  <FiPlus className="w-5 h-5 text-purple-600 mb-2" />
-                  <span className="block text-sm font-medium text-gray-700 dark:text-gray-200">{t('events.createEvent')}</span>
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-600/20 to-purple-700/20 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
+                    <FiPlus className="w-5 h-5 text-purple-700 dark:text-purple-500" />
+                  </div>
+                  <span className="block text-sm font-semibold text-gray-700 dark:text-gray-200">{t('events.createEvent')}</span>
                 </button>
               </>
             )}
@@ -317,59 +357,75 @@ const DashboardPage = () => {
               <>
                 <button
                   onClick={() => navigate('/admin/users')}
-                  className="p-4 rounded-xl bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-colors text-left"
+                  className="group p-4 rounded-xl bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 hover:from-primary-50 hover:to-accent-50 dark:hover:from-primary-900/30 dark:hover:to-gray-800 border border-gray-200/50 dark:border-gray-700/50 hover:border-primary-300/50 dark:hover:border-primary-700/50 transition-all duration-300 text-left hover:scale-105 hover:shadow-lg"
                 >
-                  <FiUsers className="w-5 h-5 text-primary-500 mb-2" />
-                  <span className="block text-sm font-medium text-gray-700 dark:text-gray-200">{t('nav.users')}</span>
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary-500/20 to-accent-500/20 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
+                    <FiUsers className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+                  </div>
+                  <span className="block text-sm font-semibold text-gray-700 dark:text-gray-200">{t('nav.users')}</span>
                 </button>
                 <button
                   onClick={() => navigate('/admin/courses')}
-                  className="p-4 rounded-xl bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-colors text-left"
+                  className="group p-4 rounded-xl bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 hover:from-accent-50 hover:to-accent-100 dark:hover:from-accent-900/30 dark:hover:to-gray-800 border border-gray-200/50 dark:border-gray-700/50 hover:border-accent-300/50 dark:hover:border-accent-700/50 transition-all duration-300 text-left hover:scale-105 hover:shadow-lg"
                 >
-                  <FiBook className="w-5 h-5 text-accent-500 mb-2" />
-                  <span className="block text-sm font-medium text-gray-700 dark:text-gray-200">{t('nav.allCourses')}</span>
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-accent-500/20 to-accent-600/20 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
+                    <FiBook className="w-5 h-5 text-accent-600 dark:text-accent-400" />
+                  </div>
+                  <span className="block text-sm font-semibold text-gray-700 dark:text-gray-200">{t('nav.allCourses')}</span>
                 </button>
                 <button
                   onClick={() => navigate('/admin/sections')}
-                  className="p-4 rounded-xl bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-colors text-left"
+                  className="group p-4 rounded-xl bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 hover:from-green-50 hover:to-green-100 dark:hover:from-green-900/30 dark:hover:to-gray-800 border border-gray-200/50 dark:border-gray-700/50 hover:border-green-300/50 dark:hover:border-green-700/50 transition-all duration-300 text-left hover:scale-105 hover:shadow-lg"
                 >
-                  <FiClipboard className="w-5 h-5 text-green-500 mb-2" />
-                  <span className="block text-sm font-medium text-gray-700 dark:text-gray-200">{t('nav.sections')}</span>
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-green-500/20 to-green-600/20 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
+                    <FiClipboard className="w-5 h-5 text-green-600 dark:text-green-400" />
+                  </div>
+                  <span className="block text-sm font-semibold text-gray-700 dark:text-gray-200">{t('nav.sections')}</span>
                 </button>
                 <button
                   onClick={() => navigate('/admin/departments')}
-                  className="p-4 rounded-xl bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-colors text-left"
+                  className="group p-4 rounded-xl bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 hover:from-orange-50 hover:to-orange-100 dark:hover:from-orange-900/30 dark:hover:to-gray-800 border border-gray-200/50 dark:border-gray-700/50 hover:border-orange-300/50 dark:hover:border-orange-700/50 transition-all duration-300 text-left hover:scale-105 hover:shadow-lg"
                 >
-                  <FiCalendar className="w-5 h-5 text-orange-500 mb-2" />
-                  <span className="block text-sm font-medium text-gray-700 dark:text-gray-200">{t('nav.departments')}</span>
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-orange-500/20 to-orange-600/20 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
+                    <FiCalendar className="w-5 h-5 text-orange-600 dark:text-orange-400" />
+                  </div>
+                  <span className="block text-sm font-semibold text-gray-700 dark:text-gray-200">{t('nav.departments')}</span>
                 </button>
                 <button
                   onClick={() => navigate('/admin/menus')}
-                  className="p-4 rounded-xl bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-colors text-left"
+                  className="group p-4 rounded-xl bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 hover:from-amber-50 hover:to-amber-100 dark:hover:from-amber-900/30 dark:hover:to-gray-800 border border-gray-200/50 dark:border-gray-700/50 hover:border-amber-300/50 dark:hover:border-amber-700/50 transition-all duration-300 text-left hover:scale-105 hover:shadow-lg"
                 >
-                  <FiCoffee className="w-5 h-5 text-amber-500 mb-2" />
-                  <span className="block text-sm font-medium text-gray-700 dark:text-gray-200">{t('nav.menu')}</span>
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-500/20 to-amber-600/20 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
+                    <FiCoffee className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+                  </div>
+                  <span className="block text-sm font-semibold text-gray-700 dark:text-gray-200">{t('nav.menu')}</span>
                 </button>
                 <button
                   onClick={() => navigate('/meals/scan')}
-                  className="p-4 rounded-xl bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-colors text-left"
+                  className="group p-4 rounded-xl bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 hover:from-amber-50 hover:to-amber-100 dark:hover:from-amber-900/30 dark:hover:to-gray-800 border border-gray-200/50 dark:border-gray-700/50 hover:border-amber-300/50 dark:hover:border-amber-700/50 transition-all duration-300 text-left hover:scale-105 hover:shadow-lg"
                 >
-                  <FiCoffee className="w-5 h-5 text-amber-600 mb-2" />
-                  <span className="block text-sm font-medium text-gray-700 dark:text-gray-200">{t('attendance.scanQR')}</span>
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-600/20 to-amber-700/20 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
+                    <FiCoffee className="w-5 h-5 text-amber-700 dark:text-amber-500" />
+                  </div>
+                  <span className="block text-sm font-semibold text-gray-700 dark:text-gray-200">{t('attendance.scanQR')}</span>
                 </button>
                 <button
                   onClick={() => navigate('/events')}
-                  className="p-4 rounded-xl bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-colors text-left"
+                  className="group p-4 rounded-xl bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 hover:from-purple-50 hover:to-purple-100 dark:hover:from-purple-900/30 dark:hover:to-gray-800 border border-gray-200/50 dark:border-gray-700/50 hover:border-purple-300/50 dark:hover:border-purple-700/50 transition-all duration-300 text-left hover:scale-105 hover:shadow-lg"
                 >
-                  <FiCalendar className="w-5 h-5 text-purple-500 mb-2" />
-                  <span className="block text-sm font-medium text-gray-700 dark:text-gray-200">{t('events.title')}</span>
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500/20 to-purple-600/20 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
+                    <FiCalendar className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                  </div>
+                  <span className="block text-sm font-semibold text-gray-700 dark:text-gray-200">{t('events.title')}</span>
                 </button>
                 <button
                   onClick={() => navigate('/events/create')}
-                  className="p-4 rounded-xl bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-colors text-left"
+                  className="group p-4 rounded-xl bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 hover:from-purple-50 hover:to-purple-100 dark:hover:from-purple-900/30 dark:hover:to-gray-800 border border-gray-200/50 dark:border-gray-700/50 hover:border-purple-300/50 dark:hover:border-purple-700/50 transition-all duration-300 text-left hover:scale-105 hover:shadow-lg"
                 >
-                  <FiPlus className="w-5 h-5 text-purple-600 mb-2" />
-                  <span className="block text-sm font-medium text-gray-700 dark:text-gray-200">{t('events.createEvent')}</span>
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-600/20 to-purple-700/20 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
+                    <FiPlus className="w-5 h-5 text-purple-700 dark:text-purple-500" />
+                  </div>
+                  <span className="block text-sm font-semibold text-gray-700 dark:text-gray-200">{t('events.createEvent')}</span>
                 </button>
               </>
             )}
@@ -377,8 +433,10 @@ const DashboardPage = () => {
         </div>
 
         {/* Recent Activity */}
-        <div className="card">
-          <h2 className="font-sans text-xl font-normal mb-4 text-gray-800 dark:text-gray-100">{t('dashboard.recentNotifications')}</h2>
+        <div className="card relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-40 h-40 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-full blur-3xl -ml-20 -mt-20"></div>
+          <div className="relative z-10">
+            <h2 className="font-sans text-2xl font-bold mb-6 text-gray-800 dark:text-gray-100">{t('dashboard.recentNotifications')}</h2>
           <div className="space-y-4">
             {loading ? (
               Array(4).fill(0).map((_, index) => (
@@ -394,12 +452,12 @@ const DashboardPage = () => {
               activities.map((activity, index) => (
                 <div
                   key={activity.id || index}
-                  className="flex items-start gap-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:bg-gray-800 transition-colors"
+                  className="flex items-start gap-3 p-4 rounded-xl bg-gradient-to-r from-gray-50/50 to-white dark:from-gray-900/50 dark:to-gray-800/50 hover:from-primary-50/50 hover:to-accent-50/30 dark:hover:from-primary-900/20 dark:hover:to-gray-800/50 border border-gray-200/50 dark:border-gray-700/50 hover:border-primary-300/50 dark:hover:border-primary-700/50 transition-all duration-300 hover:scale-[1.02] hover:shadow-md"
                 >
-                  <div className={`w-2 h-2 mt-2 rounded-full ${getActivityColor(activity.type)}`} />
-                  <div>
-                    <p className="text-sm text-gray-700 dark:text-gray-200">{activity.text}</p>
-                    <span className="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500">{activity.time}</span>
+                  <div className={`w-3 h-3 mt-1.5 rounded-full ${getActivityColor(activity.type)} shadow-lg`} />
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-gray-700 dark:text-gray-200">{activity.text}</p>
+                    <span className="text-xs text-gray-500 dark:text-gray-400 mt-1 block">{activity.time}</span>
                   </div>
                 </div>
               ))
@@ -411,7 +469,6 @@ const DashboardPage = () => {
           </div>
         </div>
       </div>
-
     </div>
   );
 };

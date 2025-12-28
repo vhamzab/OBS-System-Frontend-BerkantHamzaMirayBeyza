@@ -113,57 +113,76 @@ const Sidebar = ({ isOpen, onClose }) => {
       {/* Sidebar */}
       <aside
         className={`
-          fixed top-16 left-0 h-[calc(100vh-4rem)] w-64 bg-white dark:bg-gray-800/95 backdrop-blur-md
-          border-r-2 border-gray-300 dark:border-gray-600 z-50 transform transition-transform duration-300
-          lg:translate-x-0 lg:static lg:h-auto flex flex-col overflow-hidden shadow-xl lg:shadow-lg
+          fixed top-16 left-0 h-[calc(100vh-4rem)] w-64 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl
+          border-r border-gray-200/50 dark:border-gray-800/50 z-50 transform transition-all duration-300 ease-in-out
+          lg:translate-x-0 lg:static lg:h-screen flex flex-col overflow-hidden shadow-2xl lg:shadow-xl
           ${isOpen ? 'translate-x-0' : '-translate-x-full'}
         `}
       >
         {/* Sticky Header with Logo */}
-        <div className="sticky top-0 z-10 bg-gradient-to-r from-primary-50/60 to-accent-50/50 border-b-2 border-gray-200 dark:border-gray-700 p-4 backdrop-blur-sm">
-          <Link to="/dashboard" className="flex items-center gap-3" onClick={onClose}>
-            <img
-              src="/logo2.png"
-              alt="Doğu Karadeniz Üniversitesi Logo"
-              className="w-12 h-12 object-contain flex-shrink-0 rounded-lg shadow-md"
-            />
-            <span className="font-sans font-normal text-lg text-gray-800 dark:text-gray-100">
-              DKÜ Doğu Karadeniz Üniversitesi
-            </span>
+        <div className="sticky top-0 z-10 bg-gradient-to-br from-primary-500/10 via-primary-50/50 to-accent-50/30 dark:from-primary-900/20 dark:via-gray-900/50 dark:to-gray-900/30 border-b border-gray-200/50 dark:border-gray-800/50 p-5 backdrop-blur-xl">
+          <Link to="/dashboard" className="flex items-center gap-3 group" onClick={onClose}>
+            <div className="relative">
+              <img
+                src="/logo2.png"
+                alt="Doğu Karadeniz Üniversitesi Logo"
+                className="w-14 h-14 object-contain flex-shrink-0 rounded-xl shadow-lg group-hover:scale-105 transition-transform duration-300 ring-2 ring-primary-200/50 dark:ring-primary-800/50"
+              />
+              <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-primary-400/20 to-accent-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            </div>
+            <div className="flex-1 min-w-0">
+              <span className="font-sans font-semibold text-base text-gray-800 dark:text-gray-100 block truncate">
+                DKÜ OBS
+              </span>
+              <span className="text-xs text-gray-600 dark:text-gray-400 block truncate">
+                Doğu Karadeniz Üniversitesi
+              </span>
+            </div>
           </Link>
         </div>
 
         {/* Scrollable Navigation */}
-        <nav className="flex-1 overflow-y-auto p-4 space-y-2">
-          {links.map((link) => (
+        <nav className="flex-1 overflow-y-auto p-4 space-y-1.5 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 scrollbar-track-transparent">
+          {links.map((link, index) => (
             <NavLink
               key={link.to}
               to={link.to}
               onClick={onClose}
               className={({ isActive }) => `
-                flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300
-                border-2 shadow-sm
+                group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300
+                relative overflow-hidden
                 ${isActive
-                  ? 'bg-primary-100 text-primary-800 dark:text-primary-200 border-primary-400 font-semibold shadow-md scale-105'
-                  : 'text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-gray-100 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 dark:bg-gray-800 hover:border-gray-300 dark:border-gray-600 hover:scale-105 border-transparent'
+                  ? 'bg-gradient-to-r from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-500/30 scale-[1.02] border border-primary-400/50'
+                  : 'text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gradient-to-r hover:from-gray-50 hover:to-gray-100 dark:hover:from-gray-800 dark:hover:to-gray-800/50 border border-transparent hover:border-gray-200 dark:hover:border-gray-700 hover:shadow-md'
                 }
               `}
+              style={{ animationDelay: `${index * 30}ms` }}
             >
-              <link.icon className="w-5 h-5" />
-              <span className="font-medium">{link.label}</span>
+              <div className={`absolute inset-0 bg-gradient-to-r from-primary-500/10 to-accent-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${isActive ? 'opacity-0' : ''}`}></div>
+              <link.icon className={`w-5 h-5 relative z-10 ${isActive ? 'text-white' : 'text-gray-600 dark:text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-400'}`} />
+              <span className={`font-medium relative z-10 ${isActive ? 'text-white' : 'text-gray-700 dark:text-gray-300'}`}>{link.label}</span>
+              {isActive && (
+                <div className="absolute right-2 w-1.5 h-1.5 rounded-full bg-white/80"></div>
+              )}
             </NavLink>
           ))}
         </nav>
 
         {/* User Role Badge - Sticky at bottom */}
-        <div className="sticky bottom-0 bg-gradient-to-r from-primary-50/60 to-accent-50/50 border-t-2 border-gray-200 dark:border-gray-700 p-4 backdrop-blur-sm">
-          <div className="px-4 py-2 rounded-xl bg-white dark:bg-gray-800/80 border-2 border-gray-200 dark:border-gray-700 shadow-md">
-            <div className="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-500 mb-1">Rol</div>
-            <div className="font-medium text-gray-800 dark:text-gray-100 capitalize">
-              {user?.role === 'student' && t('roles.student')}
-              {user?.role === 'faculty' && t('roles.faculty')}
-              {user?.role === 'admin' && t('roles.admin')}
-
+        <div className="sticky bottom-0 bg-gradient-to-br from-gray-50/95 via-white/95 to-primary-50/30 dark:from-gray-900/95 dark:via-gray-900/95 dark:to-primary-900/20 border-t border-gray-200/50 dark:border-gray-800/50 p-4 backdrop-blur-xl">
+          <div className="px-4 py-3 rounded-xl bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 border border-gray-200/50 dark:border-gray-700/50 shadow-lg">
+            <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5 uppercase tracking-wide">Kullanıcı Rolü</div>
+            <div className="flex items-center gap-2">
+              <div className={`w-2 h-2 rounded-full ${
+                user?.role === 'admin' ? 'bg-red-500' :
+                user?.role === 'faculty' ? 'bg-blue-500' :
+                'bg-green-500'
+              } animate-pulse`}></div>
+              <div className="font-semibold text-gray-800 dark:text-gray-100 capitalize">
+                {user?.role === 'student' && t('roles.student')}
+                {user?.role === 'faculty' && t('roles.faculty')}
+                {user?.role === 'admin' && t('roles.admin')}
+              </div>
             </div>
           </div>
         </div>
