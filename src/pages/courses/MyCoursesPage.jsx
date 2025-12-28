@@ -345,7 +345,6 @@ const MyCoursesPage = () => {
                 )}
               </div>
             );
-            );
           })}
         </div>
       )}
