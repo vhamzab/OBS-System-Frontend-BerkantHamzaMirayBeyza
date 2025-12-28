@@ -462,10 +462,11 @@ const DashboardPage = () => {
                 </div>
               ))
             ) : (
-              <div className="text-center text-gray-500 dark:text-gray-400 dark:text-gray-500 py-8">
+              <div className="text-center text-gray-500 dark:text-gray-400 py-8">
                 <p>{t('common.noData')}</p>
               </div>
             )}
+          </div>
           </div>
         </div>
       </div>
