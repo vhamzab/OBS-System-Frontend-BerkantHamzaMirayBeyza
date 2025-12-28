@@ -272,8 +272,8 @@ const MyCoursesPage = () => {
                     ))}
                   </div>
 
-                    {/* Attendance */}
-                    <div className="flex items-center gap-4">
+                  {/* Attendance */}
+                  <div className="flex items-center gap-4">
                       <div className={`px-4 py-3 rounded-xl border shadow-lg hover:scale-105 transition-all duration-300 ${attendanceStatus.color === 'text-red-400'
                         ? 'bg-gradient-to-br from-red-100 to-red-50 dark:from-red-900/30 dark:to-red-800/20 border-red-300/50 dark:border-red-700/50'
                         : attendanceStatus.color === 'text-amber-400'
@@ -318,33 +318,33 @@ const MyCoursesPage = () => {
                   </div>
                 </div>
 
-                  {/* Grades Preview */}
-                  {(enrollment.grades?.midterm || enrollment.grades?.final) && (
-                    <div className="mt-4 pt-4 border-t border-gray-200/50 dark:border-gray-700/50">
-                      <div className="flex items-center gap-6 text-sm">
-                        <span className="text-gray-600 dark:text-gray-400 font-medium">Notlar:</span>
-                        {enrollment.grades?.midterm && (
-                          <span className="px-3 py-1.5 rounded-lg bg-blue-100/50 dark:bg-blue-900/30 border border-blue-200/50 dark:border-blue-700/50">
-                            <span className="text-gray-600 dark:text-gray-400">Vize: </span>
-                            <span className="font-bold text-blue-700 dark:text-blue-400">{enrollment.grades.midterm}</span>
-                          </span>
-                        )}
-                        {enrollment.grades?.final && (
-                          <span className="px-3 py-1.5 rounded-lg bg-purple-100/50 dark:bg-purple-900/30 border border-purple-200/50 dark:border-purple-700/50">
-                            <span className="text-gray-600 dark:text-gray-400">Final: </span>
-                            <span className="font-bold text-purple-700 dark:text-purple-400">{enrollment.grades.final}</span>
-                          </span>
-                        )}
-                        {enrollment.grades?.letterGrade && (
-                          <span className="px-3 py-1.5 rounded-lg bg-gradient-to-br from-primary-500/20 to-accent-500/20 border border-primary-300/50 dark:border-primary-700/50 text-primary-700 dark:text-primary-400 font-bold">
-                            {enrollment.grades.letterGrade}
-                          </span>
-                        )}
-                      </div>
+                {/* Grades Preview */}
+                {(enrollment.grades?.midterm || enrollment.grades?.final) && (
+                  <div className="mt-4 pt-4 border-t border-gray-200/50 dark:border-gray-700/50">
+                    <div className="flex items-center gap-6 text-sm">
+                      <span className="text-gray-600 dark:text-gray-400 font-medium">Notlar:</span>
+                      {enrollment.grades?.midterm && (
+                        <span className="px-3 py-1.5 rounded-lg bg-blue-100/50 dark:bg-blue-900/30 border border-blue-200/50 dark:border-blue-700/50">
+                          <span className="text-gray-600 dark:text-gray-400">Vize: </span>
+                          <span className="font-bold text-blue-700 dark:text-blue-400">{enrollment.grades.midterm}</span>
+                        </span>
+                      )}
+                      {enrollment.grades?.final && (
+                        <span className="px-3 py-1.5 rounded-lg bg-purple-100/50 dark:bg-purple-900/30 border border-purple-200/50 dark:border-purple-700/50">
+                          <span className="text-gray-600 dark:text-gray-400">Final: </span>
+                          <span className="font-bold text-purple-700 dark:text-purple-400">{enrollment.grades.final}</span>
+                        </span>
+                      )}
+                      {enrollment.grades?.letterGrade && (
+                        <span className="px-3 py-1.5 rounded-lg bg-gradient-to-br from-primary-500/20 to-accent-500/20 border border-primary-300/50 dark:border-primary-700/50 text-primary-700 dark:text-primary-400 font-bold">
+                          {enrollment.grades.letterGrade}
+                        </span>
+                      )}
                     </div>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
+            );
             );
           })}
         </div>
