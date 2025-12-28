@@ -82,6 +82,14 @@ const courseService = {
   },
 
   /**
+   * Get instructor's courses (faculty)
+   */
+  getInstructorCourses: async () => {
+    const response = await api.get('/courses/my-courses');
+    return response.data;
+  },
+
+  /**
    * Create a new section (admin only)
    */
   createSection: async (sectionData) => {
@@ -136,6 +144,7 @@ const courseService = {
 };
 
 export default courseService;
+
 
 
 

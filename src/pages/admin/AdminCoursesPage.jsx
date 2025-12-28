@@ -10,6 +10,7 @@ const AdminCoursesPage = () => {
   const { t } = useTranslation();
     const [courses, setCourses] = useState([]);
     const [departments, setDepartments] = useState([]);
+    const [faculty, setFaculty] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
     const [editingCourse, setEditingCourse] = useState(null);
@@ -25,6 +26,7 @@ const AdminCoursesPage = () => {
         credits: 3,
         ects: 5,
         department_id: '',
+        instructor_id: '',
     });
 
     useEffect(() => {
@@ -34,12 +36,13 @@ const AdminCoursesPage = () => {
     const fetchData = async () => {
         try {
             setLoading(true);
-            const [coursesRes, deptsRes] = await Promise.all([
+            const [coursesRes, deptsRes, facultyRes] = await Promise.all([
                 courseService.getCourses({
                     department_id: filters.department_id || undefined,
                     limit: 100,
                 }),
                 userService.getAllDepartments(),
+                userService.getAllFaculty(),
             ]);
 
             if (coursesRes.success) {
@@ -47,6 +50,9 @@ const AdminCoursesPage = () => {
             }
             if (deptsRes.success) {
                 setDepartments(deptsRes.data || []);
+            }
+            if (facultyRes.success) {
+                setFaculty(facultyRes.data || []);
             }
         } catch (error) {
             toast.error('Veriler yüklenirken hata oluştu');
@@ -71,6 +77,7 @@ const AdminCoursesPage = () => {
                 credits: course.credits,
                 ects: course.ects,
                 department_id: course.department_id || '',
+                instructor_id: course.instructor_id || course.instructor?.id || '',
             });
         } else {
             setEditingCourse(null);
@@ -81,6 +88,7 @@ const AdminCoursesPage = () => {
                 credits: 3,
                 ects: 5,
                 department_id: '',
+                instructor_id: '',
             });
         }
         setShowModal(true);
@@ -221,6 +229,7 @@ const AdminCoursesPage = () => {
                             <tr className="border-b border-gray-200 dark:border-gray-700/50">
                                 <th className="text-left p-4 font-medium text-gray-600 dark:text-gray-300">Ders</th>
                                 <th className="text-left p-4 font-medium text-gray-600 dark:text-gray-300">{t('profile.department')}</th>
+                                <th className="text-left p-4 font-medium text-gray-600 dark:text-gray-300">Öğretmen</th>
                                 <th className="text-center p-4 font-medium text-gray-600 dark:text-gray-300">{t('courses.credits')}</th>
                                 <th className="text-center p-4 font-medium text-gray-600 dark:text-gray-300">ECTS</th>
                                 <th className="text-center p-4 font-medium text-gray-600 dark:text-gray-300">{t('common.status')}</th>
@@ -230,7 +239,7 @@ const AdminCoursesPage = () => {
                         <tbody className="divide-y divide-gray-200 dark:divide-gray-700 dark:divide-gray-700">
                             {filteredCourses.length === 0 ? (
                                 <tr>
-                                    <td colSpan="6" className="p-8 text-center text-gray-600 dark:text-gray-300">
+                                    <td colSpan="7" className="p-8 text-center text-gray-600 dark:text-gray-300">
                                         Ders bulunamadı
                                     </td>
                                 </tr>
@@ -251,6 +260,11 @@ const AdminCoursesPage = () => {
                                         <td className="p-4">
                                             <span className="text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500">
                                                 {course.department?.name || '-'}
+                                            </span>
+                                        </td>
+                                        <td className="p-4">
+                                            <span className="text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500">
+                                                {course.instructor?.user ? `${course.instructor.user.first_name} ${course.instructor.user.last_name}` : '-'}
                                             </span>
                                         </td>
                                         <td className="p-4 text-center">
@@ -354,6 +368,22 @@ const AdminCoursesPage = () => {
                                     placeholder="Ders açıklaması..."
                                     className="input w-full h-24 resize-none"
                                 />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium mb-2">Öğretmen</label>
+                                <select
+                                    value={formData.instructor_id}
+                                    onChange={(e) => setFormData({ ...formData, instructor_id: e.target.value })}
+                                    className="input w-full"
+                                >
+                                    <option value="">Öğretmen Seçiniz</option>
+                                    {faculty.map((f) => (
+                                        <option key={f.id} value={f.id}>
+                                            {f.user?.first_name} {f.user?.last_name} {f.department ? `(${f.department.name})` : ''}
+                                        </option>
+                                    ))}
+                                </select>
                             </div>
 
                             <div className="grid grid-cols-2 gap-4">

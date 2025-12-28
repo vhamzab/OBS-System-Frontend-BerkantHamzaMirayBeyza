@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next';
 const FacultySectionsPage = () => {
   const { t } = useTranslation();
   const [sections, setSections] = useState([]);
+  const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedSemester, setSelectedSemester] = useState('');
 
@@ -33,6 +34,7 @@ const FacultySectionsPage = () => {
 
   useEffect(() => {
     fetchSections();
+    fetchCourses();
   }, [selectedSemester]);
 
   const fetchSections = async () => {
@@ -71,6 +73,18 @@ const FacultySectionsPage = () => {
     }
   };
 
+  const fetchCourses = async () => {
+    try {
+      const response = await courseService.getInstructorCourses();
+      
+      if (response.success) {
+        setCourses(response.data || []);
+      }
+    } catch (error) {
+      console.error('Courses yüklenirken hata oluştu:', error);
+    }
+  };
+
   const formatSchedule = (schedule) => {
     if (!schedule || !Array.isArray(schedule)) return [];
     return schedule.map((slot) => ({
@@ -104,6 +118,48 @@ const FacultySectionsPage = () => {
           <option value="current">{t('profile.currentSemester')}</option>
           <option value="all">Tüm Dönemler</option>
         </select>
+      </div>
+
+      {/* Atanan Dersler (Courses) */}
+      {courses.length > 0 && (
+        <div className="mb-8">
+          <h2 className="text-xl font-semibold mb-4">Size Atanan Dersler</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {courses.map((course) => (
+              <div key={course.id} className="card">
+                <div className="flex items-start gap-3 mb-3">
+                  <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary-500/20 to-accent-500/20 flex items-center justify-center shrink-0">
+                    <FiBook className="w-6 h-6 text-primary-400" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="font-medium text-sm text-primary-600 dark:text-primary-400 mb-1">
+                      {course.code}
+                    </div>
+                    <h3 className="font-semibold">{course.name}</h3>
+                    {course.department && (
+                      <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                        {course.department.name}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <div className="flex gap-2 text-sm">
+                  <span className="px-2 py-1 rounded bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300">
+                    {course.credits} Kredi
+                  </span>
+                  <span className="px-2 py-1 rounded bg-accent-100 dark:bg-accent-900/30 text-accent-700 dark:text-accent-300">
+                    {course.ects} ECTS
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Ders Bölümleri (Sections) */}
+      <div className="mb-4">
+        <h2 className="text-xl font-semibold mb-4">Ders Bölümleri</h2>
       </div>
 
       {sections.length === 0 ? (
