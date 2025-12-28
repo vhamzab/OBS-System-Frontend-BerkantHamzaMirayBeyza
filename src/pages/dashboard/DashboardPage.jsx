@@ -429,6 +429,7 @@ const DashboardPage = () => {
                 </button>
               </>
             )}
+            </div>
           </div>
         </div>
 
