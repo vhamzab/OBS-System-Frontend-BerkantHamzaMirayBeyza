@@ -68,16 +68,21 @@ class ErrorBoundary extends Component {
                             veya ana sayfaya dönün.
                         </p>
 
-                        {/* Error Details (Development only) */}
-                        {process.env.NODE_ENV === 'development' && this.state.error && (
-                            <div className="mb-6 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg text-left overflow-auto max-h-40">
-                                <p className="text-sm font-mono text-red-600 dark:text-red-400">
-                                    {this.state.error.toString()}
+                        {/* Error Details */}
+                        {this.state.error && (
+                            <div className="mb-6 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg text-left overflow-auto max-h-60">
+                                <p className="text-sm font-mono text-red-600 dark:text-red-400 mb-2">
+                                    <strong>Hata:</strong> {this.state.error.toString()}
                                 </p>
                                 {this.state.errorInfo && (
-                                    <pre className="text-xs text-gray-500 dark:text-gray-400 mt-2 whitespace-pre-wrap">
-                                        {this.state.errorInfo.componentStack}
-                                    </pre>
+                                    <details className="mt-2">
+                                        <summary className="text-xs text-gray-600 dark:text-gray-400 cursor-pointer hover:text-gray-800 dark:hover:text-gray-200">
+                                            Detayları göster
+                                        </summary>
+                                        <pre className="text-xs text-gray-500 dark:text-gray-400 mt-2 whitespace-pre-wrap overflow-auto">
+                                            {this.state.errorInfo.componentStack}
+                                        </pre>
+                                    </details>
                                 )}
                             </div>
                         )}

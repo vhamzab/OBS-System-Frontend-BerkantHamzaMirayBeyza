@@ -30,13 +30,17 @@ export const AuthProvider = ({ children }) => {
           // Verify token by fetching profile
           try {
             const response = await userService.getProfile();
-            setUser(response.data);
-            setIsAuthenticated(true);
+            if (response && response.data) {
+              setUser(response.data);
+              setIsAuthenticated(true);
+            }
           } catch (error) {
-            // Token invalid, clear storage
+            // Token invalid or API error, clear storage
+            console.error('Profile fetch error:', error);
             localStorage.removeItem('accessToken');
             localStorage.removeItem('refreshToken');
             localStorage.removeItem('user');
+            // Don't throw error, just set loading to false
           }
         }
       } catch (error) {
