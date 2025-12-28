@@ -437,36 +437,36 @@ const DashboardPage = () => {
           <div className="absolute top-0 left-0 w-40 h-40 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-full blur-3xl -ml-20 -mt-20"></div>
           <div className="relative z-10">
             <h2 className="font-sans text-2xl font-bold mb-6 text-gray-800 dark:text-gray-100">{t('dashboard.recentNotifications')}</h2>
-          <div className="space-y-4">
-            {loading ? (
-              Array(4).fill(0).map((_, index) => (
-                <div key={index} className="flex items-start gap-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-900 animate-pulse">
-                  <div className="w-2 h-2 mt-2 rounded-full bg-gray-300"></div>
-                  <div className="flex-1">
-                    <div className="h-4 w-3/4 bg-gray-200 dark:bg-gray-700 rounded mb-2"></div>
-                    <div className="h-3 w-20 bg-gray-200 dark:bg-gray-700 rounded"></div>
+            <div className="space-y-4">
+              {loading ? (
+                Array(4).fill(0).map((_, index) => (
+                  <div key={index} className="flex items-start gap-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-900 animate-pulse">
+                    <div className="w-2 h-2 mt-2 rounded-full bg-gray-300"></div>
+                    <div className="flex-1">
+                      <div className="h-4 w-3/4 bg-gray-200 dark:bg-gray-700 rounded mb-2"></div>
+                      <div className="h-3 w-20 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                    </div>
                   </div>
-                </div>
-              ))
-            ) : activities.length > 0 ? (
-              activities.map((activity, index) => (
-                <div
-                  key={activity.id || index}
-                  className="flex items-start gap-3 p-4 rounded-xl bg-gradient-to-r from-gray-50/50 to-white dark:from-gray-900/50 dark:to-gray-800/50 hover:from-primary-50/50 hover:to-accent-50/30 dark:hover:from-primary-900/20 dark:hover:to-gray-800/50 border border-gray-200/50 dark:border-gray-700/50 hover:border-primary-300/50 dark:hover:border-primary-700/50 transition-all duration-300 hover:scale-[1.02] hover:shadow-md"
-                >
-                  <div className={`w-3 h-3 mt-1.5 rounded-full ${getActivityColor(activity.type)} shadow-lg`} />
-                  <div className="flex-1">
-                    <p className="text-sm font-medium text-gray-700 dark:text-gray-200">{activity.text}</p>
-                    <span className="text-xs text-gray-500 dark:text-gray-400 mt-1 block">{activity.time}</span>
+                ))
+              ) : activities.length > 0 ? (
+                activities.map((activity, index) => (
+                  <div
+                    key={activity.id || index}
+                    className="flex items-start gap-3 p-4 rounded-xl bg-gradient-to-r from-gray-50/50 to-white dark:from-gray-900/50 dark:to-gray-800/50 hover:from-primary-50/50 hover:to-accent-50/30 dark:hover:from-primary-900/20 dark:hover:to-gray-800/50 border border-gray-200/50 dark:border-gray-700/50 hover:border-primary-300/50 dark:hover:border-primary-700/50 transition-all duration-300 hover:scale-[1.02] hover:shadow-md"
+                  >
+                    <div className={`w-3 h-3 mt-1.5 rounded-full ${getActivityColor(activity.type)} shadow-lg`} />
+                    <div className="flex-1">
+                      <p className="text-sm font-medium text-gray-700 dark:text-gray-200">{activity.text}</p>
+                      <span className="text-xs text-gray-500 dark:text-gray-400 mt-1 block">{activity.time}</span>
+                    </div>
                   </div>
+                ))
+              ) : (
+                <div className="text-center text-gray-500 dark:text-gray-400 py-8">
+                  <p>{t('common.noData')}</p>
                 </div>
-              ))
-            ) : (
-              <div className="text-center text-gray-500 dark:text-gray-400 py-8">
-                <p>{t('common.noData')}</p>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
