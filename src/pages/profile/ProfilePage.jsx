@@ -10,6 +10,8 @@ import Input from '../../components/common/Input';
 import Button from '../../components/common/Button';
 
 import { useTranslation } from 'react-i18next';
+import PasswordStrengthMeter from '../../components/common/PasswordStrengthMeter';
+
 const profileSchema = Yup.object({
   firstName: Yup.string()
     .min(2, 'Ad en az 2 karakter olmalıdır')
@@ -569,19 +571,22 @@ const ProfilePage = () => {
             />
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-              <Input
-                label="Yeni Şifre"
-                name="newPassword"
-                type="password"
-                icon={FiLock}
-                placeholder="••••••••"
-                value={passwordFormik.values.newPassword}
-                onChange={passwordFormik.handleChange}
-                onBlur={passwordFormik.handleBlur}
-                error={passwordFormik.errors.newPassword}
-                touched={passwordFormik.touched.newPassword}
-                required
-              />
+              <div>
+                <Input
+                  label="Yeni Şifre"
+                  name="newPassword"
+                  type="password"
+                  icon={FiLock}
+                  placeholder="••••••••"
+                  value={passwordFormik.values.newPassword}
+                  onChange={passwordFormik.handleChange}
+                  onBlur={passwordFormik.handleBlur}
+                  error={passwordFormik.errors.newPassword}
+                  touched={passwordFormik.touched.newPassword}
+                  required
+                />
+                <PasswordStrengthMeter password={passwordFormik.values.newPassword} />
+              </div>
               <Input
                 label="Yeni Şifre Tekrar"
                 name="confirmPassword"

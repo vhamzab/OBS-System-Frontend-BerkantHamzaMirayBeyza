@@ -8,6 +8,7 @@ import { BrowserMultiFormatReader } from '@zxing/browser';
 import toast from 'react-hot-toast';
 import attendanceService from '../../services/attendanceService';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
+import useDeviceSensors from '../../hooks/useDeviceSensors';
 
 import { useTranslation } from 'react-i18next';
 const GiveAttendancePage = () => {
@@ -28,6 +29,9 @@ const GiveAttendancePage = () => {
   const [result, setResult] = useState(null);
   const videoRef = useRef(null);
   const scanControlsRef = useRef(null);
+  
+  // Device sensors for advanced spoofing detection
+  const { sensorData, collectSamples, isSupported: sensorsSupported } = useDeviceSensors(true);
 
   useEffect(() => {
     fetchSession();
@@ -149,10 +153,21 @@ const GiveAttendancePage = () => {
     try {
       setSubmitting(true);
       
+      // Collect device sensor data for spoofing detection
+      let deviceSensorData = null;
+      if (sensorsSupported) {
+        try {
+          deviceSensorData = await collectSamples(2000, 10); // 2 seconds, 10 samples/sec
+        } catch (err) {
+          console.warn('Failed to collect sensor data:', err);
+        }
+      }
+      
       const response = await attendanceService.checkIn(
         sessionId,
         useQR ? {} : location,
-        useQR ? finalQr : null
+        useQR ? finalQr : null,
+        deviceSensorData
       );
       
       if (response.success) {

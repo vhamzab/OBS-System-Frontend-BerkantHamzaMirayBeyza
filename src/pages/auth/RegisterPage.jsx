@@ -10,6 +10,8 @@ import Select from '../../components/common/Select';
 import Button from '../../components/common/Button';
 
 import { useTranslation } from 'react-i18next';
+import PasswordStrengthMeter from '../../components/common/PasswordStrengthMeter';
+
 const validationSchema = Yup.object({
   firstName: Yup.string()
     .min(2, 'Ad en az 2 karakter olmalıdır')
@@ -171,19 +173,22 @@ const RegisterPage = () => {
             />
 
             <div className="grid grid-cols-2 gap-4">
-              <Input
-                label={t('auth.password')}
-                name="password"
-                type="password"
-                placeholder="••••••••"
-                icon={FiLock}
-                value={formik.values.password}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={formik.errors.password}
-                touched={formik.touched.password}
-                required
-              />
+              <div>
+                <Input
+                  label={t('auth.password')}
+                  name="password"
+                  type="password"
+                  placeholder="••••••••"
+                  icon={FiLock}
+                  value={formik.values.password}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={formik.errors.password}
+                  touched={formik.touched.password}
+                  required
+                />
+                <PasswordStrengthMeter password={formik.values.password} />
+              </div>
               <Input
                 label={t('auth.confirmPassword')}
                 name="confirmPassword"

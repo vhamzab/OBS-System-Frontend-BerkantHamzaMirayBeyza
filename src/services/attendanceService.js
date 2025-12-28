@@ -62,8 +62,12 @@ const attendanceService = {
 
   /**
    * Check in to session (student)
+   * @param {string} sessionId - Session ID
+   * @param {Object} location - GPS location {latitude, longitude, accuracy}
+   * @param {string} qrCode - QR code string
+   * @param {Array} deviceSensorData - Device sensor data for spoofing detection
    */
-  checkIn: async (sessionId, location = {}, qrCode = null) => {
+  checkIn: async (sessionId, location = {}, qrCode = null, deviceSensorData = null) => {
     const data = {};
 
     if (location && (location.latitude || location.longitude)) {
@@ -74,6 +78,10 @@ const attendanceService = {
 
     if (qrCode) {
       data.qr_code = qrCode;
+    }
+
+    if (deviceSensorData && deviceSensorData.length > 0) {
+      data.device_sensors = deviceSensorData;
     }
 
     const response = await api.post(`/attendance/sessions/${sessionId}/checkin`, data);
