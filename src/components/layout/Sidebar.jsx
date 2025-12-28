@@ -158,11 +158,15 @@ const Sidebar = ({ isOpen, onClose }) => {
               `}
               style={{ animationDelay: `${index * 30}ms` }}
             >
-              <div className={`absolute inset-0 bg-gradient-to-r from-primary-500/10 to-accent-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${isActive ? 'opacity-0' : ''}`}></div>
-              <link.icon className={`w-5 h-5 relative z-10 ${isActive ? 'text-white' : 'text-gray-600 dark:text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-400'}`} />
-              <span className={`font-medium relative z-10 ${isActive ? 'text-white' : 'text-gray-700 dark:text-gray-300'}`}>{link.label}</span>
-              {isActive && (
-                <div className="absolute right-2 w-1.5 h-1.5 rounded-full bg-white/80"></div>
+              {({ isActive }) => (
+                <>
+                  <div className={`absolute inset-0 bg-gradient-to-r from-primary-500/10 to-accent-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${isActive ? 'opacity-0' : ''}`}></div>
+                  <link.icon className={`w-5 h-5 relative z-10 ${isActive ? 'text-white' : 'text-gray-600 dark:text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-400'}`} />
+                  <span className={`font-medium relative z-10 ${isActive ? 'text-white' : 'text-gray-700 dark:text-gray-300'}`}>{link.label}</span>
+                  {isActive && (
+                    <div className="absolute right-2 w-1.5 h-1.5 rounded-full bg-white/80"></div>
+                  )}
+                </>
               )}
             </NavLink>
           ))}
